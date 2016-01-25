@@ -4,10 +4,10 @@ import javax.swing.*;
 
 import sun.java2d.pipe.DrawImage;
 public class PanClass extends JFrame{
-	JButton[][] a1=new JButton[5][5];
-	JButton[][] a2=new JButton[5][5];
-	JButton[][] a3=new JButton[5][5];
-	JPanel p=new JPanel();
+	JButton[][] a1=new JButton[5][5]; //첫번째 판 25칸
+	JButton[][] a2=new JButton[5][5]; //두번째 판 25칸
+	JButton[][] a3=new JButton[5][5]; //세번째 판 25칸
+	JPanel p=new JPanel(); //패널 생성
 	JPanel p1=new JPanel();
 	JPanel p2=new JPanel();
 	JPanel p3=new JPanel();
@@ -15,10 +15,10 @@ public class PanClass extends JFrame{
 	ImageIcon pan1=new ImageIcon("c:\\bingo\\abc\\빙고틀-공격.png");
 	public void Rand()
 	{
-		int[] temp=new int[75];
+		int[] temp=new int[75]; //중복되지 않는 난수 발생
 		boolean bDash=false;
 		int su=0;
-		for(int i=0; i<75;i++)
+		for(int i=0; i<75;i++) 
 		{
 			bDash=true;
 			while(bDash)
@@ -36,7 +36,7 @@ public class PanClass extends JFrame{
 			}
 			temp[i]=su;
 			
-		  if(i<25)	
+		  if(i<25)	//배열 25전까지(숫자가 아닌 배열)는 첫번째판에 배치 
 		  {
 			//ImageIcon m=new ImageIcon("c:\\bingo\\abc\\"+(i+1)+".png");
 			//ImageIcon m=new ImageIcon("c:\\bingo\\"+i+".png");
@@ -48,7 +48,7 @@ public class PanClass extends JFrame{
 			a1[i/5][i%5].setContentAreaFilled(false);
 			a1[i/5][i%5].setFocusPainted(false);
 		  }
-		  else if((i>=25)&&(i<50))
+		  else if((i>=25)&&(i<50)) //25~50까지 두번째 판에 배치
 		  {
 			//ImageIcon m=new ImageIcon("c:\\bingo\\abc\\"+(i+1)+".png");
 			//  ImageIcon m=new ImageIcon("c:\\bingo\\1.png");
@@ -61,7 +61,7 @@ public class PanClass extends JFrame{
 			a2[(i/5)-5][i%5].setContentAreaFilled(false); 
 			a2[(i/5)-5][i%5].setFocusPainted(false);      
 		  }
-		  else//(i>=50)
+		  else//(i>=50) 75까지 세번째 판에 배치
 		  {
 			//ImageIcon m=new ImageIcon("c:\\bingo\\abc\\"+(i+1)+".png");
 			//  ImageIcon m=new ImageIcon("c:\\bingo\\1.png");

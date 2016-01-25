@@ -108,6 +108,7 @@ public class GameLayout extends JPanel{
 		setVisible(true);
 		
 	}
+	@Override
 	public void paint(Graphics g){
 		  g.drawImage(bg, 0, 0, getWidth(), getHeight(), this);
 		  //.setOpaque(false);//투명하게
