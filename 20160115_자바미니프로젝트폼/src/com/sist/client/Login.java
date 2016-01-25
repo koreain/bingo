@@ -10,9 +10,10 @@ public class Login extends JPanel{ //상속 extends
 	Image loginTxt; //게임이름
 	Login() //생성자의 명칭은 클래스명과 동일 !! 리턴형이 없다!!
 	{
-		img=Toolkit.getDefaultToolkit().getImage("c:\\이미지\\login.jpg");
-		loginTxt=Toolkit.getDefaultToolkit().getImage("c:\\이미지\\login_text3.png");
+		img=Toolkit.getDefaultToolkit().getImage("c:\\bingo\\로그인배경.jpg");
+		loginTxt=Toolkit.getDefaultToolkit().getImage("c:\\bingo\\로그인텍스트.png");
 		setLayout(null);//FlowLayout
+		// 각 레이아웃속성 할당
 		la1=new JLabel("ID");
 		la2=new JLabel("PW");
 		tf=new JTextField();
@@ -31,7 +32,7 @@ public class Login extends JPanel{ //상속 extends
 		p.add(b1);
 		p.add(b2);
 		p.setBounds(310, 420, 195, 35);
-		p.setOpaque(false);
+		p.setOpaque(false);//뒷부분(쓸데없는 부분) 제거(투명화)
 		add(la1);
 		add(tf);
 		add(la2);
