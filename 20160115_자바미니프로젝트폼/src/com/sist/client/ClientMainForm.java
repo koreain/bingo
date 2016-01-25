@@ -16,7 +16,7 @@ implements ActionListener
 		add("LOG",login);
 		add("WR",wr);
 		add("GAME",game);
-		setSize(1200,800);
+		setSize(1200,970);
 		setVisible(true);
 		login.b1.addActionListener(this);
 		login.b2.addActionListener(this);

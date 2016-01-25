@@ -104,12 +104,12 @@ public class GameLayout extends JPanel{
 		Rand();
 		
 		//p.setOpaque(false);
-		setSize(1200,800);
+		setSize(1200,970);
 		setVisible(true);
 		
 	}
 	@Override
-	public void paint(Graphics g){
+	public void paintComponent(Graphics g){
 		  g.drawImage(bg, 0, 0, getWidth(), getHeight(), this);
 		  //.setOpaque(false);//투명하게
 		  }
