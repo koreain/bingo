@@ -12,7 +12,7 @@ public class GameLayout extends JPanel implements ActionListener{
 	Image bg; //추상클래스 abstract!! 단독으로 메모리 할당을 못한다.
 	
 	//빙고판 
-	JButton[][] a1=new JButton[5][5]; //내 판
+	static JButton[][] a1=new JButton[5][5]; //내 판
 	static JButton[][] a2=new JButton[5][5];
 	static JButton[][] a3=new JButton[5][5];
 	
@@ -114,14 +114,18 @@ public class GameLayout extends JPanel implements ActionListener{
 				a1[i][j].setCursor(cur); //버튼에 마우스를 올리면 커서 모양이 손으로 바뀜
 				a2[i][j].setCursor(cur);
 				a3[i][j].setCursor(cur);
+				
+				a1[i][j].addActionListener(this); //버튼 액션 추가
+				a2[i][j].addActionListener(this);
+				a3[i][j].addActionListener(this);
 			}
 		}
 	}
 	@Override
 	public void paintComponent(Graphics g){
-		  g.drawImage(bg, 0, 0, getWidth(), getHeight(), this);
-		  //.setOpaque(false);//투명하게
-		  }
+		g.drawImage(bg, 0, 0, getWidth(), getHeight(), this);
+		//.setOpaque(false);//투명하게
+	}
 	
 	//버튼 누르기 빙고체크!!!!!!!!
 	@Override
@@ -129,16 +133,84 @@ public class GameLayout extends JPanel implements ActionListener{
 		// TODO Auto-generated method stub
 		
 		//빙고 체크(체크된 빙고가 아닐 때+스킬아이템을 클릭하지 않았을 때)
-		if(GameProcess.bingo[0][0]==false&&GameProcess.bAttackSkill==false&&GameProcess.bAttackFinish==false&&GameProcess.bDefenseSkill==false
+		if(GameProcess.bAttackSkill==false&&GameProcess.bAttackFinish==false&&GameProcess.bDefenseSkill==false
 		&&GameProcess.bDefenseFinish==false&&GameProcess.bStrategySkill==false&&GameProcess.bStrategyFinish==false)
 		{
-			a1[0][0]=new JButton(bcIcon0);
-			p1.add(a1[0][0]);
-			// 버튼에 아이콘 사이즈 맞추기 
-			a1[0][0].setPreferredSize(new Dimension(bcIcon0.getIconWidth(), bcIcon0.getIconHeight()));
-			a1[0][0].setBorderPainted(false); //버튼 경계선 제거
-			a1[0][0].setContentAreaFilled(false); //선택했던 버튼 표시 제거
-			a1[0][0].setFocusPainted(false); //버튼영역 배경 제거
+			if(ChoiceNation.chosenNation==0)//진영선택 : 위를 선택했을 때
+			{
+				for(int i=0; i<5; i++)
+				{
+					for(int j=0; j<5; j++)
+					{
+						//bingo[][]가 체크 안된것만 체크 가능
+						if(e.getSource()==a1[i][j])
+						{
+							a1[i][j].setIcon(bcIcon0);//아이콘 모양 바꾸기 함수
+							GameProcess.bingo[0][(i*5)+j]=true;
+						}
+						else if(e.getSource()==a2[i][j])
+						{
+							a2[i][j].setIcon(bcIcon0);
+							GameProcess.bingo[1][(i*5)+j]=true;
+						}
+						else if(e.getSource()==a3[i][j])
+						{
+							a3[i][j].setIcon(bcIcon0);
+							GameProcess.bingo[2][(i*5)+j]=true;
+						}
+					}
+				}	
+			}
+			
+			if(ChoiceNation.chosenNation==1)//촉
+			{
+				for(int i=0; i<5; i++)
+				{
+					for(int j=0; j<5; j++)
+					{
+						if(e.getSource()==a1[i][j])
+						{
+							a1[i][j].setIcon(bcIcon1);
+							GameProcess.bingo[0][(i*5)+j]=true;
+						}
+						else if(e.getSource()==a2[i][j])
+						{
+							a2[i][j].setIcon(bcIcon1);
+							GameProcess.bingo[1][(i*5)+j]=true;
+						}
+						else if(e.getSource()==a3[i][j])
+						{
+							a3[i][j].setIcon(bcIcon1);
+							GameProcess.bingo[2][(i*5)+j]=true;
+						}
+					}
+				}
+			}
+			
+			if(ChoiceNation.chosenNation==2)//오
+			{
+				for(int i=0; i<5; i++)
+				{
+					for(int j=0; j<5; j++)
+					{
+						if(e.getSource()==a1[i][j])
+						{
+							a1[i][j].setIcon(bcIcon2);
+							GameProcess.bingo[0][(i*5)+j]=true;
+						}
+						else if(e.getSource()==a2[i][j])
+						{
+							a2[i][j].setIcon(bcIcon2);
+							GameProcess.bingo[1][(i*5)+j]=true;
+						}
+						else if(e.getSource()==a3[i][j])
+						{
+							a3[i][j].setIcon(bcIcon2);
+							GameProcess.bingo[2][(i*5)+j]=true;
+						}
+					}
+				}	
+			}
 		}
 	}
 }
