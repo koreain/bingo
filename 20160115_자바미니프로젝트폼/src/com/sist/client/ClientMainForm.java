@@ -11,8 +11,13 @@ implements ActionListener
 	CardLayout card=new CardLayout();
 	GameLayout game=new GameLayout();
 	
+	ImageIcon mainIcon;//타이틀창 아이콘
 	ClientMainForm() 
 	{
+		super("삼국지 전략빙고");//타이틀 제목
+		mainIcon=new ImageIcon("c:\\bingo\\타이틀아이콘.png");
+		this.setIconImage(mainIcon.getImage());
+		
 		setLayout(card);//BorderLayout
 		add("LOG",login);
 		add("WR",wr);
