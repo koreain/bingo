@@ -23,6 +23,7 @@ implements ActionListener
 		
 		login.b1.addActionListener(this);//카드레이아웃이 될 버튼들 추가
 		login.b2.addActionListener(this);
+		login.b3.addActionListener(this);//회원가입
 		wr.b6.addActionListener(this);
 		wr.b3.addActionListener(this);
 		cn.nation0.addActionListener(this);
@@ -52,6 +53,11 @@ implements ActionListener
 		else if(e.getSource()==login.b2) //취소를 누르면 프로그램 종료
 		{
 			System.exit(0);
+		}
+		else if(e.getSource()==login.b3) // 회원가입 버튼.
+		{
+			SignUp su = new SignUp();
+			su.setVisible(true);
 		}
 		else if(e.getSource()==wr.b6) //나가기를 누르면 프로그램 종료
 		{

@@ -19,7 +19,7 @@ public class WaitRoom extends JPanel implements ActionListener{
    JButton b1,b2,b3,b4,b5,b6;
    MakeRoom mr=new MakeRoom();
    
-   WaitRoom() 
+   WaitRoom()
    {
       String[] col1={"방이름","공개/비공개","인원"};
       String[][] row1=new String[0][3]; //초기 0값, but 데이터는 3개씩..
@@ -132,42 +132,4 @@ public class WaitRoom extends JPanel implements ActionListener{
 		 }
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
