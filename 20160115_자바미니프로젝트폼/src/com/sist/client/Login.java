@@ -5,7 +5,7 @@ public class Login extends JPanel{ //상속 extends
 	JLabel	la1, la2; //필드명 주기
 	JTextField tf; //입력필드
 	JPasswordField pf;//비밀번호 입력 필드
-	JButton b1,b2; // 버튼 2개.
+	JButton b1,b2,b3; // 버튼 2개.
 	Image img; //추상클래스 abstract!! 단독으로 메모리 할당을 못한다.
 	Image loginTxt; //게임이름
 	Login() //생성자의 명칭은 클래스명과 동일 !! 리턴형이 없다!!
@@ -20,6 +20,7 @@ public class Login extends JPanel{ //상속 extends
 		pf=new JPasswordField();
 		b1=new JButton("login");
 		b2=new JButton("cancel");
+		b3=new JButton("회원가입");
 		//배치
 		la1.setBounds(290, 350, 40, 30); //x,y,w,h -300
 		la1.setForeground(Color.white); // 필드명 색깔 변경 -300
@@ -31,6 +32,7 @@ public class Login extends JPanel{ //상속 extends
 		JPanel p=new JPanel();
 		p.add(b1);
 		p.add(b2);
+		p.add(b3);
 		p.setBounds(310, 420, 195, 35);
 		p.setOpaque(false);//뒷부분(쓸데없는 부분) 제거(투명화)
 		add(la1);
