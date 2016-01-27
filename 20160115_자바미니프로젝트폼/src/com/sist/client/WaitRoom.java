@@ -17,6 +17,7 @@ public class WaitRoom extends JPanel implements ActionListener{
    JTextField tf;
    JComboBox box;
    JButton b1,b2,b3,b4,b5,b6;
+   MakeRoom mr=new MakeRoom();
    
    WaitRoom() 
    {
@@ -24,24 +25,12 @@ public class WaitRoom extends JPanel implements ActionListener{
       String[][] row1=new String[0][3]; //초기 0값, but 데이터는 3개씩..
       model1=new DefaultTableModel(row1, col1);
       table1=new JTable(model1);
-      table1.getTableHeader().setReorderingAllowed(false);//게시판 타이틀 위치변경 안되게 하는것  
-      table1.getTableHeader().setResizingAllowed(false);  
-      table1.getTableHeader().setBackground(Color.pink);//테이블바 컬러지정  
-      table1.setRowHeight(35);//타이틀바 밑에 제목들의 높이 조정  
-      table1.setShowVerticalLines(false);//내용들 정렬될때 세로줄 없애는것  
-
       JScrollPane js1=new JScrollPane(table1);
       
       String[] col2={"ID","대화명","성별","위치"};
       String[][] row2=new String[0][4]; //초기 0값, but 데이터는 3개씩..
       model2=new DefaultTableModel(row2, col2);
       table2=new JTable(model2);
-      table2.getTableHeader().setReorderingAllowed(false);//게이판 타이틀 위치변경 안되게 하는것  
-      table2.getTableHeader().setResizingAllowed(false);  
-      table2.getTableHeader().setBackground(Color.pink);//테이블바 컬러지정  
-      table2.setRowHeight(35);//타이틀바 밑에 제목들의 높이 조정  
-      table2.setShowVerticalLines(false);//내용들 정렬될때 세로줄 없애는것  
-
       JScrollPane js2=new JScrollPane(table2);
       
       pane=new JTextPane();
@@ -62,6 +51,12 @@ public class WaitRoom extends JPanel implements ActionListener{
       b4=new JButton("쪽지보내기");
       b5=new JButton("정보보기");
       b6=new JButton("나가기");
+      b1.setFont(new Font("맑은 고딕",Font.BOLD,20));
+      b2.setFont(new Font("맑은 고딕",Font.BOLD,20));
+      b3.setFont(new Font("맑은 고딕",Font.BOLD,20));
+      b4.setFont(new Font("맑은 고딕",Font.BOLD,20));
+      b5.setFont(new Font("맑은 고딕",Font.BOLD,20));
+      b6.setFont(new Font("맑은 고딕",Font.BOLD,20));
       
       JPanel p=new JPanel();
       p.setLayout(new GridLayout(1,6,10,10)); 
@@ -70,12 +65,13 @@ public class WaitRoom extends JPanel implements ActionListener{
       p.add(b5);      p.add(b6);
 
       setLayout(null);
-      js1.setBounds(425, 15, 755, 590); //대기실  
-      js2.setBounds(10, 15, 400, 350); //접속자  
-      js3.setBounds(10, 370, 400, 350); //채팅창  
-      tf.setBounds(10, 725, 295, 30); //채팅창입력창  
-      box.setBounds(310, 725, 100, 30); //글자색깔  
-      p.setBounds(425, 725, 755, 30); //버튼  
+      js1.setBounds(425, 15, 755, 590); //대기실 
+      js2.setBounds(10, 15, 400, 350); //접속자 
+      js3.setBounds(10, 370, 400, 500); //채팅창 
+      tf.setBounds(10, 875, 295, 30); //채팅창입력창 
+      box.setBounds(310, 875, 100, 30); //글자색깔 
+      p.setBounds(425, 820, 755, 80); //버튼 
+
 
       add(js1);
       add(js2);
@@ -84,6 +80,9 @@ public class WaitRoom extends JPanel implements ActionListener{
       add(box);
       add(p);
       tf.addActionListener(this);
+      mr.b1.addActionListener(this);
+      mr.b2.addActionListener(this);
+      b1.addActionListener(this); 
    }
    public void initStyle() {
       // default 색상을 가져온다
@@ -110,20 +109,28 @@ public class WaitRoom extends JPanel implements ActionListener{
       }
    }
    @Override
-   public void actionPerformed(ActionEvent e) {
-      // TODO Auto-generated method stub
-      String name="김진현";
-      String data=name+">> "+tf.getText();
-      if(e.getSource()==tf) {
-         if(data.length()<1)
-            return;
-         initStyle();
-         String color=box.getSelectedItem().toString();
-         append(data,color);
-         tf.setText("");
-         
-      }
-   }
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		String name="김진현";
+		String data=name+">> "+tf.getText();
+		if(e.getSource()==tf) {
+			if(data.length()<1)
+				return;
+			initStyle();
+			String color=box.getSelectedItem().toString();
+			append(data,color);
+			tf.setText("");	
+		}
+		 if(e.getSource()==b1) {
+			mr.setVisible(true);
+		}else if(e.getSource()==mr.b2) {
+			mr.setVisible(false);
+		}
+		 
+		 if(e.getSource()==mr.b1) {
+			  String data1=mr.tf.getText();
+		 }
+	}
 }
 
 
