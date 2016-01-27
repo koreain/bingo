@@ -16,6 +16,26 @@ public class ChoiceNation extends JPanel{
 	//마우스 커서가 버튼에 올라갔을때 손모양으로 바뀌게
 	private Cursor cur = new Cursor(Cursor.HAND_CURSOR);
 	
+	public void jangsu()
+	{
+		for(int i=0;i<6;i++)
+		{
+			if(i<3)
+			{
+				JButton a1=new JButton(new ImageIcon("c:\\bingo\\장수"+chosenNation1+i+".jpg"));
+				//a1.setEnabled(false);
+				GameLayout.j1.add(a1);
+			}
+			else
+			{
+				JButton a2=new JButton(new ImageIcon("c:\\bingo\\장수"+chosenNation2+(i%3)+".jpg"));
+				//a1.setEnabled(false);
+				GameLayout.j2.add(a2);
+			}
+		}
+	}
+	
+	
 	public ChoiceNation()
 	{
 		bg=Toolkit.getDefaultToolkit().getImage("c:\\bingo\\나라선택-배경.jpg"); //그림가져오기
@@ -49,6 +69,7 @@ public class ChoiceNation extends JPanel{
 			public void actionPerformed(ActionEvent e) 
 			{
 				chosenNation1=0;
+				jangsu();
 			}
 		});
 
@@ -58,6 +79,7 @@ public class ChoiceNation extends JPanel{
 			public void actionPerformed(ActionEvent e) 
 			{
 				chosenNation1=1;
+				jangsu();
 			}
 		});
 
@@ -67,6 +89,7 @@ public class ChoiceNation extends JPanel{
 			public void actionPerformed(ActionEvent e) 
 			{
 				chosenNation1=2;
+				jangsu();
 			}
 		});
 		
