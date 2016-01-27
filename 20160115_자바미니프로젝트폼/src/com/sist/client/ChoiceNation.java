@@ -5,9 +5,9 @@ import java.awt.event.*;
 public class ChoiceNation extends JPanel{
 	static int chosenNation1=0; //0=위, 1=촉, 2=오
 	static int chosenNation2=0;
-	ImageIcon icon0=new ImageIcon("c:\\bingo\\나라선택아이콘-위.png"); // 위촉오 선택버튼 이미지
-	ImageIcon icon1=new ImageIcon("c:\\bingo\\나라선택아이콘-촉.png");
-	ImageIcon icon2=new ImageIcon("c:\\bingo\\나라선택아이콘-오.png");
+	ImageIcon icon0=new ImageIcon("img\\나라선택아이콘-위.png"); // 위촉오 선택버튼 이미지
+	ImageIcon icon1=new ImageIcon("img\\나라선택아이콘-촉.png");
+	ImageIcon icon2=new ImageIcon("img\\나라선택아이콘-오.png");
 	JButton nation0 = new JButton(icon0); //위촉오 선택버튼
 	JButton nation1 = new JButton(icon1);
 	JButton nation2 = new JButton(icon2);
@@ -18,8 +18,8 @@ public class ChoiceNation extends JPanel{
 	
 	public ChoiceNation()
 	{
-		bg=Toolkit.getDefaultToolkit().getImage("c:\\bingo\\나라선택-배경.jpg"); //그림가져오기
-		notice=Toolkit.getDefaultToolkit().getImage("c:\\bingo\\나라선택-설명.jpg");
+		bg=Toolkit.getDefaultToolkit().getImage("img\\나라선택-배경.jpg"); //그림가져오기
+		notice=Toolkit.getDefaultToolkit().getImage("img\\나라선택-설명.jpg");
 		
 		setLayout(null);
 		// 버튼에 아이콘 사이즈 맞추기 

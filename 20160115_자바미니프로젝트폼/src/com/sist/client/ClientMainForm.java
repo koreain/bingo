@@ -15,7 +15,7 @@ implements ActionListener
 	ClientMainForm() 
 	{
 		super("삼국지 전략빙고");//타이틀 제목
-		mainIcon=new ImageIcon("c:\\bingo\\타이틀아이콘.png");
+		mainIcon=new ImageIcon("img\\타이틀아이콘.png");
 		this.setIconImage(mainIcon.getImage());
 		
 		setLayout(card);//BorderLayout

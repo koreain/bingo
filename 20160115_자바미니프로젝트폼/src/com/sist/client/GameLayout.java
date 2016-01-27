@@ -31,9 +31,9 @@ public class GameLayout extends JPanel implements ActionListener{
 	//마우스 커서가 버튼에 올라갔을때 손모양으로 바뀌게
 	private Cursor cur = new Cursor(Cursor.HAND_CURSOR);
 	
-	ImageIcon bcIcon0=new ImageIcon("c:\\bingo\\빙고체크-위.png");
-	ImageIcon bcIcon1=new ImageIcon("c:\\bingo\\빙고체크-촉.png");
-	ImageIcon bcIcon2=new ImageIcon("c:\\bingo\\빙고체크-오.png");
+	ImageIcon bcIcon0=new ImageIcon("img\\빙고체크-위.png");
+	ImageIcon bcIcon1=new ImageIcon("img\\빙고체크-촉.png");
+	ImageIcon bcIcon2=new ImageIcon("img\\빙고체크-오.png");
 	
 	public void Rand()
 	{
@@ -44,7 +44,7 @@ public class GameLayout extends JPanel implements ActionListener{
 		  if(i<25)	
 		  {
 			// 랜덤으로 생성된 숫자numArr1에 따른 숫자아이콘 버튼에 추가 
-			ImageIcon m=new ImageIcon("c:\\bingo\\"+GameProcess.numArr1[i]+".png");
+			ImageIcon m=new ImageIcon("img\\"+GameProcess.numArr1[i]+".png");
 			a1[i/5][i%5]= new JButton(m);
 			//a1[i/5][i%5].setFont(new Font("맑은 고딕",Font.BOLD,9));	
 			p1.add(a1[i/5][i%5]);
@@ -56,7 +56,7 @@ public class GameLayout extends JPanel implements ActionListener{
 		  }
 		  else if((i>=25)&&(i<50))
 		  {
-			ImageIcon m=new ImageIcon("c:\\bingo\\"+GameProcess.numArr1[i]+".png");
+			ImageIcon m=new ImageIcon("img\\"+GameProcess.numArr1[i]+".png");
 			a2[(i/5)-5][i%5]= new JButton(m);
 			//a2[(i/5)-5][i%5].setFont(new Font("맑은 고딕",Font.BOLD,9));
 			p2.add(a2[(i/5)-5][i%5]);
@@ -67,7 +67,7 @@ public class GameLayout extends JPanel implements ActionListener{
 		  }
 		  else//(i>=50)
 		  {
-			ImageIcon m=new ImageIcon("c:\\bingo\\"+GameProcess.numArr1[i]+".png");
+			ImageIcon m=new ImageIcon("img\\"+GameProcess.numArr1[i]+".png");
 			a3[(i/5)-10][i%5]= new JButton(m);
 			//a3[(i/5)-10][i%5].setFont(new Font("맑은 고딕",Font.BOLD,9));
 			p3.add(a3[(i/5)-10][i%5]);  
@@ -81,7 +81,7 @@ public class GameLayout extends JPanel implements ActionListener{
 
 	GameLayout()
 	{	
-		bg=Toolkit.getDefaultToolkit().getImage("c:\\bingo\\인게임배경.jpg");
+		bg=Toolkit.getDefaultToolkit().getImage("img\\인게임배경.jpg");
 		setLayout(null);
 		FlowLayout k=new FlowLayout(0); // 0: 왼쪽정렬, 1:가운데정렬, 2:오른쪽정렬
 		k.setHgap(20);

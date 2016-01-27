@@ -8,10 +8,13 @@ public class Login extends JPanel{ //상속 extends
 	JButton b1,b2,b3; // 버튼 2개.
 	Image img; //추상클래스 abstract!! 단독으로 메모리 할당을 못한다.
 	Image loginTxt; //게임이름
+	
+	private Cursor cur = new Cursor(Cursor.HAND_CURSOR);
+	
 	Login() //생성자의 명칭은 클래스명과 동일 !! 리턴형이 없다!!
 	{
-		img=Toolkit.getDefaultToolkit().getImage("c:\\bingo\\로그인배경.jpg");
-		loginTxt=Toolkit.getDefaultToolkit().getImage("c:\\bingo\\로그인텍스트.png");
+		img=Toolkit.getDefaultToolkit().getImage("img\\로그인배경.jpg");
+		loginTxt=Toolkit.getDefaultToolkit().getImage("img\\로그인텍스트.png");
 		setLayout(null);//FlowLayout
 		// 각 레이아웃속성 할당
 		la1=new JLabel("ID");
@@ -40,6 +43,10 @@ public class Login extends JPanel{ //상속 extends
 		add(la2);
 		add(pf);
 		add(p);
+		
+		b1.setCursor(cur);
+		b2.setCursor(cur);
+		b3.setCursor(cur);
 	}
 	@Override
 	   protected void paintComponent(Graphics g) {

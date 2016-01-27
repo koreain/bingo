@@ -19,6 +19,7 @@ public class WaitRoom extends JPanel implements ActionListener{
    JButton b1,b2,b3,b4,b5,b6;
    MakeRoom mr=new MakeRoom();
    
+   private Cursor cur = new Cursor(Cursor.HAND_CURSOR);
    WaitRoom()
    {
       String[] col1={"방이름","공개/비공개","인원"};
@@ -83,6 +84,13 @@ public class WaitRoom extends JPanel implements ActionListener{
       mr.b1.addActionListener(this);
       mr.b2.addActionListener(this);
       b1.addActionListener(this); 
+      
+      b1.setCursor(cur);
+      b2.setCursor(cur);
+      b3.setCursor(cur);
+      b4.setCursor(cur);
+      b5.setCursor(cur);
+      b6.setCursor(cur);
    }
    public void initStyle() {
       // default 색상을 가져온다
