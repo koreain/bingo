@@ -24,12 +24,24 @@ public class WaitRoom extends JPanel implements ActionListener{
       String[][] row1=new String[0][3]; //초기 0값, but 데이터는 3개씩..
       model1=new DefaultTableModel(row1, col1);
       table1=new JTable(model1);
+      table1.getTableHeader().setReorderingAllowed(false);//게시판 타이틀 위치변경 안되게 하는것  
+      table1.getTableHeader().setResizingAllowed(false);  
+      table1.getTableHeader().setBackground(Color.pink);//테이블바 컬러지정  
+      table1.setRowHeight(35);//타이틀바 밑에 제목들의 높이 조정  
+      table1.setShowVerticalLines(false);//내용들 정렬될때 세로줄 없애는것  
+
       JScrollPane js1=new JScrollPane(table1);
       
       String[] col2={"ID","대화명","성별","위치"};
       String[][] row2=new String[0][4]; //초기 0값, but 데이터는 3개씩..
       model2=new DefaultTableModel(row2, col2);
       table2=new JTable(model2);
+      table2.getTableHeader().setReorderingAllowed(false);//게이판 타이틀 위치변경 안되게 하는것  
+      table2.getTableHeader().setResizingAllowed(false);  
+      table2.getTableHeader().setBackground(Color.pink);//테이블바 컬러지정  
+      table2.setRowHeight(35);//타이틀바 밑에 제목들의 높이 조정  
+      table2.setShowVerticalLines(false);//내용들 정렬될때 세로줄 없애는것  
+
       JScrollPane js2=new JScrollPane(table2);
       
       pane=new JTextPane();
@@ -52,18 +64,19 @@ public class WaitRoom extends JPanel implements ActionListener{
       b6=new JButton("나가기");
       
       JPanel p=new JPanel();
-      p.setLayout(new GridLayout(3,2,5,5));
+      p.setLayout(new GridLayout(1,6,10,10)); 
       p.add(b1);      p.add(b2);
       p.add(b3);      p.add(b4);
       p.add(b5);      p.add(b6);
 
       setLayout(null);
-      js1.setBounds(10, 15, 500, 350);
-      js2.setBounds(10, 370, 500, 180);
-      js3.setBounds(515, 15, 265, 300);
-      tf.setBounds(515, 320, 160, 30);
-      box.setBounds(680, 320, 90, 30);
-      p.setBounds(515, 470, 265, 80);
+      js1.setBounds(425, 15, 755, 590); //대기실  
+      js2.setBounds(10, 15, 400, 350); //접속자  
+      js3.setBounds(10, 370, 400, 350); //채팅창  
+      tf.setBounds(10, 725, 295, 30); //채팅창입력창  
+      box.setBounds(310, 725, 100, 30); //글자색깔  
+      p.setBounds(425, 725, 755, 30); //버튼  
+
       add(js1);
       add(js2);
       add(js3);
