@@ -3,7 +3,8 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 public class ChoiceNation extends JPanel{
-	static int chosenNation=0; //0=위, 1=촉, 2=오
+	static int chosenNation1=0; //0=위, 1=촉, 2=오
+	static int chosenNation2=0;
 	ImageIcon icon0=new ImageIcon("c:\\bingo\\나라선택아이콘-위.png"); // 위촉오 선택버튼 이미지
 	ImageIcon icon1=new ImageIcon("c:\\bingo\\나라선택아이콘-촉.png");
 	ImageIcon icon2=new ImageIcon("c:\\bingo\\나라선택아이콘-오.png");
@@ -47,7 +48,7 @@ public class ChoiceNation extends JPanel{
 			@Override 
 			public void actionPerformed(ActionEvent e) 
 			{
-				chosenNation=0;
+				chosenNation1=0;
 			}
 		});
 
@@ -56,7 +57,7 @@ public class ChoiceNation extends JPanel{
 			@Override 
 			public void actionPerformed(ActionEvent e) 
 			{
-				chosenNation=1;
+				chosenNation1=1;
 			}
 		});
 
@@ -65,7 +66,7 @@ public class ChoiceNation extends JPanel{
 			@Override 
 			public void actionPerformed(ActionEvent e) 
 			{
-				chosenNation=2;
+				chosenNation1=2;
 			}
 		});
 		

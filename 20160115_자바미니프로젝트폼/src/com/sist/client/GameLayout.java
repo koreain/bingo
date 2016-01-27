@@ -133,10 +133,10 @@ public class GameLayout extends JPanel implements ActionListener{
 		// TODO Auto-generated method stub
 		
 		//빙고 체크(체크된 빙고가 아닐 때+스킬아이템을 클릭하지 않았을 때)
-		if(GameProcess.bAttackSkill==false&&GameProcess.bAttackFinish==false&&GameProcess.bDefenseSkill==false
-		&&GameProcess.bDefenseFinish==false&&GameProcess.bStrategySkill==false&&GameProcess.bStrategyFinish==false)
+		if(GameProcess.bAttackSkill1==false&&GameProcess.bAttackFinish1==false&&GameProcess.bDefenseSkill1==false
+		&&GameProcess.bDefenseFinish1==false&&GameProcess.bStrategySkill1==false&&GameProcess.bStrategyFinish1==false)
 		{
-			if(ChoiceNation.chosenNation==0)//진영선택 : 위를 선택했을 때
+			if(ChoiceNation.chosenNation1==0)//진영선택 : 위를 선택했을 때
 			{
 				for(int i=0; i<5; i++)
 				{
@@ -145,49 +145,27 @@ public class GameLayout extends JPanel implements ActionListener{
 						//bingo[][]가 체크 안된것만 체크 가능
 						if(e.getSource()==a1[i][j])
 						{
-							a1[i][j].setIcon(bcIcon0);//아이콘 모양 바꾸기 함수
-							GameProcess.bingo[0][(i*5)+j]=true;
+							GameProcess.chosenBingoNumber=GameProcess.p1Board[0][(i*5)+j];
+							GameProcess.CheckBingo(a1[i][j], bcIcon0);
+							GameProcess.lineCount();
 						}
 						else if(e.getSource()==a2[i][j])
 						{
-							a2[i][j].setIcon(bcIcon0);
-							GameProcess.bingo[1][(i*5)+j]=true;
+							GameProcess.chosenBingoNumber=GameProcess.p1Board[1][(i*5)+j];
+							GameProcess.CheckBingo(a2[i][j], bcIcon0);
+							GameProcess.lineCount();
 						}
 						else if(e.getSource()==a3[i][j])
 						{
-							a3[i][j].setIcon(bcIcon0);
-							GameProcess.bingo[2][(i*5)+j]=true;
-						}
-					}
-				}	
-			}
-			
-			if(ChoiceNation.chosenNation==1)//촉
-			{
-				for(int i=0; i<5; i++)
-				{
-					for(int j=0; j<5; j++)
-					{
-						if(e.getSource()==a1[i][j])
-						{
-							a1[i][j].setIcon(bcIcon1);
-							GameProcess.bingo[0][(i*5)+j]=true;
-						}
-						else if(e.getSource()==a2[i][j])
-						{
-							a2[i][j].setIcon(bcIcon1);
-							GameProcess.bingo[1][(i*5)+j]=true;
-						}
-						else if(e.getSource()==a3[i][j])
-						{
-							a3[i][j].setIcon(bcIcon1);
-							GameProcess.bingo[2][(i*5)+j]=true;
+							GameProcess.chosenBingoNumber=GameProcess.p1Board[2][(i*5)+j];
+							GameProcess.CheckBingo(a3[i][j], bcIcon0);
+							GameProcess.lineCount();
 						}
 					}
 				}
 			}
 			
-			if(ChoiceNation.chosenNation==2)//오
+			if(ChoiceNation.chosenNation1==1)//촉
 			{
 				for(int i=0; i<5; i++)
 				{
@@ -195,18 +173,49 @@ public class GameLayout extends JPanel implements ActionListener{
 					{
 						if(e.getSource()==a1[i][j])
 						{
-							a1[i][j].setIcon(bcIcon2);
-							GameProcess.bingo[0][(i*5)+j]=true;
+							GameProcess.chosenBingoNumber=GameProcess.p1Board[0][(i*5)+j];
+							GameProcess.CheckBingo(a1[i][j], bcIcon1);
+							GameProcess.lineCount();
 						}
 						else if(e.getSource()==a2[i][j])
 						{
-							a2[i][j].setIcon(bcIcon2);
-							GameProcess.bingo[1][(i*5)+j]=true;
+							GameProcess.chosenBingoNumber=GameProcess.p1Board[1][(i*5)+j];
+							GameProcess.CheckBingo(a2[i][j], bcIcon1);
+							GameProcess.lineCount();
 						}
 						else if(e.getSource()==a3[i][j])
 						{
-							a3[i][j].setIcon(bcIcon2);
-							GameProcess.bingo[2][(i*5)+j]=true;
+							GameProcess.chosenBingoNumber=GameProcess.p1Board[2][(i*5)+j];
+							GameProcess.CheckBingo(a3[i][j], bcIcon1);
+							GameProcess.lineCount();
+						}
+					}
+				}
+			}
+			
+			if(ChoiceNation.chosenNation1==2)//오
+			{
+				for(int i=0; i<5; i++)
+				{
+					for(int j=0; j<5; j++)
+					{
+						if(e.getSource()==a1[i][j])
+						{
+							GameProcess.chosenBingoNumber=GameProcess.p1Board[0][(i*5)+j];
+							GameProcess.CheckBingo(a1[i][j], bcIcon2);
+							GameProcess.lineCount();
+						}
+						else if(e.getSource()==a2[i][j])
+						{
+							GameProcess.chosenBingoNumber=GameProcess.p1Board[1][(i*5)+j];
+							GameProcess.CheckBingo(a2[i][j], bcIcon2);
+							GameProcess.lineCount();
+						}
+						else if(e.getSource()==a3[i][j])
+						{
+							GameProcess.chosenBingoNumber=GameProcess.p1Board[2][(i*5)+j];
+							GameProcess.CheckBingo(a3[i][j], bcIcon2);
+							GameProcess.lineCount();
 						}
 					}
 				}	

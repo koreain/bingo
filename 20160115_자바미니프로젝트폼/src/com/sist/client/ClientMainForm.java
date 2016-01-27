@@ -36,9 +36,11 @@ implements ActionListener
 		// TODO Auto-generated method stub
 		try
 		{
-			UIManager.setLookAndFeel("com.jtattoo.plaf.mcwin.McWinLookAndFeel");
+			UIManager.setLookAndFeel("com.jtattoo.plaf.bernstein.BernsteinLookAndFeel");
 		}catch(Exception ex){}
 		new ClientMainForm();
+		
+		
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
