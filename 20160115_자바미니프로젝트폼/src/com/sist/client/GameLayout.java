@@ -10,9 +10,9 @@ public class GameLayout extends JPanel implements ActionListener{
 	
 	//배경화면
 	Image bg; //추상클래스 abstract!! 단독으로 메모리 할당을 못한다.
-	Image vs;
-	//빙고판 
+	Image vs; //가운데  vs 텍스트
 	
+	//빙고판 
 	static JButton[][] a4=new JButton[5][5]; //상대 판
 	static JButton[][] a5=new JButton[5][5];
 	static JButton[][] a6=new JButton[5][5];
@@ -21,6 +21,12 @@ public class GameLayout extends JPanel implements ActionListener{
 	static JButton[][] a2=new JButton[5][5];
 	static JButton[][] a3=new JButton[5][5];
 		
+	//플레이어 1,2  장기판별 아이디
+	//static JLabel eft1,eft2,eft3,eft4,eft5,eft6;
+	//플레이어 1,2  장기판별 게이지
+	static JProgressBar[][] gauge=new JProgressBar[2][3];
+	//static JProgressBar gauge=new JProgressBar();
+	//static JPanel[][] gaugePan=new JPanel[2][3];
 	//플레이어 2 빙고판 레이아웃 (상대판)
 	static JPanel p=new JPanel();
 	static JPanel p1=new JPanel();
@@ -45,6 +51,27 @@ public class GameLayout extends JPanel implements ActionListener{
 	ImageIcon bcIcon0=new ImageIcon("c:\\bingo\\빙고체크-위.png");
 	ImageIcon bcIcon1=new ImageIcon("c:\\bingo\\빙고체크-촉.png");
 	ImageIcon bcIcon2=new ImageIcon("c:\\bingo\\빙고체크-오.png");
+	
+	public void proBar()
+	{
+		//String[] color={"RED","GREEN","BLACK"};
+		int[] xVal={115,398,673};
+		
+				for(int i=0; i<2;i++)
+				{
+					for(int j=0; j<3; j++)
+					{
+						add(gauge[i][j]);
+						gauge[i][j].setMinimum(0); //진행바 최소값 설정
+						gauge[i][j].setMaximum(100); //진행바 최대값 설정
+						gauge[i][j].setStringPainted(true); //진행사항 퍼센티지로 보여주기 설정
+						gauge[i][j].setForeground(Color.BLUE); //진행바 색설정
+						gauge[i][j].setBounds(xVal[i/3], i*465+75, 165, 50);
+					}
+					
+				}	
+	}
+	
 	
 	public void Rand()
 	{
@@ -111,6 +138,46 @@ public class GameLayout extends JPanel implements ActionListener{
 
 	GameLayout()
 	{	
+		proBar();
+		/*add(gauge);
+		gauge.setBounds(115, 75, 165, 50);
+		gauge.setMinimum(0); //진행바 최소값 설정
+		gauge.setMaximum(100); //진행바 최대값 설정
+		gauge.setStringPainted(true); //진행사항 퍼센티지로 보여주기 설정
+		gauge.setForeground(Color.BLUE); //진행바 색설정
+		
+		add(gauge2);
+		gauge2.setBounds(370, 75, 165, 50);
+		gauge2.setMinimum(0); //진행바 최소값 설정
+		gauge2.setMaximum(100); //진행바 최대값 설정
+		gauge2.setStringPainted(true); //진행사항 퍼센티지로 보여주기 설정
+		gauge2.setForeground(Color.BLUE); //진행바 색설정
+*/		
+		// 장수효과 라벨 생성
+		JLabel eft1 = new JLabel();
+		JLabel eft2 = new JLabel();
+		JLabel eft3 = new JLabel();
+		JLabel eft4 = new JLabel();
+		JLabel eft5 = new JLabel();
+		JLabel eft6 = new JLabel();
+		add(eft1); add(eft2); add(eft3);
+		add(eft4); add(eft5); add(eft6);
+		Font f1 = new Font("궁서",Font.BOLD,18);
+		eft1.setText("장군효과: 투  신");
+		eft2.setText("장군효과: 적진기습");
+		eft3.setText("장군효과: 진영파괴");
+		eft4.setText("장군효과: 투  신");
+		eft5.setText("장군효과: 적진기습");
+		eft6.setText("장군효과: 진영파괴");
+		eft1.setFont(f1);
+		eft2.setFont(f1);
+		eft3.setFont(f1);
+		eft4.setFont(f1);
+		eft5.setFont(f1);
+		eft6.setFont(f1);
+		eft1.setBounds(120, 30, 188, 60); eft2.setBounds(398, 30, 188, 60); eft3.setBounds(673, 30, 188, 60);
+		eft4.setBounds(120, 495, 188, 60); eft5.setBounds(398, 495, 188, 60); eft6.setBounds(673, 495, 188, 60);
+		// 배경화면
 		bg=Toolkit.getDefaultToolkit().getImage("c:\\bingo\\인게임배경.jpg");
 		vs=Toolkit.getDefaultToolkit().getImage("c:\\bingo\\vs.png");
 		setLayout(null);
@@ -122,7 +189,16 @@ public class GameLayout extends JPanel implements ActionListener{
 		add(pp);
 		p.add(p1); 		p.add(p2); 		p.add(p3);
 		pp.add(pp1);	pp.add(pp2);	pp.add(pp3);
-
+		FlowLayout j0=new FlowLayout(FlowLayout.RIGHT,185,0);
+		add(j1);
+		//j1.setOpaque(false);
+		j1.setLayout(j0);
+		add(j2);
+		j2.setLayout(j0);
+		//j2.setOpaque(false);
+		j2.setBackground(null);
+		j1.setBounds(20, 30, 836, 100);
+		j2.setBounds(20, 495, 836, 100);
 		p.setBounds(5,130,900,275);
 		pp.setBounds(5, 595, 900, 275);
 		p1.setLayout(new GridLayout(5,5,0,0)); //5by5행렬모양, 좌,우갭은 0

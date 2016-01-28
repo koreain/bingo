@@ -25,12 +25,16 @@ public class ChoiceNation extends JPanel{
 				JButton a1=new JButton(new ImageIcon("c:\\bingo\\장수"+chosenNation1+i+".jpg"));
 				//a1.setEnabled(false);
 				GameLayout.j1.add(a1);
+				a1.setContentAreaFilled(false);
+				a1.setBorderPainted(false); //버튼 경계선 제거
 			}
 			else
 			{
 				JButton a2=new JButton(new ImageIcon("c:\\bingo\\장수"+chosenNation2+(i%3)+".jpg"));
 				//a1.setEnabled(false);
 				GameLayout.j2.add(a2);
+				a2.setContentAreaFilled(false);
+				a2.setBorderPainted(false);
 			}
 		}
 	}
