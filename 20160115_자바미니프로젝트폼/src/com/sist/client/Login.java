@@ -53,7 +53,7 @@ public class Login extends JPanel{ //상속 extends
 		// TODO Auto-generated method stub
 		//getWidth(),getHeight(): 그림 크기를 창 안에 딱 맞게 집어넣음
 		g.drawImage(img, 0, 0, getWidth(),getHeight(),this);//this에 그려라
-		g.drawImage(loginTxt, 150, 200, 900, 270, this);
+		g.drawImage(loginTxt, 150, 215, 900, 270, this);
 	}
 	
 }

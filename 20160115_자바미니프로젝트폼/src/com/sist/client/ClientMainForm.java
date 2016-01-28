@@ -6,22 +6,26 @@ public class ClientMainForm extends JFrame
 implements ActionListener
 {
 	Login login=new Login();
+//	Loading2 ld2=new Loading2();
 	WaitRoom wr=new WaitRoom();
 	ChoiceNation cn=new ChoiceNation();
 	CardLayout card=new CardLayout();
 	GameLayout game=new GameLayout();
 	
 	ImageIcon mainIcon;//타이틀창 아이콘
+	
 	ClientMainForm() 
 	{
 		super("삼국지 전략빙고");//타이틀 제목
 		mainIcon=new ImageIcon("img\\타이틀아이콘.png");
 		this.setIconImage(mainIcon.getImage());
 		
+		
 		setLayout(card);//BorderLayout
 		add("LOG",login);
+//		add("LOADING2",ld2);
 		add("WR",wr);
-		add("ChoiceNation",cn);//
+		add("ChoiceNation",cn);//나라선택 화면
 		add("GAME",game);
 		setSize(1200,970);
 		setVisible(true);
@@ -48,6 +52,7 @@ implements ActionListener
 		
 		
 	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
