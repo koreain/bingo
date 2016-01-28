@@ -17,26 +17,26 @@ public class Login extends JPanel{ //상속 extends
 		loginTxt=Toolkit.getDefaultToolkit().getImage("img\\로그인텍스트.png");
 		setLayout(null);//FlowLayout
 		// 각 레이아웃속성 할당
-		la1=new JLabel("ID");
-		la2=new JLabel("PW");
+		la1=new JLabel("아이디");
+		la2=new JLabel("비밀번호");
 		tf=new JTextField();
 		pf=new JPasswordField();
-		b1=new JButton("login");
-		b2=new JButton("cancel");
+		b1=new JButton("로그인");
+		b2=new JButton("나가기");
 		b3=new JButton("회원가입");
 		//배치
-		la1.setBounds(290, 350, 40, 30); //x,y,w,h -300
+		la1.setBounds(465, 540, 50, 30); //x,y,w,h -300
 		la1.setForeground(Color.white); // 필드명 색깔 변경 -300
-		tf.setBounds(335, 350, 150,30);
-		la2.setBounds(290, 385, 40, 30);
+		tf.setBounds(520, 540, 150,30);
+		la2.setBounds(465, 585, 50, 30);
 		la2.setForeground(Color.white); // 필드명 색깔 변경 -300
-		pf.setBounds(335, 385, 150,30);
+		pf.setBounds(520, 585, 150,30);
 		
 		JPanel p=new JPanel();
 		p.add(b1);
-		p.add(b2);
 		p.add(b3);
-		p.setBounds(310, 420, 195, 35);
+		p.add(b2);
+		p.setBounds(495, 625, 195, 35);
 		p.setOpaque(false);//뒷부분(쓸데없는 부분) 제거(투명화)
 		add(la1);
 		add(tf);
@@ -49,10 +49,11 @@ public class Login extends JPanel{ //상속 extends
 		b3.setCursor(cur);
 	}
 	@Override
-	   protected void paintComponent(Graphics g) {
-	      // TODO Auto-generated method stub
-	      //getWidth(),getHeight(): 그림 크기를 창 안에 딱 맞게 집어넣음
-	      g.drawImage(img, 0, 0, getWidth(),getHeight(),this);//this에 그려라
-	   }
+	protected void paintComponent(Graphics g) {
+		// TODO Auto-generated method stub
+		//getWidth(),getHeight(): 그림 크기를 창 안에 딱 맞게 집어넣음
+		g.drawImage(img, 0, 0, getWidth(),getHeight(),this);//this에 그려라
+		g.drawImage(loginTxt, 150, 200, 900, 270, this);
+	}
 	
 }

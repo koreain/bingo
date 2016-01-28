@@ -66,6 +66,7 @@ implements ActionListener
 		}
 		else if(e.getSource()==wr.b6) //나가기를 누르면 프로그램 종료
 		{
+			dispose();
 			System.exit(0);
 		}
 		else if(e.getSource()==wr.b3) //1:1게임을 누르면 진영선택창

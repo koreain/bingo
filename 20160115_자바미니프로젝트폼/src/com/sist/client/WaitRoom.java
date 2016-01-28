@@ -22,8 +22,8 @@ public class WaitRoom extends JPanel implements ActionListener{
    private Cursor cur = new Cursor(Cursor.HAND_CURSOR);
    WaitRoom()
    {
-      String[] col1={"방이름","공개/비공개","인원"};
-      String[][] row1=new String[0][3]; //초기 0값, but 데이터는 3개씩..
+      String[] col1={"방번호","방이름","공개/비공개","인원"};
+      String[][] row1=new String[0][4]; //초기 0값, but 데이터는 3개씩..
       model1=new DefaultTableModel(row1, col1);
       table1=new JTable(model1);
       JScrollPane js1=new JScrollPane(table1);
@@ -49,8 +49,8 @@ public class WaitRoom extends JPanel implements ActionListener{
       b1=new JButton("방만들기");
       b2=new JButton("방들어가기");
       b3=new JButton("1:1 게임");
-      b4=new JButton("쪽지보내기");
-      b5=new JButton("정보보기");
+      b4=new JButton("게임방법");
+      b5=new JButton("게임정보");
       b6=new JButton("나가기");
       b1.setFont(new Font("맑은 고딕",Font.BOLD,20));
       b2.setFont(new Font("맑은 고딕",Font.BOLD,20));
@@ -72,7 +72,6 @@ public class WaitRoom extends JPanel implements ActionListener{
       tf.setBounds(10, 875, 295, 30); //채팅창입력창 
       box.setBounds(310, 875, 100, 30); //글자색깔 
       p.setBounds(425, 820, 755, 80); //버튼 
-
 
       add(js1);
       add(js2);
@@ -120,6 +119,7 @@ public class WaitRoom extends JPanel implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		String name="김진현";
+		
 		String data=name+">> "+tf.getText();
 		if(e.getSource()==tf) {
 			if(data.length()<1)
