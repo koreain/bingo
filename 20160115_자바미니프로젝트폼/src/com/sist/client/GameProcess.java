@@ -324,6 +324,10 @@ public class GameProcess extends JPanel{
 			numOfLine4++;
 		}
 		numOfBingo2[0]=numOfLine4;
+		if(numOfLine4>3)
+			GameLayout.gauge[0][0].setValue(gaugeScore[3]);
+			else
+			GameLayout.gauge[0][0].setValue(gaugeScore[numOfLine4]);
 		attackSkill2=numOfLine4;
 		attackFinish2=numOfLine4;
 		
@@ -360,6 +364,10 @@ public class GameProcess extends JPanel{
 			numOfLine5++;
 		}
 		numOfBingo2[1]=numOfLine5;
+		if(numOfLine5>3)
+			GameLayout.gauge[0][1].setValue(gaugeScore[3]);
+			else
+			GameLayout.gauge[0][1].setValue(gaugeScore[numOfLine5]);
 		attackSkill2=numOfLine5;
 		attackFinish2=numOfLine5;
 		
@@ -396,6 +404,10 @@ public class GameProcess extends JPanel{
 			numOfLine6++;
 		}
 		numOfBingo2[2]=numOfLine6;
+		if(numOfLine5>3)
+			GameLayout.gauge[0][2].setValue(gaugeScore[3]);
+			else
+			GameLayout.gauge[0][2].setValue(gaugeScore[numOfLine6]);
 		strategySkill2=numOfLine6;
 		strategyFinish2=numOfLine6;
 				
