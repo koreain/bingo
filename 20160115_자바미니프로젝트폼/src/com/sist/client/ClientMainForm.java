@@ -83,5 +83,6 @@ implements ActionListener
 		{
 			card.show(getContentPane(), "GAME");
 		}
+		
 	}
 }

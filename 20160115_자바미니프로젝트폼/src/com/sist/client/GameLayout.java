@@ -17,7 +17,16 @@ public class GameLayout extends JPanel implements ActionListener{
 	static JButton[][] a2=new JButton[3][25]; //상대판
 	
 	//플레이어 1,2  장기판별 게이지 
-	static JProgressBar[][] gauge=new JProgressBar[2][3]; 
+	static JProgressBar[][] gauge=new JProgressBar[2][3];
+	//플레이어 1,2 장기판별 궁극기 활성 안내버튼
+	static JButton[][] fury=new JButton[2][3];
+	
+	//플레이어 1,2 장기판별 빙고획득점수 확인패널
+	static JButton[][] bingoScore=new JButton[6][5];
+	static JPanel[] bingoScorePan=new JPanel[6];
+	static ImageIcon bingo1=new ImageIcon("img\\빙고-한줄.png");
+	static ImageIcon bingo2=new ImageIcon("img\\빙고-한줄완성.png");
+	
 	
 	//플레이어 2 빙고판 레이아웃 (상대판)
 	static JPanel p=new JPanel();
@@ -33,8 +42,8 @@ public class GameLayout extends JPanel implements ActionListener{
 	
 	// 장수 캐릭터 창
 	
-	static JPanel j1=new JPanel();
-	static JPanel j2=new JPanel();
+	static JPanel j1=new JPanel(); //플레이어2
+	static JPanel j2=new JPanel(); //플레이어1
 	
 	
 	//마우스 커서가 버튼에 올라갔을때 손모양으로 바뀌게
@@ -45,7 +54,27 @@ public class GameLayout extends JPanel implements ActionListener{
 	static ImageIcon bcIcon2=new ImageIcon("img\\빙고체크-오.png");
 	
 	
-
+	public void RanButton(int a, int b, int c, JPanel d, JPanel e)
+	{
+		ImageIcon m=new ImageIcon("img\\"+GameProcess.numArr1[a]+".png");
+		a1[b][a-c]= new JButton(m);
+		d.add(a1[b][a-c]);
+		// 버튼에 아이콘 사이즈 맞추기 
+		a1[b][a-c].setPreferredSize(new Dimension(m.getIconWidth(), m.getIconHeight()));
+		a1[b][a-c].setBorderPainted(false); //버튼 경계선 제거
+		a1[b][a-c].setContentAreaFilled(false); //선택했던 버튼 표시 제거
+		a1[b][a-c].setFocusPainted(false); //버튼영역 배경 제거
+		ImageIcon m1=new ImageIcon("img\\"+GameProcess.numArr2[a]+".png");
+		a2[b][a-c]= new JButton(m1);
+		e.add(a2[b][a-c]);
+		// 버튼에 아이콘 사이즈 맞추기 
+		a2[b][a-c].setPreferredSize(new Dimension(m1.getIconWidth(), m1.getIconHeight()));
+		a2[b][a-c].setBorderPainted(false); //버튼 경계선 제거
+		a2[b][a-c].setContentAreaFilled(false); //선택했던 버튼 표시 제거
+		a2[b][a-c].setFocusPainted(false); //버튼영역 배경 제거
+	}
+	
+	
 	public void Rand()
 	{
 		GameProcess.rand(); // GameProcess 클래스 안쪽으로 들어가서~ 랜덤메소드 호출
@@ -54,57 +83,15 @@ public class GameLayout extends JPanel implements ActionListener{
 		{
 		  if(i<25)	
 		  {
-			// 랜덤으로 생성된 숫자numArr1에 따른 숫자아이콘 버튼에 추가 
-			ImageIcon m=new ImageIcon("img\\"+GameProcess.numArr1[i]+".png");
-			a1[0][i]= new JButton(m);
-			pp1.add(a1[0][i]);
-			// 버튼에 아이콘 사이즈 맞추기 
-			a1[0][i].setPreferredSize(new Dimension(m.getIconWidth(), m.getIconHeight()));
-			a1[0][i].setBorderPainted(false); //버튼 경계선 제거
-			a1[0][i].setContentAreaFilled(false); //선택했던 버튼 표시 제거
-			a1[0][i].setFocusPainted(false); //버튼영역 배경 제거
-			ImageIcon m1=new ImageIcon("img\\"+GameProcess.numArr2[i]+".png");
-			a2[0][i]= new JButton(m1);
-			p1.add(a2[0][i]);
-			// 버튼에 아이콘 사이즈 맞추기 
-			a2[0][i].setPreferredSize(new Dimension(m1.getIconWidth(), m1.getIconHeight()));
-			a2[0][i].setBorderPainted(false); //버튼 경계선 제거
-			a2[0][i].setContentAreaFilled(false); //선택했던 버튼 표시 제거
-			a2[0][i].setFocusPainted(false); //버튼영역 배경 제거
+			  RanButton(i, 0, 0, pp1, p1);
 		  }
 		  else if((i>=25)&&(i<50))
 		  {
-			ImageIcon m=new ImageIcon("img\\"+GameProcess.numArr1[i]+".png");
-			a1[1][i-25]= new JButton(m);
-			pp2.add(a1[1][i-25]);
-			a1[1][i-25].setPreferredSize(new Dimension(m.getIconWidth(), m.getIconHeight()));
-			a1[1][i-25].setBorderPainted(false);
-			a1[1][i-25].setContentAreaFilled(false); 
-			a1[1][i-25].setFocusPainted(false);
-			ImageIcon m1=new ImageIcon("img\\"+GameProcess.numArr2[i]+".png");
-			a2[1][i-25]= new JButton(m1);
-			p2.add(a2[1][i-25]);
-			a2[1][i-25].setPreferredSize(new Dimension(m1.getIconWidth(), m1.getIconHeight()));
-			a2[1][i-25].setBorderPainted(false);
-			a2[1][i-25].setContentAreaFilled(false); 
-			a2[1][i-25].setFocusPainted(false);
+			  RanButton(i, 1, 25, pp2, p2);
 		  }
 		  else//(i>=50)
 		  {
-			ImageIcon m=new ImageIcon("img\\"+GameProcess.numArr1[i]+".png");
-			a1[2][i-50]= new JButton(m);
-			pp3.add(a1[2][i-50]);  
-			a1[2][i-50].setPreferredSize(new Dimension(m.getIconWidth(), m.getIconHeight()));
-			a1[2][i-50].setBorderPainted(false);
-			a1[2][i-50].setContentAreaFilled(false); 
-			a1[2][i-50].setFocusPainted(false);
-			ImageIcon m1=new ImageIcon("img\\"+GameProcess.numArr2[i]+".png");
-			a2[2][i-50]= new JButton(m1);
-			p3.add(a2[2][i-50]);  
-			a2[2][i-50].setPreferredSize(new Dimension(m1.getIconWidth(), m1.getIconHeight()));
-			a2[2][i-50].setBorderPainted(false);
-			a2[2][i-50].setContentAreaFilled(false); 
-			a2[2][i-50].setFocusPainted(false);
+			RanButton(i, 2, 50, pp3, p3);
 		  }
 		}
 	}
@@ -113,10 +100,45 @@ public class GameLayout extends JPanel implements ActionListener{
 	{	
 		Color RED=new Color(255,0,0);
 		Color GREEN=new Color(0,147,0);
-		Color BLUE=new Color(95,0,255);
-		Color[] color={RED,GREEN,BLUE};
+		Color PURPLE=new Color(95,0,255); //BLUE 명칭을 보라색 PURPLE로 변경-HJ
+		Color[] color={RED,GREEN,PURPLE}; //BLUE 명칭을 보라색 PURPLE로 변경-HJ
 		int[] xVal={115,398,673};
+		int[] xVal2={230,513,788};
 		
+		String[] goong={"img\\스킬아이콘-공격필살기.png",
+						"img\\스킬아이콘-방어필살기.png",
+						"img\\스킬아이콘-책략필살기.png"};
+		
+		for(int i=0; i<6; i++)
+		{	bingoScorePan[i]=new JPanel();
+			add(bingoScorePan[i]);
+			bingoScorePan[i].setOpaque(false);
+			for(int j=0; j<5; j++)
+			{
+				bingoScore[i][j]=new JButton(bingo1);
+				bingoScorePan[i].add(bingoScore[i][j]);
+				bingoScore[i][j].setPreferredSize(new Dimension(bingo1.getIconWidth(), bingo1.getIconHeight()));
+				bingoScorePan[i].setBounds(xVal[i%3]-8, (i/3)*465+40, 180, 60);
+				bingoScore[i][j].setBorderPainted(false);
+				bingoScore[i][j].setContentAreaFilled(false); 
+				bingoScore[i][j].setFocusPainted(false);
+			}
+		}
+		
+		
+		// 필살기 버튼 생성 (초기: setVisible(false), 100퍼센트 이후: setVisible(true)
+		for(int i=0; i<2;i++)
+		{
+			for(int j=0; j<3; j++)
+			{
+				fury[i][j]=new JButton(new ImageIcon(goong[j]));
+				add(fury[i][j]);
+				fury[i][j].setBounds(xVal2[j], i*468+74, 60, 60);
+				fury[i][j].setBorderPainted(false); //버튼 경계선 제거
+				fury[i][j].setContentAreaFilled(false); //선택했던 버튼 표시 제거
+				fury[i][j].setFocusPainted(false); //버튼영역 배경 제거
+			}
+		}
 		for(int i=0; i<2;i++)
 		{
 			for(int j=0; j<3; j++)
@@ -127,13 +149,12 @@ public class GameLayout extends JPanel implements ActionListener{
 				gauge[i][j].setMaximum(100); //진행바 최대값 설정
 				gauge[i][j].setStringPainted(true); //진행사항 퍼센티지로 보여주기 설정
 				gauge[i][j].setForeground(color[j]); //진행바 색설정
-				gauge[i][j].setBounds(xVal[j], i*465+75, 165, 50);
+				gauge[i][j].setBounds(xVal[j], i*467+85, 115, 40);
 			}
 			
 		}
-		
 		// 장수효과 라벨 생성
-		JLabel eft1 = new JLabel();
+		/*JLabel eft1 = new JLabel();
 		JLabel eft2 = new JLabel();
 		JLabel eft3 = new JLabel();
 		JLabel eft4 = new JLabel();
@@ -155,7 +176,7 @@ public class GameLayout extends JPanel implements ActionListener{
 		eft5.setFont(f1);
 		eft6.setFont(f1);
 		eft1.setBounds(120, 30, 188, 60); eft2.setBounds(398, 30, 188, 60); eft3.setBounds(673, 30, 188, 60);
-		eft4.setBounds(120, 495, 188, 60); eft5.setBounds(398, 495, 188, 60); eft6.setBounds(673, 495, 188, 60);
+		eft4.setBounds(120, 495, 188, 60); eft5.setBounds(398, 495, 188, 60); eft6.setBounds(673, 495, 188, 60);*/
 		
 		// 배경화면
 		bg=Toolkit.getDefaultToolkit().getImage("img\\인게임배경.jpg");
@@ -171,14 +192,14 @@ public class GameLayout extends JPanel implements ActionListener{
 		pp.add(pp1);	pp.add(pp2);	pp.add(pp3);
 		FlowLayout j0=new FlowLayout(FlowLayout.RIGHT,185,0);
 		add(j1);
-		//j1.setOpaque(false);
+		j1.setOpaque(false);
 		j1.setLayout(j0);
 		add(j2);
 		j2.setLayout(j0);
-		//j2.setOpaque(false);
+		j2.setOpaque(false);
 		j2.setBackground(null);
-		j1.setBounds(20, 30, 836, 100);
-		j2.setBounds(20, 495, 836, 100);
+		j2.setBounds(20, 30, 836, 100);
+		j1.setBounds(20, 495, 836, 100);
 		p.setBounds(5,130,900,275);
 		pp.setBounds(5, 595, 900, 275);
 		p1.setLayout(new GridLayout(5,5,0,0)); //5by5행렬모양, 좌,우갭은 0
@@ -223,7 +244,7 @@ public class GameLayout extends JPanel implements ActionListener{
 	@Override
 	public void paintComponent(Graphics g){
 		g.drawImage(bg, 0, 0, getWidth(), getHeight(), this);
-		g.drawImage(vs, 500, 400, vs.getWidth(this),vs.getHeight(this),this);
+		g.drawImage(vs, 332, 400, vs.getWidth(this),vs.getHeight(this),this);
 	}
 	
 	//버튼 누르기 빙고체크!!!!!!!!

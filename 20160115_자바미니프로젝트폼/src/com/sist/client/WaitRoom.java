@@ -130,6 +130,7 @@ public class WaitRoom extends JPanel implements ActionListener{
 			tf.setText("");	
 		}
 		 if(e.getSource()==b1) {
+			 mr.setLocationRelativeTo(null);
 			mr.setVisible(true);
 		}else if(e.getSource()==mr.b2) {
 			mr.setVisible(false);
@@ -138,6 +139,7 @@ public class WaitRoom extends JPanel implements ActionListener{
 		 if(e.getSource()==mr.b1) {
 			  String data1=mr.tf.getText();
 		 }
+		 
 	}
 }
 

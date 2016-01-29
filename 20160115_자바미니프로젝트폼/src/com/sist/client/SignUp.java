@@ -105,7 +105,7 @@ public class SignUp extends JFrame implements ActionListener, FocusListener{
 		Dimension ds = tk.getScreenSize(); // 현재 스크린 사이즈를 저장
 		setLocation(ds.width/2+130, ds.height/2-350);
 		
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		/*setDefaultCloseOperation(EXIT_ON_CLOSE);*/
 		setSize(370, 510);
 		setVisible(false);
 	}

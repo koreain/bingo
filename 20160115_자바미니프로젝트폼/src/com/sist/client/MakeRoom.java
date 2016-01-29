@@ -53,7 +53,7 @@ public class MakeRoom extends JFrame implements ActionListener {
 		add(noopen);
 		add(la3);
 		add(pf);
-		add(p);
+		add("Center",p); //
 
 		setSize(230, 220);
 		// setVisible(true);
