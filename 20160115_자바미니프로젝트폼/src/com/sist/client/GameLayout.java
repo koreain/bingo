@@ -24,9 +24,7 @@ public class GameLayout extends JPanel implements ActionListener{
 	//플레이어 1,2  장기판별 아이디
 	//static JLabel eft1,eft2,eft3,eft4,eft5,eft6;
 	//플레이어 1,2  장기판별 게이지
-	static JProgressBar[][] gauge=new JProgressBar[2][3];
-	//static JProgressBar gauge=new JProgressBar();
-	//static JPanel[][] gaugePan=new JPanel[2][3];
+	static JProgressBar[][] gauge=new JProgressBar[2][3];;
 	//플레이어 2 빙고판 레이아웃 (상대판)
 	static JPanel p=new JPanel();
 	static JPanel p1=new JPanel();
@@ -51,27 +49,6 @@ public class GameLayout extends JPanel implements ActionListener{
 	ImageIcon bcIcon0=new ImageIcon("c:\\bingo\\빙고체크-위.png");
 	ImageIcon bcIcon1=new ImageIcon("c:\\bingo\\빙고체크-촉.png");
 	ImageIcon bcIcon2=new ImageIcon("c:\\bingo\\빙고체크-오.png");
-	
-	public void proBar()
-	{
-		//String[] color={"RED","GREEN","BLACK"};
-		int[] xVal={115,398,673};
-		
-				for(int i=0; i<2;i++)
-				{
-					for(int j=0; j<3; j++)
-					{
-						add(gauge[i][j]);
-						gauge[i][j].setMinimum(0); //진행바 최소값 설정
-						gauge[i][j].setMaximum(100); //진행바 최대값 설정
-						gauge[i][j].setStringPainted(true); //진행사항 퍼센티지로 보여주기 설정
-						gauge[i][j].setForeground(Color.BLUE); //진행바 색설정
-						gauge[i][j].setBounds(xVal[i/3], i*465+75, 165, 50);
-					}
-					
-				}	
-	}
-	
 	
 	public void Rand()
 	{
@@ -126,7 +103,7 @@ public class GameLayout extends JPanel implements ActionListener{
 			a3[(i/5)-10][i%5].setContentAreaFilled(false); 
 			a3[(i/5)-10][i%5].setFocusPainted(false);
 			ImageIcon m1=new ImageIcon("c:\\bingo\\"+GameProcess.numArr2[i]+".png");
-			a6[(i/5)-10][i%5]= new JButton(m);
+			a6[(i/5)-10][i%5]= new JButton(m1);
 			p3.add(a6[(i/5)-10][i%5]);  
 			a6[(i/5)-10][i%5].setPreferredSize(new Dimension(m1.getIconWidth(), m1.getIconHeight()));
 			a6[(i/5)-10][i%5].setBorderPainted(false);
@@ -138,21 +115,27 @@ public class GameLayout extends JPanel implements ActionListener{
 
 	GameLayout()
 	{	
-		proBar();
-		/*add(gauge);
-		gauge.setBounds(115, 75, 165, 50);
-		gauge.setMinimum(0); //진행바 최소값 설정
-		gauge.setMaximum(100); //진행바 최대값 설정
-		gauge.setStringPainted(true); //진행사항 퍼센티지로 보여주기 설정
-		gauge.setForeground(Color.BLUE); //진행바 색설정
+		Color RED=new Color(255,0,0);
+		Color GREEN=new Color(0,147,0);
+		Color BLUE=new Color(95,0,255);
+		Color[] color={RED,GREEN,BLUE};
+		int[] xVal={115,398,673};
 		
-		add(gauge2);
-		gauge2.setBounds(370, 75, 165, 50);
-		gauge2.setMinimum(0); //진행바 최소값 설정
-		gauge2.setMaximum(100); //진행바 최대값 설정
-		gauge2.setStringPainted(true); //진행사항 퍼센티지로 보여주기 설정
-		gauge2.setForeground(Color.BLUE); //진행바 색설정
-*/		
+		for(int i=0; i<2;i++)
+		{
+			for(int j=0; j<3; j++)
+			{
+				gauge[i][j]=new JProgressBar();
+				add(gauge[i][j]);
+				gauge[i][j].setMinimum(0); //진행바 최소값 설정
+				gauge[i][j].setMaximum(100); //진행바 최대값 설정
+				gauge[i][j].setStringPainted(true); //진행사항 퍼센티지로 보여주기 설정
+				gauge[i][j].setForeground(color[j]); //진행바 색설정
+				gauge[i][j].setBounds(xVal[j], i*465+75, 165, 50);
+			}
+			
+		}
+		
 		// 장수효과 라벨 생성
 		JLabel eft1 = new JLabel();
 		JLabel eft2 = new JLabel();
@@ -191,11 +174,11 @@ public class GameLayout extends JPanel implements ActionListener{
 		pp.add(pp1);	pp.add(pp2);	pp.add(pp3);
 		FlowLayout j0=new FlowLayout(FlowLayout.RIGHT,185,0);
 		add(j1);
-		//j1.setOpaque(false);
+		j1.setOpaque(false);
 		j1.setLayout(j0);
 		add(j2);
 		j2.setLayout(j0);
-		//j2.setOpaque(false);
+		j2.setOpaque(false);
 		j2.setBackground(null);
 		j1.setBounds(20, 30, 836, 100);
 		j2.setBounds(20, 495, 836, 100);

@@ -56,6 +56,9 @@ public class GameProcess extends JPanel{
 	static boolean playerTurn=false; //true=player1, false=player2 
 
 	static int chosenNation=0;//위:0,촉:1,오:2
+	
+	static int[] gaugeScore={0,33,66,100};
+	
 	static void rand()//중복되지 않는 랜덤 숫자배열 두개 만들기
 	{		
 		int su=0; //난수 발생시 저장할 변수
@@ -175,7 +178,9 @@ public class GameProcess extends JPanel{
 					&&bingo1[0][(i*5)+2]==true&&bingo1[0][(i*5)+3]==true
 					&&bingo1[0][(i*5)+4]==true)
 			{
+				
 				numOfLine1++;
+				
 			}
 			//세로
 			if(bingo1[0][i]==true&&bingo1[0][i+5]==true
@@ -199,6 +204,10 @@ public class GameProcess extends JPanel{
 			numOfLine1++;
 		}
 		numOfBingo1[0]=numOfLine1;
+		if(numOfLine1>3)
+		GameLayout.gauge[1][0].setValue(gaugeScore[3]);
+		else
+		GameLayout.gauge[1][0].setValue(gaugeScore[numOfLine1]);
 		attackSkill1=numOfLine1;
 		attackFinish1=numOfLine1;
 		
@@ -235,6 +244,10 @@ public class GameProcess extends JPanel{
 			numOfLine2++;
 		}
 		numOfBingo1[1]=numOfLine2;
+		if(numOfLine2>3)
+		GameLayout.gauge[1][1].setValue(gaugeScore[3]);
+		else
+		GameLayout.gauge[1][1].setValue(gaugeScore[numOfLine2]);
 		attackSkill1=numOfLine2;
 		attackFinish1=numOfLine2;
 		
@@ -271,6 +284,10 @@ public class GameProcess extends JPanel{
 			numOfLine3++;
 		}
 		numOfBingo1[2]=numOfLine3;
+		if(numOfLine3>3)
+		GameLayout.gauge[1][2].setValue(gaugeScore[3]);
+		else
+		GameLayout.gauge[1][2].setValue(gaugeScore[numOfLine3]);
 		strategySkill1=numOfLine3;
 		strategyFinish1=numOfLine3;
 		
