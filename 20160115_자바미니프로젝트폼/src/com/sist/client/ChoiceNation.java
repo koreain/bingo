@@ -16,7 +16,7 @@ public class ChoiceNation extends JPanel{
 	//마우스 커서가 버튼에 올라갔을때 손모양으로 바뀌게
 	private Cursor cur = new Cursor(Cursor.HAND_CURSOR);
 	
-	public void jangsu()//장수선택
+	public void jangsu()
 	{
 		for(int i=0;i<6;i++)
 		{
@@ -38,6 +38,7 @@ public class ChoiceNation extends JPanel{
 			}
 		}
 	}
+	
 	
 	public ChoiceNation()
 	{
