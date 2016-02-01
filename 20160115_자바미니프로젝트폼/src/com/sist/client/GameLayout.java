@@ -11,6 +11,9 @@ public class GameLayout extends JPanel implements ActionListener{
 	//배경화면
 	Image bg; //추상클래스 abstract!! 단독으로 메모리 할당을 못한다.
 	Image vs; //가운데  vs 텍스트
+	Image pan1; //빙고틀 플레이어1
+	Image pan2; //빙고틀 플레이어2
+	
 	
 	//빙고판 
 	static JButton[][] a1=new JButton[3][25]; //내 판
@@ -102,8 +105,8 @@ public class GameLayout extends JPanel implements ActionListener{
 		Color GREEN=new Color(0,147,0);
 		Color PURPLE=new Color(95,0,255); //BLUE 명칭을 보라색 PURPLE로 변경-HJ
 		Color[] color={RED,GREEN,PURPLE}; //BLUE 명칭을 보라색 PURPLE로 변경-HJ
-		int[] xVal={115,398,673};
-		int[] xVal2={230,513,788};
+		int[] xVal={130,413,688};
+		int[] xVal2={245,528,803};
 		
 		String[] goong={"img\\스킬아이콘-공격필살기.png",
 						"img\\스킬아이콘-방어필살기.png",
@@ -118,7 +121,7 @@ public class GameLayout extends JPanel implements ActionListener{
 				bingoScore[i][j]=new JButton(bingo1);
 				bingoScorePan[i].add(bingoScore[i][j]);
 				bingoScore[i][j].setPreferredSize(new Dimension(bingo1.getIconWidth(), bingo1.getIconHeight()));
-				bingoScorePan[i].setBounds(xVal[i%3]-8, (i/3)*465+40, 180, 60);
+				bingoScorePan[i].setBounds(xVal[i%3]-8, (i/3)*505+40, 180, 60);
 				bingoScore[i][j].setBorderPainted(false);
 				bingoScore[i][j].setContentAreaFilled(false); 
 				bingoScore[i][j].setFocusPainted(false);
@@ -133,10 +136,11 @@ public class GameLayout extends JPanel implements ActionListener{
 			{
 				fury[i][j]=new JButton(new ImageIcon(goong[j]));
 				add(fury[i][j]);
-				fury[i][j].setBounds(xVal2[j], i*468+74, 60, 60);
+				fury[i][j].setBounds(xVal2[j], i*508+74, 60, 60);
 				fury[i][j].setBorderPainted(false); //버튼 경계선 제거
 				fury[i][j].setContentAreaFilled(false); //선택했던 버튼 표시 제거
 				fury[i][j].setFocusPainted(false); //버튼영역 배경 제거
+				fury[i][j].setEnabled(false);
 			}
 		}
 		for(int i=0; i<2;i++)
@@ -149,36 +153,14 @@ public class GameLayout extends JPanel implements ActionListener{
 				gauge[i][j].setMaximum(100); //진행바 최대값 설정
 				gauge[i][j].setStringPainted(true); //진행사항 퍼센티지로 보여주기 설정
 				gauge[i][j].setForeground(color[j]); //진행바 색설정
-				gauge[i][j].setBounds(xVal[j], i*467+85, 115, 40);
+				gauge[i][j].setBounds(xVal[j], i*507+85, 115, 40);
 			}
 			
 		}
-		// 장수효과 라벨 생성
-		/*JLabel eft1 = new JLabel();
-		JLabel eft2 = new JLabel();
-		JLabel eft3 = new JLabel();
-		JLabel eft4 = new JLabel();
-		JLabel eft5 = new JLabel();
-		JLabel eft6 = new JLabel();
-		add(eft1); add(eft2); add(eft3);
-		add(eft4); add(eft5); add(eft6);
-		Font f1 = new Font("궁서",Font.BOLD,18);
-		eft1.setText("장군효과: 투  신");
-		eft2.setText("장군효과: 적진기습");
-		eft3.setText("장군효과: 진영파괴");
-		eft4.setText("장군효과: 투  신");
-		eft5.setText("장군효과: 적진기습");
-		eft6.setText("장군효과: 진영파괴");
-		eft1.setFont(f1);
-		eft2.setFont(f1);
-		eft3.setFont(f1);
-		eft4.setFont(f1);
-		eft5.setFont(f1);
-		eft6.setFont(f1);
-		eft1.setBounds(120, 30, 188, 60); eft2.setBounds(398, 30, 188, 60); eft3.setBounds(673, 30, 188, 60);
-		eft4.setBounds(120, 495, 188, 60); eft5.setBounds(398, 495, 188, 60); eft6.setBounds(673, 495, 188, 60);*/
 		
 		// 배경화면
+		pan2=Toolkit.getDefaultToolkit().getImage("img\\빙고틀.png");
+		pan1=Toolkit.getDefaultToolkit().getImage("img\\빙고틀.png");
 		bg=Toolkit.getDefaultToolkit().getImage("img\\인게임배경.jpg");
 		vs=Toolkit.getDefaultToolkit().getImage("img\\vs.png");
 		setLayout(null);
@@ -198,10 +180,10 @@ public class GameLayout extends JPanel implements ActionListener{
 		j2.setLayout(j0);
 		j2.setOpaque(false);
 		j2.setBackground(null);
-		j2.setBounds(20, 30, 836, 100);
-		j1.setBounds(20, 495, 836, 100);
-		p.setBounds(5,130,900,275);
-		pp.setBounds(5, 595, 900, 275);
+		j2.setBounds(35, 30, 836, 100);
+		j1.setBounds(35, 535, 836, 100);
+		p.setBounds(20,130,900,275);
+		pp.setBounds(20, 635, 900, 275);
 		p1.setLayout(new GridLayout(5,5,0,0)); //5by5행렬모양, 좌,우갭은 0
 		p2.setLayout(new GridLayout(5,5,0,0));
 		p3.setLayout(new GridLayout(5,5,0,0));
@@ -244,7 +226,9 @@ public class GameLayout extends JPanel implements ActionListener{
 	@Override
 	public void paintComponent(Graphics g){
 		g.drawImage(bg, 0, 0, getWidth(), getHeight(), this);
-		g.drawImage(vs, 332, 400, vs.getWidth(this),vs.getHeight(this),this);
+		g.drawImage(vs, 343, 423, vs.getWidth(this),80,this);
+		g.drawImage(pan1, 4, 492, 895, 452, this);
+		g.drawImage(pan2, 4, -10, 895, 446, this);
 	}
 	
 	//버튼 누르기 빙고체크!!!!!!!!

@@ -166,6 +166,17 @@ public class GameProcess extends JPanel{
 	   else
 	   	  GameLayout.gauge[a][b].setValue(gaugeScore[lineNum]);
    }
+ 
+   static void goongCtrl(int lineNum, int a, int b)
+   {
+	 if(lineNum>=3)  
+	 //if()한번썼을경우에는 비활성화
+	 //GameLayout.fury[a][b].setEnabled(false);
+	 //else() <-- 한번도 안썼을경우
+	   GameLayout.fury[a][b].setEnabled(true);
+   }
+	  
+   
    
    static void bingoIcon(int lineNo,int a) //int a는 판숫자 (1~6);
    {
@@ -220,6 +231,7 @@ public class GameProcess extends JPanel{
       numOfBingo1[0]=numOfLine1;
       gaugeCtrl(numOfLine1, 1, 0);
       bingoIcon(numOfLine1, 4);
+      goongCtrl(numOfLine1,1,0);
       attackSkill1=numOfLine1;
       attackFinish1=numOfLine1;
       
@@ -258,6 +270,7 @@ public class GameProcess extends JPanel{
       numOfBingo1[1]=numOfLine2;
       gaugeCtrl(numOfLine2, 1, 1);
       bingoIcon(numOfLine2, 5);
+      goongCtrl(numOfLine2,1,1);
       attackSkill1=numOfLine2;
       attackFinish1=numOfLine2;
       
@@ -296,6 +309,7 @@ public class GameProcess extends JPanel{
       numOfBingo1[2]=numOfLine3;
       gaugeCtrl(numOfLine3, 1, 2);
       bingoIcon(numOfLine3, 6);
+      goongCtrl(numOfLine3,1,2);
       strategySkill1=numOfLine3;
       strategyFinish1=numOfLine3;
       
@@ -334,6 +348,7 @@ public class GameProcess extends JPanel{
       numOfBingo2[0]=numOfLine4;
       gaugeCtrl(numOfLine4, 0, 0);
       bingoIcon(numOfLine4, 1);
+      goongCtrl(numOfLine4,0,0);
       attackSkill2=numOfLine4;
       attackFinish2=numOfLine4;
       
@@ -372,6 +387,7 @@ public class GameProcess extends JPanel{
       numOfBingo2[1]=numOfLine5;
       gaugeCtrl(numOfLine5, 0, 1);
       bingoIcon(numOfLine5, 2);
+      goongCtrl(numOfLine5,0,1);
       attackSkill2=numOfLine5;
       attackFinish2=numOfLine5;
       
@@ -410,6 +426,7 @@ public class GameProcess extends JPanel{
       numOfBingo2[2]=numOfLine6;
       gaugeCtrl(numOfLine6, 0, 2);
       bingoIcon(numOfLine6, 3);
+      goongCtrl(numOfLine6,0,2);
       strategySkill2=numOfLine6;
       strategyFinish2=numOfLine6;
             
