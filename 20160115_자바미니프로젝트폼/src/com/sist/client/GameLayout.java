@@ -2,17 +2,20 @@ package com.sist.client;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.*;
 import javax.swing.border.*;
 
-public class GameLayout extends JPanel implements ActionListener{
+public class GameLayout extends JPanel implements ActionListener, KeyListener{
 	
 	//배경화면
 	Image bg; //추상클래스 abstract!! 단독으로 메모리 할당을 못한다.
 	Image vs; //가운데  vs 텍스트
 	Image pan1; //빙고틀 플레이어1
 	Image pan2; //빙고틀 플레이어2
+	ChatInGame cig = new ChatInGame();
 	
 	
 	//빙고판 
@@ -220,8 +223,11 @@ public class GameLayout extends JPanel implements ActionListener{
 				
 				a1[i][j].addActionListener(this); //버튼 액션 추가
 				a2[i][j].addActionListener(this);
+				
 			}
 		}
+		addKeyListener(this);
+		setFocusable(true);
 	}
 	@Override
 	public void paintComponent(Graphics g){
@@ -520,5 +526,34 @@ public class GameLayout extends JPanel implements ActionListener{
 				}
 			}
 		}
+	}
+
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		// TODO Auto-generated method stub
+		switch (e.getKeyCode()) {
+		case KeyEvent.VK_ENTER:
+			cig.setVisible(true);
+			cig.tf.requestFocus();
+			break;
+
+		default:
+			break;
+		}
+	}
+
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }

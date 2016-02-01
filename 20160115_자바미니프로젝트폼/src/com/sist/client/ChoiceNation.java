@@ -104,27 +104,12 @@ public class ChoiceNation extends JPanel{
 		nation0.setCursor(cur); //버튼 위에 커서를 올리면 손모양으로 변화되게 설정
 		nation1.setCursor(cur);
 		nation2.setCursor(cur);
-		
-//		setSize(1200,970);
-//		setVisible(true);
+
 	}
 	
 	@Override
 	public void paintComponent(Graphics g){
-		  g.drawImage(bg, 0, 0, 1200, 970, this); //배경 그리기
+		  g.drawImage(bg, 0, 0, 1280, 970, this); //배경 그리기
 		  g.drawImage(notice,80,110,360,130,this); //설명 그리기
 	}
-	
-//	public static void main(String[] args) {
-//		// TODO Auto-generated method stub
-//		JFrame f = new JFrame(); 
-//		f.setPreferredSize(new Dimension(1200, 970));
-//		f.setLocation(0, 0); 
-//		Container con = f.getContentPane(); 
-//		ChoiceNation c = new ChoiceNation(); 
-//		con.add(c); 
-//		f.pack(); 
-//		f.setVisible(true); 
-//		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//	}
 }

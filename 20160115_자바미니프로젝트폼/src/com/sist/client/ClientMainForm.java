@@ -27,7 +27,7 @@ implements ActionListener
 		add("WR",wr);
 		add("ChoiceNation",cn);//나라선택 화면
 		add("GAME",game);
-		setSize(1200,970);
+		setSize(1280,970);
 		setVisible(true);
 		
 		login.b1.addActionListener(this);//카드레이아웃이 될 버튼들 추가
@@ -82,6 +82,7 @@ implements ActionListener
 				||e.getSource()==cn.nation2)
 		{
 			card.show(getContentPane(), "GAME");
+			game.requestFocus(); 
 		}
 		
 	}
