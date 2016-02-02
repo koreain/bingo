@@ -16,7 +16,8 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 	Image pan1; //빙고틀 플레이어1
 	Image pan2; //빙고틀 플레이어2
 	ChatInGame cig = new ChatInGame();
-	
+	ChoiceNation cn=new ChoiceNation();
+	static int jypgUseCnt=0;
 	
 	//빙고판 
 	static JButton[][] a1=new JButton[3][25]; //내 판
@@ -102,8 +103,10 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 		}
 	}
 
+
 	GameLayout()
 	{	
+	
 		Color RED=new Color(255,0,0);
 		Color GREEN=new Color(0,147,0);
 		Color PURPLE=new Color(95,0,255); //BLUE 명칭을 보라색 PURPLE로 변경-HJ
@@ -224,6 +227,13 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 				a1[i][j].addActionListener(this); //버튼 액션 추가
 				a2[i][j].addActionListener(this);
 				
+			}
+		}
+		for(int i=0; i<2;i++)
+		{
+			for(int j=0; j<3; j++)
+			{
+				fury[i][j].addActionListener(this);
 			}
 		}
 		addKeyListener(this);
@@ -525,8 +535,42 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 					}
 				}
 			}
+			
+			
 		}
-	}
+/*		for(int i=0; i<2;i++)
+		{
+			for(int j=0; j<3; j++)
+			{*/
+				if(e.getSource()==fury[1][2])
+				{
+					int[] arr={0,1,2,3,4,5};
+					jypgUseCnt=1;
+					String inputChoice;
+					inputChoice=JOptionPane.showInputDialog(arr);
+					Integer inputChoiceNum=Integer.parseInt(inputChoice);
+					System.out.println(inputChoice);
+					for(int k=0; k<6;k++)
+					{
+						  if(inputChoiceNum==k&&k<3)
+						  {
+							  GameProcess.jypg(0,k);
+							  break;
+						  }
+						  if(inputChoiceNum==k&&k>=3)
+						  {
+							  GameProcess.jypg(1,k%3);
+							  break;
+						  }
+					}
+
+				 }
+						  
+					 
+/*			  }
+		  }*/
+			
+		}
 
 
 	@Override

@@ -1,14 +1,15 @@
 package com.sist.client;
 import java.awt.*;
 import javax.swing.*;
-
+import java.awt.image.*;
 import java.awt.event.*;
 public class GameProcess extends JPanel{
    static int[][] p1Board= new int[3][25];   //플레이어1 빙고판 숫자
    static int[][] p2Board= new int[3][25];   //플레이어2 빙고판
    
-   static int[] numArr1=new int[75]; //랜덤으로 섞을 숫자 생성
-   static int[] numArr2=new int[75]; //플레이어1,2
+   //랜덤으로 섞을 숫자 생성
+   static int[] numArr1=new int[75]; //플레이어1  
+   static int[] numArr2=new int[75]; //플레이어2
    
    static int chosenBingoNumber; //선택된 빙고번호
    static boolean[][] bingo1=new boolean[3][25]; //빙고처리
@@ -155,12 +156,12 @@ public class GameProcess extends JPanel{
       }
    }
    
-   static void gaugeCtrl(int lineNum, int a, int b) //게이지 상승 및 궁극기 버튼 활성화 메소드
+   static void gaugeCtrl(int lineNum, int a, int b, String str) //게이지 상승 및 궁극기 버튼 활성화 메소드
    {
 	   if(lineNum>=3)
 	   {   GameLayout.gauge[a][b].setValue(gaugeScore[3]);
-	   	   GameLayout.gauge[a][b].setString("궁극기 사용가능");
-	   	   GameLayout.gauge[a][b].setFont(new Font("궁서체",Font.BOLD,12));
+	   	   GameLayout.gauge[a][b].setString(str);
+	   	   GameLayout.gauge[a][b].setFont(new Font("궁서체",Font.BOLD,20));
 	   	   GameLayout.gauge[a][b].setVisible(true);
 	   }
 	   else
@@ -183,8 +184,89 @@ public class GameProcess extends JPanel{
 	   if(lineNo>0)
 		   GameLayout.bingoScore[a-1][lineNo-1].setIcon(GameLayout.bingo2); 
    }
-	   
    
+   //진영파괴(JinYoung PaGoe)
+   static void jypg(int panRow, int panCol)
+   {
+	   ImageIcon[] dft= {GameLayout.bcIcon0,GameLayout.bcIcon1,GameLayout.bcIcon2}; //위촉오 빙고키
+	   ImageIcon myBingo=dft[ChoiceNation.chosenNation1];
+	   ImageIcon yourBingo=dft[ChoiceNation.chosenNation2];
+	   if(panRow==1)
+	   {
+		  for(int i=panCol*25; i<24+(panCol*25); i++)
+		  {
+			ImageIcon originNum=new ImageIcon("img\\"+GameProcess.numArr1[i]+".png");
+			int newArr=(int)(Math.random()*25+(panCol*25));
+			ImageIcon newImgNum=new ImageIcon("img\\"+GameProcess.numArr1[newArr]+".png");
+			int temp=numArr1[i];
+			numArr1[i]=numArr1[newArr];
+			numArr1[newArr]=temp;
+			if(GameProcess.bingo1[panCol][i-(25*panCol)]==false&&
+			   GameProcess.bingo1[panCol][newArr-(25*panCol)]==false)
+			{
+				GameLayout.a1[panCol][newArr-(25*panCol)].setIcon(originNum); 
+				GameLayout.a1[panCol][i-(25*panCol)].setIcon(newImgNum);
+			}
+			else if(GameProcess.bingo1[panCol][i-(25*panCol)]==true&&
+				    GameProcess.bingo1[panCol][newArr-(25*panCol)]==false)
+				{
+					GameLayout.a1[panCol][newArr-(25*panCol)].setIcon(myBingo); 
+					GameProcess.bingo1[panCol][i-(25*panCol)]=false;
+					GameLayout.a1[panCol][i-(25*panCol)].setIcon(newImgNum);
+					GameProcess.bingo1[panCol][newArr-(25*panCol)]=true;
+				}
+			else if(GameProcess.bingo1[panCol][i-(25*panCol)]==false&&
+				    GameProcess.bingo1[panCol][newArr-(25*panCol)]==true)
+				{
+					GameLayout.a1[panCol][newArr-(25*panCol)].setIcon(originNum); 
+					GameProcess.bingo1[panCol][i-(25*panCol)]=true;
+					GameLayout.a1[panCol][i-(25*panCol)].setIcon(myBingo);
+					GameProcess.bingo1[panCol][newArr-(25*panCol)]=false;
+				}
+				
+			p1Board[panCol][i-(25*panCol)]=numArr1[i];
+			p1Board[panCol][newArr-(25*panCol)]=numArr1[newArr];
+		  }  
+	   }
+	   else //panRow==0;
+	   {
+			  for(int i=panCol*25; i<24+(panCol*25); i++)
+			  {
+				ImageIcon originNum=new ImageIcon("img\\"+GameProcess.numArr2[i]+".png");
+				int newArr=(int)(Math.random()*25+(panCol*25));
+				ImageIcon newImgNum=new ImageIcon("img\\"+GameProcess.numArr2[newArr]+".png");
+				int temp=numArr2[i];
+				numArr2[i]=numArr2[newArr];
+				numArr2[newArr]=temp;
+				if(GameProcess.bingo2[panCol][i-(25*panCol)]==false&&
+				   GameProcess.bingo2[panCol][newArr-(25*panCol)]==false)
+				{
+					GameLayout.a2[panCol][newArr-(25*panCol)].setIcon(originNum); 
+					GameLayout.a2[panCol][i-(25*panCol)].setIcon(newImgNum);
+				}
+				else if(GameProcess.bingo2[panCol][i-(25*panCol)]==true&&
+					    GameProcess.bingo2[panCol][newArr-(25*panCol)]==false)
+					{
+						GameLayout.a2[panCol][newArr-(25*panCol)].setIcon(yourBingo); 
+						GameProcess.bingo2[panCol][i-(25*panCol)]=false;
+						GameLayout.a2[panCol][i-(25*panCol)].setIcon(newImgNum);
+						GameProcess.bingo2[panCol][newArr-(25*panCol)]=true;
+					}
+				else if(GameProcess.bingo2[panCol][i-(25*panCol)]==false&&
+					    GameProcess.bingo2[panCol][newArr-(25*panCol)]==true)
+					{
+						GameLayout.a2[panCol][newArr-(25*panCol)].setIcon(originNum); 
+						GameProcess.bingo2[panCol][i-(25*panCol)]=true;
+						GameLayout.a2[panCol][i-(25*panCol)].setIcon(yourBingo);
+						GameProcess.bingo2[panCol][newArr-(25*panCol)]=false;
+					}
+					
+				p2Board[panCol][i-(25*panCol)]=numArr2[i];
+				p2Board[panCol][newArr-(25*panCol)]=numArr2[newArr];
+			  }  
+	   }
+	   lineCount();
+   }
    
    static void lineCount() //라인 카운트
    {
@@ -229,7 +311,7 @@ public class GameProcess extends JPanel{
          numOfLine1++;
       }
       numOfBingo1[0]=numOfLine1;
-      gaugeCtrl(numOfLine1, 1, 0);
+      gaugeCtrl(numOfLine1, 1, 0, "투 신");
       bingoIcon(numOfLine1, 4);
       goongCtrl(numOfLine1,1,0);
       attackSkill1=numOfLine1;
@@ -268,7 +350,7 @@ public class GameProcess extends JPanel{
          numOfLine2++;
       }
       numOfBingo1[1]=numOfLine2;
-      gaugeCtrl(numOfLine2, 1, 1);
+      gaugeCtrl(numOfLine2, 1, 1, "적진기습");
       bingoIcon(numOfLine2, 5);
       goongCtrl(numOfLine2,1,1);
       attackSkill1=numOfLine2;
@@ -307,7 +389,7 @@ public class GameProcess extends JPanel{
          numOfLine3++;
       }
       numOfBingo1[2]=numOfLine3;
-      gaugeCtrl(numOfLine3, 1, 2);
+      gaugeCtrl(numOfLine3, 1, 2, "진영파괴");
       bingoIcon(numOfLine3, 6);
       goongCtrl(numOfLine3,1,2);
       strategySkill1=numOfLine3;
@@ -346,7 +428,7 @@ public class GameProcess extends JPanel{
          numOfLine4++;
       }
       numOfBingo2[0]=numOfLine4;
-      gaugeCtrl(numOfLine4, 0, 0);
+      gaugeCtrl(numOfLine4, 0, 0, "투 신");
       bingoIcon(numOfLine4, 1);
       goongCtrl(numOfLine4,0,0);
       attackSkill2=numOfLine4;
@@ -385,7 +467,7 @@ public class GameProcess extends JPanel{
          numOfLine5++;
       }
       numOfBingo2[1]=numOfLine5;
-      gaugeCtrl(numOfLine5, 0, 1);
+      gaugeCtrl(numOfLine5, 0, 1, "적진기습");
       bingoIcon(numOfLine5, 2);
       goongCtrl(numOfLine5,0,1);
       attackSkill2=numOfLine5;
@@ -424,7 +506,7 @@ public class GameProcess extends JPanel{
          numOfLine6++;
       }
       numOfBingo2[2]=numOfLine6;
-      gaugeCtrl(numOfLine6, 0, 2);
+      gaugeCtrl(numOfLine6, 0, 2, "진영파괴");
       bingoIcon(numOfLine6, 3);
       goongCtrl(numOfLine6,0,2);
       strategySkill2=numOfLine6;

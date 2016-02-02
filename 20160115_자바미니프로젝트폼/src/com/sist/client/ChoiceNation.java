@@ -2,9 +2,10 @@ package com.sist.client;
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
-public class ChoiceNation extends JPanel{
-	static int chosenNation1=0; //0=위, 1=촉, 2=오
-	static int chosenNation2=0;
+public class ChoiceNation extends JPanel implements ActionListener{
+	static public int chosenNation1=0; //0=위, 1=촉, 2=오
+	static public int chosenNation2=0;
+	static public JButton[][] jangSu=new JButton[2][3];
 	ImageIcon icon0=new ImageIcon("img\\나라선택아이콘-위.png"); // 위촉오 선택버튼 이미지
 	ImageIcon icon1=new ImageIcon("img\\나라선택아이콘-촉.png");
 	ImageIcon icon2=new ImageIcon("img\\나라선택아이콘-오.png");
@@ -22,19 +23,19 @@ public class ChoiceNation extends JPanel{
 		{
 			if(i<3)
 			{
-				JButton a1=new JButton(new ImageIcon("img\\장수"+chosenNation1+i+".jpg"));
+				jangSu[1][i]=new JButton(new ImageIcon("img\\장수"+chosenNation1+i+".jpg"));
 				//a1.setEnabled(false);
-				GameLayout.j1.add(a1);
-				a1.setContentAreaFilled(false);
-				a1.setBorderPainted(false); //버튼 경계선 제거
+				GameLayout.j1.add(jangSu[1][i]);
+				jangSu[1][i].setContentAreaFilled(false);
+				jangSu[1][i].setBorderPainted(false); //버튼 경계선 제거
 			}
 			else
 			{
-				JButton a2=new JButton(new ImageIcon("img\\장수"+chosenNation2+(i%3)+".jpg"));
+				jangSu[0][i%3]=new JButton(new ImageIcon("img\\장수"+chosenNation2+(i%3)+".jpg"));
 				//a1.setEnabled(false);
-				GameLayout.j2.add(a2);
-				a2.setContentAreaFilled(false);
-				a2.setBorderPainted(false);
+				GameLayout.j2.add(jangSu[0][i%3]);
+				jangSu[0][i%3].setContentAreaFilled(false);
+				jangSu[0][i%3].setBorderPainted(false);
 			}
 		}
 	}
@@ -75,6 +76,7 @@ public class ChoiceNation extends JPanel{
 				chosenNation1=0;
 				jangsu();
 			}
+			
 		});
 
 		nation1.addActionListener(new ActionListener()
@@ -97,6 +99,9 @@ public class ChoiceNation extends JPanel{
 			}
 		});
 		
+		//장수얼굴 버튼 이벤트 처리
+	
+		
 		add(nation0); // 화면에 나라 버튼 아이콘 3개 추가
 		add(nation1);
 		add(nation2);
@@ -111,5 +116,12 @@ public class ChoiceNation extends JPanel{
 	public void paintComponent(Graphics g){
 		  g.drawImage(bg, 0, 0, 1280, 970, this); //배경 그리기
 		  g.drawImage(notice,80,110,360,130,this); //설명 그리기
+	}
+
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }
