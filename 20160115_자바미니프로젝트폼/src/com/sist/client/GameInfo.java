@@ -1,23 +1,11 @@
 package com.sist.client;
 import java.awt.*;
 import javax.swing.*;
-import java.awt.event.*;
 
-class GameView extends JPanel{
-	Image back;
-	
-	public GameView(){
-		back=Toolkit.getDefaultToolkit().getImage("img\\게임정보.jpg");
-	}
-	public void paint(Graphics g){
-		g.drawImage(back, 0, 0, getWidth(),getHeight(),this);
-	}
-
-}
 public class GameInfo extends JDialog{
-	GameView gv=new GameView();
+	GameImage gimage=new GameImage();
 	public GameInfo(){
-		add("Center", gv);
+		add("Center", gimage);
 		this.setModal(true);
 		setSize(800,600);
 		setLocationRelativeTo(null);

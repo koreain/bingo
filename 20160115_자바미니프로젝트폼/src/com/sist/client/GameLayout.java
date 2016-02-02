@@ -7,6 +7,7 @@ import java.awt.event.KeyListener;
 
 import javax.swing.*;
 import javax.swing.border.*;
+import sun.net.www.content.image.jpeg;
 
 public class GameLayout extends JPanel implements ActionListener, KeyListener{
 	//배경화면
@@ -17,7 +18,8 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 	Image stateImage; // 상태창 이미지
 	
 	ChatInGame cig = new ChatInGame();
-	ChoiceNation cn=new ChoiceNation();
+	static boolean[] goongUsable1=new boolean[3];
+	static boolean[] goongUsable2=new boolean[3]; 
 	static int jypgUseCnt=0;
 	
 
@@ -67,7 +69,13 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 	static ImageIcon trickIcon=new ImageIcon("img\\스킬아이콘-책략.png");
 	static ImageIcon avatarIcon=new ImageIcon("img\\m1.jpg");
 	static ImageIcon youAvatarIcon=new ImageIcon("img\\m2.jpg");
-	
+	static ImageIcon jypgLine=new ImageIcon("img\\진영파괴이미지.jpg");  
+	static JButton[] jypgChoice=new JButton[6];  
+	static JPanel jypgPan1=new JPanel();  
+	static JPanel jypgPan2=new JPanel();  
+	static ImageIcon jypgEnd=new ImageIcon("img\\궁극기소진아이콘.png");  
+	static JButton[][] furyEnd=new JButton[2][3];  
+
 	
 	//플레이어 2 빙고판 레이아웃 (상대판)
 	static JPanel p=new JPanel();
@@ -126,7 +134,6 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 		JPanel p = new JPanel();
 		p.add(youLaNickname);
 		p.setBounds(920, 30, 240, 58);
-		p.setOpaque(false);		
 		
 		youBtnAtt.setBounds(903, 104, 60, 60);
 		youLaAtt.setBounds(963, 109, 100, 60);
@@ -181,7 +188,6 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 		JPanel p = new JPanel();
 		p.add(laNickname);
 		p.setBounds(920, 539, 240, 58);
-		p.setOpaque(false);
 		
 		btnAvatar.setBounds(1024,607,157,190);
 		btnAvatar.setPreferredSize(new Dimension(avatarIcon.getIconWidth(), avatarIcon.getIconHeight()));
@@ -240,8 +246,53 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 		}
 	}
 
+
 	GameLayout()
 	{	
+		for(int i=0;i<3;i++) //
+		{
+			goongUsable1[i]=true;
+			goongUsable2[i]=true;
+		}
+		
+		for(int i=0; i<6;i++) 
+		{
+			if(i<3)
+			{
+				jypgChoice[i]=new JButton(jypgLine);
+				jypgChoice[i].setContentAreaFilled(false);
+				jypgChoice[i].addActionListener(this);
+				jypgChoice[i].setBorderPainted(false); //버튼 경계선 제거
+				jypgPan2.add(jypgChoice[i]); //플레이어2 판에 배치 (choice 0,1,2)
+				
+			}
+			if(i>=3)
+			{
+				jypgChoice[i]=new JButton(jypgLine);
+				jypgChoice[i].setContentAreaFilled(false);
+				jypgChoice[i].addActionListener(this);
+				jypgChoice[i].setBorderPainted(false); //버튼 경계선 제거
+				jypgPan1.add(jypgChoice[i]);//플레이어1 판에 배치 (choice 3,4,5)
+			}
+		}
+		
+		FlowLayout jypg=new FlowLayout(FlowLayout.LEFT,0,0);
+		jypgPan1.setLayout(jypg);
+		jypgPan1.setBackground(null);
+		jypgPan1.setOpaque(false);
+		jypgPan1.setVisible(true);
+		jypgPan1.setBounds(32, 528, 895, 110);
+		add(jypgPan1);
+		jypgPan1.setVisible(false);
+		
+		jypgPan2.setLayout(jypg);
+		jypgPan2.setBackground(null);
+		jypgPan2.setOpaque(false);
+		jypgPan2.setVisible(true);
+		jypgPan2.setBounds(32, 23, 895, 110);
+		add(jypgPan2);
+		jypgPan2.setVisible(false);
+		
 		Color RED=new Color(255,0,0);
 		Color GREEN=new Color(0,147,0);
 		Color PURPLE=new Color(95,0,255); //BLUE 명칭을 보라색 PURPLE로 변경-HJ
@@ -254,7 +305,8 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 						"img\\스킬아이콘-책략필살기.png"};
 		
 		for(int i=0; i<6; i++)
-		{	bingoScorePan[i]=new JPanel();
+		{	
+			bingoScorePan[i]=new JPanel();
 			add(bingoScorePan[i]);
 			bingoScorePan[i].setOpaque(false);
 			for(int j=0; j<5; j++)
@@ -269,19 +321,25 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 			}
 		}
 		
-		
 		// 필살기 버튼 생성 (초기: setVisible(false), 100퍼센트 이후: setVisible(true)
 		for(int i=0; i<2;i++)
 		{
 			for(int j=0; j<3; j++)
 			{
 				fury[i][j]=new JButton(new ImageIcon(goong[j]));
+				furyEnd[i][j]=new JButton(jypgEnd);
 				add(fury[i][j]);
+				add(furyEnd[i][j]);
 				fury[i][j].setBounds(xVal2[j], i*508+74, 60, 60);
 				fury[i][j].setBorderPainted(false); //버튼 경계선 제거
 				fury[i][j].setContentAreaFilled(false); //선택했던 버튼 표시 제거
 				fury[i][j].setFocusPainted(false); //버튼영역 배경 제거
 				fury[i][j].setEnabled(false);
+				furyEnd[i][j].setBounds(xVal2[j], i*508+74, 60, 60);
+				furyEnd[i][j].setBorderPainted(false); //버튼 경계선 제거
+				furyEnd[i][j].setContentAreaFilled(false); //선택했던 버튼 표시 제거
+				furyEnd[i][j].setFocusPainted(false); //버튼영역 배경 제거
+				furyEnd[i][j].setVisible(false);
 			}
 		}
 		for(int i=0; i<2;i++)
@@ -296,7 +354,6 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 				gauge[i][j].setForeground(color[j]); //진행바 색설정
 				gauge[i][j].setBounds(xVal[j], i*507+85, 115, 40);
 			}
-			
 		}
 		
 		// 배경화면
@@ -377,6 +434,14 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 				fury[i][j].addActionListener(this);
 			}
 		}
+		for(int i=0; i<3;i++) //장수 얼굴 버튼 액션리스너
+		{
+			ChoiceNation.jangSu1[i].addActionListener(this);
+			ChoiceNation.jangSu2[i].addActionListener(this);
+			ChoiceNation.jangSu1[i].setCursor(cur);
+			ChoiceNation.jangSu2[i].setCursor(cur);
+            
+		}
 		addKeyListener(this);
 		setFocusable(true);
 	}
@@ -419,13 +484,16 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 						{
 							GameProcess.bingoCheck(i,j,GameProcess.p1Board,GameProcess.p2Board
 									,GameProcess.bingo1,GameProcess.bingo2,a1,a2
-									,bcIcon0,bcIcon0,GameProcess.bingoCheckChance1);
+									,bcIcon0,bcIcon0);
+							GameProcess.bingoCheckChance1--;
+							System.out.println(GameProcess.numOfBingo1[0]);
+							GameLayout.laCommand.setText("지휘권x"+String.valueOf(GameProcess.bingoCheckChance1));
 						}
 						else if(e.getSource()==a2[i][j]&&GameProcess.playerTurn==false)
 						{
 							GameProcess.bingoCheck(i,j,GameProcess.p2Board,GameProcess.p1Board
 									,GameProcess.bingo2,GameProcess.bingo1,a2,a1
-									,bcIcon0,bcIcon0,GameProcess.bingoCheckChance2);
+									,bcIcon0,bcIcon0);
 						}
 					}
 				}
@@ -440,13 +508,13 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 						{
 							GameProcess.bingoCheck(i,j,GameProcess.p1Board,GameProcess.p2Board
 									,GameProcess.bingo1,GameProcess.bingo2,a1,a2
-									,bcIcon0,bcIcon1,GameProcess.bingoCheckChance1);
+									,bcIcon0,bcIcon1);
 						}
 						else if(e.getSource()==a2[i][j]&&GameProcess.playerTurn==false)
 						{
 							GameProcess.bingoCheck(i,j,GameProcess.p2Board,GameProcess.p1Board
 									,GameProcess.bingo2,GameProcess.bingo1,a2,a1
-									,bcIcon1,bcIcon0,GameProcess.bingoCheckChance2);
+									,bcIcon1,bcIcon0);
 						}
 					}
 				}
@@ -461,13 +529,13 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 							{
 								GameProcess.bingoCheck(i,j,GameProcess.p1Board,GameProcess.p2Board
 										,GameProcess.bingo1,GameProcess.bingo2,a1,a2
-										,bcIcon0,bcIcon2,GameProcess.bingoCheckChance1);
+										,bcIcon0,bcIcon2);
 							}
 							else if(e.getSource()==a2[i][j]&&GameProcess.playerTurn==false)
 							{
 								GameProcess.bingoCheck(i,j,GameProcess.p2Board,GameProcess.p1Board
 										,GameProcess.bingo2,GameProcess.bingo1,a2,a1
-										,bcIcon2,bcIcon0,GameProcess.bingoCheckChance2);
+										,bcIcon2,bcIcon0);
 							}
 						}
 					}
@@ -482,13 +550,13 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 							{
 								GameProcess.bingoCheck(i,j,GameProcess.p1Board,GameProcess.p2Board
 										,GameProcess.bingo1,GameProcess.bingo2,a1,a2
-										,bcIcon1,bcIcon0,GameProcess.bingoCheckChance1);
+										,bcIcon1,bcIcon0);
 							}
 							else if(e.getSource()==a2[i][j]&&GameProcess.playerTurn==false)
 							{
 								GameProcess.bingoCheck(i,j,GameProcess.p2Board,GameProcess.p1Board
 										,GameProcess.bingo2,GameProcess.bingo1,a2,a1
-										,bcIcon0,bcIcon1,GameProcess.bingoCheckChance2);
+										,bcIcon0,bcIcon1);
 							}
 						}
 					}
@@ -503,13 +571,13 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 							{
 								GameProcess.bingoCheck(i,j,GameProcess.p1Board,GameProcess.p2Board
 										,GameProcess.bingo1,GameProcess.bingo2,a1,a2
-										,bcIcon1,bcIcon1,GameProcess.bingoCheckChance1);
+										,bcIcon1,bcIcon1);
 							}
 							else if(e.getSource()==a2[i][j]&&GameProcess.playerTurn==false)
 							{
 								GameProcess.bingoCheck(i,j,GameProcess.p2Board,GameProcess.p1Board
 										,GameProcess.bingo2,GameProcess.bingo1,a2,a1
-										,bcIcon1,bcIcon1,GameProcess.bingoCheckChance2);
+										,bcIcon1,bcIcon1);
 							}
 						}
 					}
@@ -524,13 +592,13 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 							{
 								GameProcess.bingoCheck(i,j,GameProcess.p1Board,GameProcess.p2Board
 										,GameProcess.bingo1,GameProcess.bingo2,a1,a2
-										,bcIcon1,bcIcon2,GameProcess.bingoCheckChance1);
+										,bcIcon1,bcIcon2);
 							}
 							else if(e.getSource()==a2[i][j]&&GameProcess.playerTurn==false)
 							{
 								GameProcess.bingoCheck(i,j,GameProcess.p2Board,GameProcess.p1Board
 										,GameProcess.bingo2,GameProcess.bingo1,a2,a1
-										,bcIcon2,bcIcon1,GameProcess.bingoCheckChance2);
+										,bcIcon2,bcIcon1);
 							}
 						}
 					}
@@ -545,13 +613,13 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 							{
 								GameProcess.bingoCheck(i,j,GameProcess.p1Board,GameProcess.p2Board
 										,GameProcess.bingo1,GameProcess.bingo2,a1,a2
-										,bcIcon2,bcIcon0,GameProcess.bingoCheckChance1);
+										,bcIcon2,bcIcon0);
 							}
 							else if(e.getSource()==a2[i][j]&&GameProcess.playerTurn==false)
 							{
 								GameProcess.bingoCheck(i,j,GameProcess.p2Board,GameProcess.p1Board
 										,GameProcess.bingo2,GameProcess.bingo1,a2,a1
-										,bcIcon0,bcIcon2,GameProcess.bingoCheckChance2);
+										,bcIcon0,bcIcon2);
 							}
 						}
 					}
@@ -566,13 +634,13 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 							{
 								GameProcess.bingoCheck(i,j,GameProcess.p1Board,GameProcess.p2Board
 										,GameProcess.bingo1,GameProcess.bingo2,a1,a2
-										,bcIcon2,bcIcon1,GameProcess.bingoCheckChance1);
+										,bcIcon2,bcIcon1);
 							}
 							else if(e.getSource()==a2[i][j]&&GameProcess.playerTurn==false)
 							{
 								GameProcess.bingoCheck(i,j,GameProcess.p2Board,GameProcess.p1Board
 										,GameProcess.bingo2,GameProcess.bingo1,a2,a1
-										,bcIcon1,bcIcon2,GameProcess.bingoCheckChance2);
+										,bcIcon1,bcIcon2);
 							}
 						}
 					}
@@ -587,13 +655,13 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 							{
 								GameProcess.bingoCheck(i,j,GameProcess.p1Board,GameProcess.p2Board
 										,GameProcess.bingo1,GameProcess.bingo2,a1,a2
-										,bcIcon2,bcIcon2,GameProcess.bingoCheckChance1);
+										,bcIcon2,bcIcon2);
 							}
 							else if(e.getSource()==a2[i][j]&&GameProcess.playerTurn==false)
 							{
 								GameProcess.bingoCheck(i,j,GameProcess.p2Board,GameProcess.p1Board
 										,GameProcess.bingo2,GameProcess.bingo1,a2,a1
-										,bcIcon2,bcIcon2,GameProcess.bingoCheckChance2);
+										,bcIcon2,bcIcon2);
 							}
 						}
 					}
@@ -616,9 +684,9 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 					else if(e.getSource()==fury[1][0]) //공격필살기 버튼
 					{
 //			    	  new AttackFinishThread().start();
-//			    	  GameProcess.checkTurn1++;//공격기회+1,아이템사용기회+1
-//			    	  GameProcess.skillTurn1++;
-//			    	  fury[1][0].setEnabled(false);//버튼 사용 불가
+						GameProcess.bingoCheckChance1++;//공격기회+1,아이템사용기회+1
+						GameProcess.skillChance1++;
+						fury[1][0].setEnabled(false);//버튼 사용 불가
 //			    	  GameProcess.usingAttackFinish1+=3;
 					}
 					else if(e.getSource()==fury[1][1]) //방어필살기 버튼
@@ -627,28 +695,15 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 					}
 					else if(e.getSource()==fury[1][2]) //책략필살기 버튼
 					{
-						int[] arr={0,1,2,3,4,5};
-						jypgUseCnt=1;
-						String inputChoice;
-						inputChoice=JOptionPane.showInputDialog(arr);
-						Integer inputChoiceNum=Integer.parseInt(inputChoice);
-						System.out.println(inputChoice);
-						for(int k=0; k<6;k++)
+						if(goongUsable1[2])
 						{
-							  if(inputChoiceNum==k&&k<3)
-							  {
-								  GameProcess.jypg(0,k);
-								  break;
-							  }
-							  if(inputChoiceNum==k&&k>=3)
-							  {
-								  GameProcess.jypg(1,k%3);
-								  break;
-							  }
+							jypgPan2.setVisible(true);
 						}
+						
 					}
 				}
 
+				//플레이어2
 				if(GameProcess.playerTurn==false)
 				{
 					if(e.getSource()==youBtnAtt)//플레이어2 공격 스킬 버튼
@@ -679,6 +734,39 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 						
 					}
 				}
+				
+				for(int i=0; i<3; i++)//책략필살기 클릭 후, 상대 판 버튼 클릭
+				{
+					if(e.getSource()==(jypgChoice[i]))
+					{
+						System.out.println("플레이어1이 궁극기 사용중");
+						GameProcess.jypg(0,i);
+						goongUsable1[2]=false;
+						fury[1][2].setEnabled(false);
+						fury[1][2].setVisible(false);
+						gauge[1][2].setBackground(Color.DARK_GRAY);
+						gauge[1][2].setString("궁극기소진");
+						jypgPan2.setVisible(false);
+						furyEnd[1][2].setVisible(true);
+					}
+				}
+				for(int i=0; i<3; i++)
+				{
+					if(e.getSource()==(jypgChoice[i+3]))
+					{
+						System.out.println("플레이어2이 궁극기 사용중");
+						GameProcess.jypg(1,i);
+						goongUsable2[2]=false;
+						fury[0][2].setEnabled(false);
+						fury[0][2].setVisible(false);
+						gauge[0][2].setBackground(Color.DARK_GRAY);
+						gauge[0][2].setString("궁극기소진");
+						jypgPan1.setVisible(false);
+						furyEnd[0][2].setVisible(true);
+					}
+				}
+				requestFocus();
+				
 			}
 		}
 	
@@ -687,7 +775,6 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 		// TODO Auto-generated method stub
 		
 	}
-
 
 	@Override
 	public void keyPressed(KeyEvent e) {
@@ -702,7 +789,6 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 			break;
 		}
 	}
-
 
 	@Override
 	public void keyReleased(KeyEvent e) {

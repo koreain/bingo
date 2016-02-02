@@ -5,7 +5,6 @@ import java.awt.event.*;
 public class ChoiceNation extends JPanel implements ActionListener{
 	static public int chosenNation1=0; //0=위, 1=촉, 2=오
 	static public int chosenNation2=0;
-	static public JButton[][] jangSu=new JButton[2][3];
 	ImageIcon icon0=new ImageIcon("img\\나라선택아이콘-위.png"); // 위촉오 선택버튼 이미지
 	ImageIcon icon1=new ImageIcon("img\\나라선택아이콘-촉.png");
 	ImageIcon icon2=new ImageIcon("img\\나라선택아이콘-오.png");
@@ -13,7 +12,8 @@ public class ChoiceNation extends JPanel implements ActionListener{
 	JButton nation1 = new JButton(icon1);
 	JButton nation2 = new JButton(icon2);
 	Image bg, notice;//배경 이미지
-	
+	static JButton[] jangSu1 = new JButton[3]; 
+	static JButton[] jangSu2 = new JButton[3]; 
 	//마우스 커서가 버튼에 올라갔을때 손모양으로 바뀌게
 	private Cursor cur = new Cursor(Cursor.HAND_CURSOR);
 	
@@ -23,19 +23,19 @@ public class ChoiceNation extends JPanel implements ActionListener{
 		{
 			if(i<3)
 			{
-				jangSu[1][i]=new JButton(new ImageIcon("img\\장수"+chosenNation1+i+".jpg"));
+				jangSu1[i].setIcon(new ImageIcon("img\\장수"+chosenNation1+i+".jpg")); 
 				//a1.setEnabled(false);
-				GameLayout.j1.add(jangSu[1][i]);
-				jangSu[1][i].setContentAreaFilled(false);
-				jangSu[1][i].setBorderPainted(false); //버튼 경계선 제거
+				GameLayout.j1.add(jangSu1[i]); 
+				jangSu1[i].setContentAreaFilled(false); 
+				jangSu1[i].setBorderPainted(false); //버튼 경계선 제거 
 			}
 			else
 			{
-				jangSu[0][i%3]=new JButton(new ImageIcon("img\\장수"+chosenNation2+(i%3)+".jpg"));
+				jangSu2[i%3].setIcon(new ImageIcon("img\\장수"+chosenNation2+(i%3)+".jpg")); 
 				//a1.setEnabled(false);
-				GameLayout.j2.add(jangSu[0][i%3]);
-				jangSu[0][i%3].setContentAreaFilled(false);
-				jangSu[0][i%3].setBorderPainted(false);
+				GameLayout.j2.add(jangSu2[i%3]); 
+				jangSu2[i%3].setContentAreaFilled(false); 
+				jangSu2[i%3].setBorderPainted(false); 
 			}
 		}
 	}
@@ -43,6 +43,11 @@ public class ChoiceNation extends JPanel implements ActionListener{
 	
 	public ChoiceNation()
 	{
+		for(int i=0;i<3;i++)
+		{ 
+			jangSu1[i] = new JButton();  
+			jangSu2[i] = new JButton(); 
+		}
 		bg=Toolkit.getDefaultToolkit().getImage("img\\나라선택-배경.jpg"); //그림가져오기
 		notice=Toolkit.getDefaultToolkit().getImage("img\\나라선택-설명.jpg");
 		

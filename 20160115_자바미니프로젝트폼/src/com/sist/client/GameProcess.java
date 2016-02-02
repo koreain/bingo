@@ -134,7 +134,7 @@ public class GameProcess extends JPanel{
    //빙고체크
    static void bingoCheck(int i, int j, int[][] board1, int[][]board2,
 		   boolean[][] b1, boolean[][] b2, JButton[][] btn1, JButton[][] btn2,
-		   ImageIcon icon1, ImageIcon icon2,int chance)
+		   ImageIcon icon1, ImageIcon icon2)
    {
 	   chosenBingoNumber=board1[i][j];
 	   if(board1[i][j]==chosenBingoNumber) //선택한 숫자와 보드판의 숫자가 맞으면
@@ -155,32 +155,39 @@ public class GameProcess extends JPanel{
 		   }
 	   }
 	   lineCount();
-	   chance--;
    }
    
    static void gaugeCtrl(int lineNum, int a, int b, String str) //게이지 상승 및 궁극기 버튼 활성화 메소드
    {
-	   if(lineNum>=3)
-	   {   GameLayout.gauge[a][b].setValue(gaugeScore[3]);
-	   	   GameLayout.gauge[a][b].setString(str);
-	   	   GameLayout.gauge[a][b].setFont(new Font("궁서체",Font.BOLD,20));
-	   	   GameLayout.gauge[a][b].setVisible(true);
-	   }
-	   else
-	   	  GameLayout.gauge[a][b].setValue(gaugeScore[lineNum]);
+	  if(lineNum>=3)
+	  {
+		  if((GameLayout.goongUsable1[b]==true)&&a==1)
+		   {   GameLayout.gauge[a][b].setValue(gaugeScore[3]);
+		   	   GameLayout.gauge[a][b].setString(str);
+		   	   GameLayout.gauge[a][b].setFont(new Font("궁서체",Font.BOLD,20));
+		   	   GameLayout.gauge[a][b].setVisible(true);
+		   }
+		   else if((GameLayout.goongUsable2[b]==true)&&a==0)
+		   {
+			   GameLayout.gauge[a][b].setValue(gaugeScore[3]);
+		   	   GameLayout.gauge[a][b].setString(str);
+		   	   GameLayout.gauge[a][b].setFont(new Font("궁서체",Font.BOLD,20));
+		   	   GameLayout.gauge[a][b].setVisible(true);
+		   }
+	  }
+	  else
+		  GameLayout.gauge[a][b].setValue(gaugeScore[lineNum]);
    }
  
-   static void goongCtrl(int lineNum, int a, int b)
+   static void goongCtrl(int lineNum, int a, int b)   //세줄완성=>필살기 사용 가능 
    {
-	 if(lineNum>=3)  
-	 //if()한번썼을경우에는 비활성화
-	 //GameLayout.fury[a][b].setEnabled(false);
-	 //else() <-- 한번도 안썼을경우
-	   GameLayout.fury[a][b].setEnabled(true);
+	   if(lineNum>=3)  
+		   //if()한번썼을경우에는 비활성화
+		   //GameLayout.fury[a][b].setEnabled(false);
+		   //else() <-- 한번도 안썼을경우
+		   GameLayout.fury[a][b].setEnabled(true);
    }
 	  
-   
-   
    static void bingoIcon(int lineNo,int a) //int a는 판숫자 (1~6);
    {
 	   if(lineNo>0)
@@ -277,8 +284,8 @@ public class GameProcess extends JPanel{
 	   for(int i=0; i<5; i++)
 	      {
 	         //가로
-	         if(bingo[pan][i*5]==true&&bingo[0][(i*5)+1]==true
-	               &&bingo[pan][(i*5)+2]==true&&bingo[0][(i*5)+3]==true
+	         if(bingo[pan][i*5]==true&&bingo[pan][(i*5)+1]==true
+	               &&bingo[pan][(i*5)+2]==true&&bingo[pan][(i*5)+3]==true
 	               &&bingo[pan][(i*5)+4]==true)
 	         {
 	            line++;

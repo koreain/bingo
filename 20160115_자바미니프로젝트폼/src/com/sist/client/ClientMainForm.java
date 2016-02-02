@@ -2,6 +2,8 @@ package com.sist.client;
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
+import java.net.*; 
+import java.io.*;
 public class ClientMainForm extends JFrame
 implements ActionListener
 {
@@ -12,6 +14,9 @@ implements ActionListener
 	CardLayout card=new CardLayout();
 	GameLayout game=new GameLayout();
 	GameInfo gi=new GameInfo();
+	
+	//스킬설명이미지 다이얼로그
+	
 	ImageIcon mainIcon;//타이틀창 아이콘
 	
 	ClientMainForm() 
@@ -23,7 +28,6 @@ implements ActionListener
 		
 		setLayout(card);//BorderLayout
 		add("LOG",login);
-//		add("LOADING2",ld2);
 		add("WR",wr);
 		add("ChoiceNation",cn);//나라선택 화면
 		add("GAME",game);
@@ -87,8 +91,6 @@ implements ActionListener
 		else if(e.getSource()==cn.nation0||e.getSource()==cn.nation1
 				||e.getSource()==cn.nation2)
 		{
-			JOptionPane.showMessageDialog(cn, "choice1Num="+ChoiceNation.chosenNation1+
-			"\n choice2Num="+ChoiceNation.chosenNation2);
 			card.show(getContentPane(), "GAME");
 			game.requestFocus(); 
 		}
