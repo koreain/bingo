@@ -12,7 +12,7 @@ import javax.swing.*;
 
 // 나중에 아이디찾기, 비밀번호찾기 등등 만들것 질문을 통해서.
 
-public class SignUp extends JFrame implements ActionListener, FocusListener{
+public class SignUp extends JDialog implements ActionListener, FocusListener{
 	JLabel la_id,la_idCheck,la_name,la_pw,la_checkPw,
 			la_p,la_sex,la_email,la_question,la_intro;
 	JTextField tf_id,tf_name,tf_answer,tf_email;
@@ -24,7 +24,7 @@ public class SignUp extends JFrame implements ActionListener, FocusListener{
 	boolean bId;
 	SignUp() {
 		// TODO Auto-generated constructor stub
-		
+		this.setModal(true);
 	
 		la_id = new JLabel("아이디",JLabel.RIGHT);
 		la_idCheck = new JLabel();

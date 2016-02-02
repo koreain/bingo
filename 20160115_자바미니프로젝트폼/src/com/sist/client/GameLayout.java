@@ -9,20 +9,49 @@ import javax.swing.*;
 import javax.swing.border.*;
 
 public class GameLayout extends JPanel implements ActionListener, KeyListener{
-	
 	//배경화면
 	Image bg; //추상클래스 abstract!! 단독으로 메모리 할당을 못한다.
 	Image vs; //가운데  vs 텍스트
 	Image pan1; //빙고틀 플레이어1
 	Image pan2; //빙고틀 플레이어2
+	Image stateImage; // 상태창 이미지
+	
 	ChatInGame cig = new ChatInGame();
 	ChoiceNation cn=new ChoiceNation();
 	static int jypgUseCnt=0;
+	
+
+	//마우스 커서가 버튼에 올라갔을때 손모양으로 바뀌게
+	Cursor cur = new Cursor(Cursor.HAND_CURSOR);
 	
 	//빙고판 
 	static JButton[][] a1=new JButton[3][25]; //내 판
 	static JButton[][] a2=new JButton[3][25]; //상대판
 	
+	//아이템선택버튼, 아바타
+	static JButton btnAtt;  // 공격스킬버튼
+	static JButton btnDef;  // 수비스킬버튼
+	static JButton btnTrick;  // 책략스킬버튼
+	static JButton btnAvatar; // 아바타 이미지 넣어줄 버튼
+	
+	static JButton youBtnAtt; // 상대편 버튼은 사실상 이미지 삽입용
+	static JButton youBtnDef;
+	static JButton youBtnTrick;
+	static JButton youBtnAvatar;
+	
+	//아이템 갯수 확인 및 아이디
+	static JLabel laAtt;  // 공격스킬 개수 확인
+	static JLabel laDef;  // 수비스킬 개수 확인
+	static JLabel laTrick;  // 책략스킬 개수 확인
+	static JLabel laNickname;  // 닉네임 입력하는 곳
+	static JLabel laTactic, laCommand; // 전술명령, 지휘권
+	
+	static JLabel youLaAtt;   // 상대방.
+	static JLabel youLaDef;
+	static JLabel youLaTrick;
+	static JLabel youLaNickname;
+	static JLabel youLaTactic, youLaCommand;
+		
 	//플레이어 1,2  장기판별 게이지 
 	static JProgressBar[][] gauge=new JProgressBar[2][3];
 	//플레이어 1,2 장기판별 궁극기 활성 안내버튼
@@ -33,6 +62,11 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 	static JPanel[] bingoScorePan=new JPanel[6];
 	static ImageIcon bingo1=new ImageIcon("img\\빙고-한줄.png");
 	static ImageIcon bingo2=new ImageIcon("img\\빙고-한줄완성.png");
+	static ImageIcon attIcon=new ImageIcon("img\\스킬아이콘-공격.png");
+	static ImageIcon defIcon=new ImageIcon("img\\스킬아이콘-방어.png");
+	static ImageIcon trickIcon=new ImageIcon("img\\스킬아이콘-책략.png");
+	static ImageIcon avatarIcon=new ImageIcon("img\\m1.jpg");
+	static ImageIcon youAvatarIcon=new ImageIcon("img\\m2.jpg");
 	
 	
 	//플레이어 2 빙고판 레이아웃 (상대판)
@@ -48,14 +82,9 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 	static JPanel pp3=new JPanel();
 	
 	// 장수 캐릭터 창
-	
 	static JPanel j1=new JPanel(); //플레이어2
 	static JPanel j2=new JPanel(); //플레이어1
-	
-	
-	//마우스 커서가 버튼에 올라갔을때 손모양으로 바뀌게
-	private Cursor cur = new Cursor(Cursor.HAND_CURSOR);
-	
+		
 	static ImageIcon bcIcon0=new ImageIcon("img\\빙고체크-위.png");
 	static ImageIcon bcIcon1=new ImageIcon("img\\빙고체크-촉.png");
 	static ImageIcon bcIcon2=new ImageIcon("img\\빙고체크-오.png");
@@ -76,11 +105,119 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 		e.add(a2[b][a-c]);
 		// 버튼에 아이콘 사이즈 맞추기 
 		a2[b][a-c].setPreferredSize(new Dimension(m1.getIconWidth(), m1.getIconHeight()));
-		a2[b][a-c].setBorderPainted(false); //버튼 경계선 제거
-		a2[b][a-c].setContentAreaFilled(false); //선택했던 버튼 표시 제거
-		a2[b][a-c].setFocusPainted(false); //버튼영역 배경 제거
+		a2[b][a-c].setBorderPainted(false);
+		a2[b][a-c].setContentAreaFilled(false);
+		a2[b][a-c].setFocusPainted(false);
 	}
 	
+	public void youStateWindow(){
+		youBtnAtt = new JButton(attIcon);
+		youBtnDef = new JButton(defIcon);
+		youBtnTrick = new JButton(trickIcon);
+		youBtnAvatar = new JButton(youAvatarIcon);
+		youLaAtt = new JLabel("x0");
+		youLaDef = new JLabel("x0");
+		youLaTrick = new JLabel("x0");
+		youLaTactic = new JLabel("전술명령x"+GameProcess.skillChance2);
+		youLaCommand = new JLabel("지휘권x"+GameProcess.bingoCheckChance2);
+		youLaNickname = new JLabel("your아이디");
+		youLaNickname.setFont(new Font("궁서체",Font.PLAIN,35));
+		
+		JPanel p = new JPanel();
+		p.add(youLaNickname);
+		p.setBounds(920, 30, 240, 58);
+		p.setOpaque(false);		
+		
+		youBtnAtt.setBounds(903, 104, 60, 60);
+		youLaAtt.setBounds(963, 109, 100, 60);
+		youLaAtt.setFont(new Font("궁서체",Font.BOLD,35));
+		
+		youBtnDef.setBounds(903, 164, 60, 60);
+		youLaDef.setBounds(963, 169, 100, 60);
+		youLaDef.setFont(new Font("궁서체",Font.BOLD,35));
+		
+		youBtnTrick.setBounds(903, 224, 60, 60);
+		youLaTrick.setBounds(963, 229, 100, 60);
+		youLaTrick.setFont(new Font("궁서체",Font.BOLD,35));
+		
+		youLaTactic.setBounds(903, 307, 160, 40);
+		youLaTactic.setFont(new Font("궁서체", Font.BOLD,20));
+		
+		youLaCommand.setBounds(903, 347, 160, 40);
+		youLaCommand.setFont(new Font("궁서체", Font.BOLD,20));
+		
+		youBtnAvatar.setBounds(1024,102,157,190);
+		youBtnAvatar.setPreferredSize(new Dimension(youAvatarIcon.getIconWidth(), youAvatarIcon.getIconHeight()));
+		imageSetting(youBtnAvatar);
+		
+		youBtnAtt.setPreferredSize(new Dimension(attIcon.getIconWidth(), attIcon.getIconHeight()));
+		imageSetting(youBtnAtt);
+		
+		youBtnDef.setPreferredSize(new Dimension(defIcon.getIconWidth(), defIcon.getIconHeight()));
+		imageSetting(youBtnDef);
+		
+		youBtnTrick.setPreferredSize(new Dimension(trickIcon.getIconWidth(), trickIcon.getIconHeight()));
+		imageSetting(youBtnTrick);
+
+		add(youBtnAtt);add(youBtnDef);add(youBtnTrick);add(youBtnAvatar);
+		add(youLaAtt);add(youLaDef);add(youLaTrick);
+		add(youLaCommand);add(youLaTactic);add(p);
+	}
+	
+	public void stateWindow(){
+		btnAtt = new JButton(attIcon);
+		btnDef = new JButton(defIcon);
+		btnTrick = new JButton(trickIcon);
+		btnAvatar = new JButton(avatarIcon);
+		
+		laAtt = new JLabel("x0");
+		laDef = new JLabel("x0");
+		laTrick = new JLabel("x0");
+		laTactic = new JLabel("전술명령x"+GameProcess.skillChance1);
+		laCommand = new JLabel("지휘권x"+GameProcess.bingoCheckChance1);
+		laNickname = new JLabel("아이디");
+		laNickname.setFont(new Font("궁서체",Font.PLAIN,35));
+		
+		JPanel p = new JPanel();
+		p.add(laNickname);
+		p.setBounds(920, 539, 240, 58);
+		p.setOpaque(false);
+		
+		btnAvatar.setBounds(1024,607,157,190);
+		btnAvatar.setPreferredSize(new Dimension(avatarIcon.getIconWidth(), avatarIcon.getIconHeight()));
+		imageSetting(btnAvatar);
+		
+		btnAtt.setBounds(903, 613, 60, 60);
+		laAtt.setBounds(963, 618, 100, 60);
+		laAtt.setFont(new Font("궁서체",Font.BOLD,35));
+		
+		btnDef.setBounds(903, 673, 60, 60);
+		laDef.setBounds(963, 678, 100, 60);
+		laDef.setFont(new Font("궁서체",Font.BOLD,35));
+		
+		btnTrick.setBounds(903, 733, 60, 60);
+		laTrick.setBounds(963, 738, 100, 60);
+		laTrick.setFont(new Font("궁서체",Font.BOLD,35));
+		
+		laTactic.setBounds(903, 815, 160, 40);
+		laTactic.setFont(new Font("궁서체", Font.BOLD,20));
+		
+		laCommand.setBounds(903, 855, 160, 40);
+		laCommand.setFont(new Font("궁서체", Font.BOLD,20));
+		
+		btnAtt.setPreferredSize(new Dimension(attIcon.getIconWidth(), attIcon.getIconHeight()));
+		imageSetting(btnAtt);
+		
+		btnDef.setPreferredSize(new Dimension(defIcon.getIconWidth(), defIcon.getIconHeight()));
+		imageSetting(btnDef);
+		
+		btnTrick.setPreferredSize(new Dimension(trickIcon.getIconWidth(), trickIcon.getIconHeight()));
+		imageSetting(btnTrick);
+
+		add(btnAtt);add(btnDef);add(btnTrick);add(btnAvatar);
+		add(laAtt);add(laDef);add(laTrick);
+		add(laTactic);add(laCommand);add(p);
+	}
 	
 	public void Rand()
 	{
@@ -103,10 +240,8 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 		}
 	}
 
-
 	GameLayout()
 	{	
-	
 		Color RED=new Color(255,0,0);
 		Color GREEN=new Color(0,147,0);
 		Color PURPLE=new Color(95,0,255); //BLUE 명칭을 보라색 PURPLE로 변경-HJ
@@ -169,6 +304,8 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 		pan1=Toolkit.getDefaultToolkit().getImage("img\\빙고틀.png");
 		bg=Toolkit.getDefaultToolkit().getImage("img\\인게임배경.jpg");
 		vs=Toolkit.getDefaultToolkit().getImage("img\\vs.png");
+		stateImage=Toolkit.getDefaultToolkit().getImage("img\\상태창.png");
+		
 		setLayout(null);
 		FlowLayout k=new FlowLayout(0); // 0: 왼쪽정렬, 1:가운데정렬, 2:오른쪽정렬
 		k.setHgap(20);
@@ -214,6 +351,9 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 		pp2.setOpaque(false);
 		pp3.setOpaque(false);
 		
+		stateWindow();//상태창
+		youStateWindow();
+		
 		setSize(1200,970);
 		setVisible(true);
 		
@@ -233,6 +373,7 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 		{
 			for(int j=0; j<3; j++)
 			{
+				fury[i][j].setCursor(cur);
 				fury[i][j].addActionListener(this);
 			}
 		}
@@ -245,8 +386,19 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 		g.drawImage(vs, 343, 423, vs.getWidth(this),80,this);
 		g.drawImage(pan1, 4, 492, 895, 452, this);
 		g.drawImage(pan2, 4, -10, 895, 446, this);
+		g.drawImage(stateImage, 874, 0, stateImage.getWidth(this)-90, stateImage.getHeight(this)-90,this);
+		g.drawImage(stateImage, 874, 505, stateImage.getWidth(this)-90, stateImage.getHeight(this)-90,this);
+	}
+	//이미지 정리
+	public void imageSetting(JButton btn)
+	{
+		btn.setBorderPainted(false); //버튼 경계선 제거
+		btn.setContentAreaFilled(false); //선택했던 버튼 표시 제거
+		btn.setFocusPainted(false); //버튼영역 배경 제거
+		btn.setOpaque(false);
 	}
 	
+
 	//버튼 누르기 빙고체크!!!!!!!!
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -254,7 +406,7 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 		
 		//빙고 체크(체크된 빙고가 아닐 때+스킬아이템을 클릭하지 않았을 때)
 		if(GameProcess.bAttackSkill1==false&&GameProcess.bAttackFinish1==false&&GameProcess.bDefenseSkill1==false
-		&&GameProcess.bDefenseFinish1==false&&GameProcess.bStrategySkill1==false&&GameProcess.bStrategyFinish1==false)
+				&&GameProcess.bDefenseFinish1==false&&GameProcess.bStrategySkill1==false&&GameProcess.bStrategyFinish1==false)
 		{
 			if(ChoiceNation.chosenNation1==0&&ChoiceNation.chosenNation2==0)//진영선택 : 위vs위
 			{
@@ -262,317 +414,274 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 				{
 					for(int j=0; j<25; j++)
 					{
-						//bingo[][]가 체크 안된것만 체크 가능
-						if(e.getSource()==a1[i][j])
+						//bingo[][]가 체크 안된것만 체크 가능,본인 차례일 때 체크 가능
+						if(e.getSource()==a1[i][j]&&GameProcess.playerTurn==true)
 						{
-							GameProcess.chosenBingoNumber=GameProcess.p1Board[i][j];
-							if(GameProcess.p1Board[i][j]==GameProcess.chosenBingoNumber) //선택한 숫자와 보드판의 숫자가 맞으면
-				            {
-				               a1[i][j].setIcon(bcIcon0); //그 자리 버튼의 아이콘을 바꿔주고
-				               GameProcess.bingo1[i][j]=true; //빙고가 체크된걸로(true로)표시
-				            }
-							for(int k=0; k<3; k++)
-							{
-								for(int l=0; l<25; l++)
-								{
-									if(GameProcess.p2Board[k][l]==GameProcess.chosenBingoNumber)
-									{
-										a2[k][l].setIcon(bcIcon0);
-										GameProcess.bingo2[k][l]=true;
-									}
-								}
-							}
-							GameProcess.lineCount();
+							GameProcess.bingoCheck(i,j,GameProcess.p1Board,GameProcess.p2Board
+									,GameProcess.bingo1,GameProcess.bingo2,a1,a2
+									,bcIcon0,bcIcon0,GameProcess.bingoCheckChance1);
+						}
+						else if(e.getSource()==a2[i][j]&&GameProcess.playerTurn==false)
+						{
+							GameProcess.bingoCheck(i,j,GameProcess.p2Board,GameProcess.p1Board
+									,GameProcess.bingo2,GameProcess.bingo1,a2,a1
+									,bcIcon0,bcIcon0,GameProcess.bingoCheckChance2);
 						}
 					}
 				}
 			}
-			if(ChoiceNation.chosenNation1==0&&ChoiceNation.chosenNation2==1)//진영선택 : 위vs촉
+			else if(ChoiceNation.chosenNation1==0&&ChoiceNation.chosenNation2==1)//진영선택 : 위vs촉
 			{
 				for(int i=0; i<3; i++)
 				{
 					for(int j=0; j<25; j++)
 					{
-						//bingo[][]가 체크 안된것만 체크 가능
-						if(e.getSource()==a1[i][j])
+						if(e.getSource()==a1[i][j]&&GameProcess.playerTurn==true)
 						{
-							GameProcess.chosenBingoNumber=GameProcess.p1Board[i][j];
-							if(GameProcess.p1Board[i][j]==GameProcess.chosenBingoNumber) //선택한 숫자와 보드판의 숫자가 맞으면
-				            {
-				               a1[i][j].setIcon(bcIcon0); //그 자리 버튼의 아이콘을 바꿔주고
-				               GameProcess.bingo1[i][j]=true; //빙고가 체크된걸로(true로)표시
-				            }
-							for(int k=0; k<3; k++)
-							{
-								for(int l=0; l<25; l++)
-								{
-									if(GameProcess.p2Board[k][l]==GameProcess.chosenBingoNumber)
-									{
-										a2[k][l].setIcon(bcIcon1);
-										GameProcess.bingo2[k][l]=true;
-									}
-								}
-							}
-							GameProcess.lineCount();
+							GameProcess.bingoCheck(i,j,GameProcess.p1Board,GameProcess.p2Board
+									,GameProcess.bingo1,GameProcess.bingo2,a1,a2
+									,bcIcon0,bcIcon1,GameProcess.bingoCheckChance1);
+						}
+						else if(e.getSource()==a2[i][j]&&GameProcess.playerTurn==false)
+						{
+							GameProcess.bingoCheck(i,j,GameProcess.p2Board,GameProcess.p1Board
+									,GameProcess.bingo2,GameProcess.bingo1,a2,a1
+									,bcIcon1,bcIcon0,GameProcess.bingoCheckChance2);
 						}
 					}
 				}
 			}
-			if(ChoiceNation.chosenNation1==0&&ChoiceNation.chosenNation2==2)//진영선택 : 위vs오
+			else if(ChoiceNation.chosenNation1==0&&ChoiceNation.chosenNation2==2)//진영선택 : 위vs오
 			{
 				for(int i=0; i<3; i++)
 				{
 					for(int j=0; j<25; j++)
-					{
-						//bingo[][]가 체크 안된것만 체크 가능
-						if(e.getSource()==a1[i][j])
 						{
-							GameProcess.chosenBingoNumber=GameProcess.p1Board[i][j];
-							if(GameProcess.p1Board[i][j]==GameProcess.chosenBingoNumber) //선택한 숫자와 보드판의 숫자가 맞으면
-				            {
-				               a1[i][j].setIcon(bcIcon0); //그 자리 버튼의 아이콘을 바꿔주고
-				               GameProcess.bingo1[i][j]=true; //빙고가 체크된걸로(true로)표시
-				            }
-							for(int k=0; k<3; k++)
+							if(e.getSource()==a1[i][j]&&GameProcess.playerTurn==true)
 							{
-								for(int l=0; l<25; l++)
-								{
-									if(GameProcess.p2Board[k][l]==GameProcess.chosenBingoNumber)
-									{
-										a2[k][l].setIcon(bcIcon2);
-										GameProcess.bingo2[k][l]=true;
-									}
-								}
+								GameProcess.bingoCheck(i,j,GameProcess.p1Board,GameProcess.p2Board
+										,GameProcess.bingo1,GameProcess.bingo2,a1,a2
+										,bcIcon0,bcIcon2,GameProcess.bingoCheckChance1);
 							}
-							GameProcess.lineCount();
+							else if(e.getSource()==a2[i][j]&&GameProcess.playerTurn==false)
+							{
+								GameProcess.bingoCheck(i,j,GameProcess.p2Board,GameProcess.p1Board
+										,GameProcess.bingo2,GameProcess.bingo1,a2,a1
+										,bcIcon2,bcIcon0,GameProcess.bingoCheckChance2);
+							}
 						}
 					}
 				}
-			}
-			if(ChoiceNation.chosenNation1==1&&ChoiceNation.chosenNation2==0)//진영선택 : 촉vs위
-			{
-				for(int i=0; i<3; i++)
+				else if(ChoiceNation.chosenNation1==1&&ChoiceNation.chosenNation2==0)//진영선택 : 촉vs위
 				{
-					for(int j=0; j<25; j++)
+					for(int i=0; i<3; i++)
 					{
-						//bingo[][]가 체크 안된것만 체크 가능
-						if(e.getSource()==a1[i][j])
+						for(int j=0; j<25; j++)
 						{
-							GameProcess.chosenBingoNumber=GameProcess.p1Board[i][j];
-							if(GameProcess.p1Board[i][j]==GameProcess.chosenBingoNumber) //선택한 숫자와 보드판의 숫자가 맞으면
-				            {
-				               a1[i][j].setIcon(bcIcon1); //그 자리 버튼의 아이콘을 바꿔주고
-				               GameProcess.bingo1[i][j]=true; //빙고가 체크된걸로(true로)표시
-				            }
-							for(int k=0; k<3; k++)
+							if(e.getSource()==a1[i][j]&&GameProcess.playerTurn==true)
 							{
-								for(int l=0; l<25; l++)
-								{
-									if(GameProcess.p2Board[k][l]==GameProcess.chosenBingoNumber)
-									{
-										a2[k][l].setIcon(bcIcon0);
-										GameProcess.bingo2[k][l]=true;
-									}
-								}
+								GameProcess.bingoCheck(i,j,GameProcess.p1Board,GameProcess.p2Board
+										,GameProcess.bingo1,GameProcess.bingo2,a1,a2
+										,bcIcon1,bcIcon0,GameProcess.bingoCheckChance1);
 							}
-							GameProcess.lineCount();
+							else if(e.getSource()==a2[i][j]&&GameProcess.playerTurn==false)
+							{
+								GameProcess.bingoCheck(i,j,GameProcess.p2Board,GameProcess.p1Board
+										,GameProcess.bingo2,GameProcess.bingo1,a2,a1
+										,bcIcon0,bcIcon1,GameProcess.bingoCheckChance2);
+							}
 						}
 					}
 				}
-			}
-			if(ChoiceNation.chosenNation1==1&&ChoiceNation.chosenNation2==1)//진영선택 : 촉vs촉
-			{
-				for(int i=0; i<3; i++)
+				else if(ChoiceNation.chosenNation1==1&&ChoiceNation.chosenNation2==1)//진영선택 : 촉vs촉
 				{
-					for(int j=0; j<25; j++)
+					for(int i=0; i<3; i++)
 					{
-						//bingo[][]가 체크 안된것만 체크 가능
-						if(e.getSource()==a1[i][j])
+						for(int j=0; j<25; j++)
 						{
-							GameProcess.chosenBingoNumber=GameProcess.p1Board[i][j];
-							if(GameProcess.p1Board[i][j]==GameProcess.chosenBingoNumber) //선택한 숫자와 보드판의 숫자가 맞으면
-				            {
-				               a1[i][j].setIcon(bcIcon1); //그 자리 버튼의 아이콘을 바꿔주고
-				               GameProcess.bingo1[i][j]=true; //빙고가 체크된걸로(true로)표시
-				            }
-							for(int k=0; k<3; k++)
+							if(e.getSource()==a1[i][j]&&GameProcess.playerTurn==true)
 							{
-								for(int l=0; l<25; l++)
-								{
-									if(GameProcess.p2Board[k][l]==GameProcess.chosenBingoNumber)
-									{
-										a2[k][l].setIcon(bcIcon1);
-										GameProcess.bingo2[k][l]=true;
-									}
-								}
+								GameProcess.bingoCheck(i,j,GameProcess.p1Board,GameProcess.p2Board
+										,GameProcess.bingo1,GameProcess.bingo2,a1,a2
+										,bcIcon1,bcIcon1,GameProcess.bingoCheckChance1);
 							}
-							GameProcess.lineCount();
+							else if(e.getSource()==a2[i][j]&&GameProcess.playerTurn==false)
+							{
+								GameProcess.bingoCheck(i,j,GameProcess.p2Board,GameProcess.p1Board
+										,GameProcess.bingo2,GameProcess.bingo1,a2,a1
+										,bcIcon1,bcIcon1,GameProcess.bingoCheckChance2);
+							}
 						}
 					}
 				}
-			}
-			if(ChoiceNation.chosenNation1==1&&ChoiceNation.chosenNation2==2)//진영선택 : 촉vs오
-			{
-				for(int i=0; i<3; i++)
+				else if(ChoiceNation.chosenNation1==1&&ChoiceNation.chosenNation2==2)//진영선택 : 촉vs오
 				{
-					for(int j=0; j<25; j++)
+					for(int i=0; i<3; i++)
 					{
-						//bingo[][]가 체크 안된것만 체크 가능
-						if(e.getSource()==a1[i][j])
+						for(int j=0; j<25; j++)
 						{
-							GameProcess.chosenBingoNumber=GameProcess.p1Board[i][j];
-							if(GameProcess.p1Board[i][j]==GameProcess.chosenBingoNumber) //선택한 숫자와 보드판의 숫자가 맞으면
-				            {
-				               a1[i][j].setIcon(bcIcon1); //그 자리 버튼의 아이콘을 바꿔주고
-				               GameProcess.bingo1[i][j]=true; //빙고가 체크된걸로(true로)표시
-				            }
-							for(int k=0; k<3; k++)
+							if(e.getSource()==a1[i][j]&&GameProcess.playerTurn==true)
 							{
-								for(int l=0; l<25; l++)
-								{
-									if(GameProcess.p2Board[k][l]==GameProcess.chosenBingoNumber)
-									{
-										a2[k][l].setIcon(bcIcon2);
-										GameProcess.bingo2[k][l]=true;
-									}
-								}
+								GameProcess.bingoCheck(i,j,GameProcess.p1Board,GameProcess.p2Board
+										,GameProcess.bingo1,GameProcess.bingo2,a1,a2
+										,bcIcon1,bcIcon2,GameProcess.bingoCheckChance1);
 							}
-							GameProcess.lineCount();
+							else if(e.getSource()==a2[i][j]&&GameProcess.playerTurn==false)
+							{
+								GameProcess.bingoCheck(i,j,GameProcess.p2Board,GameProcess.p1Board
+										,GameProcess.bingo2,GameProcess.bingo1,a2,a1
+										,bcIcon2,bcIcon1,GameProcess.bingoCheckChance2);
+							}
 						}
 					}
 				}
-			}
-			if(ChoiceNation.chosenNation1==2&&ChoiceNation.chosenNation2==0)//진영선택 : 오vs위
-			{
-				for(int i=0; i<3; i++)
+				else if(ChoiceNation.chosenNation1==2&&ChoiceNation.chosenNation2==0)//진영선택 : 오vs위
 				{
-					for(int j=0; j<25; j++)
+					for(int i=0; i<3; i++)
 					{
-						//bingo[][]가 체크 안된것만 체크 가능
-						if(e.getSource()==a1[i][j])
+						for(int j=0; j<25; j++)
 						{
-							GameProcess.chosenBingoNumber=GameProcess.p1Board[i][j];
-							if(GameProcess.p1Board[i][j]==GameProcess.chosenBingoNumber) //선택한 숫자와 보드판의 숫자가 맞으면
-				            {
-				               a1[i][j].setIcon(bcIcon2); //그 자리 버튼의 아이콘을 바꿔주고
-				               GameProcess.bingo1[i][j]=true; //빙고가 체크된걸로(true로)표시
-				            }
-							for(int k=0; k<3; k++)
+							if(e.getSource()==a1[i][j]&&GameProcess.playerTurn==true)
 							{
-								for(int l=0; l<25; l++)
-								{
-									if(GameProcess.p2Board[k][l]==GameProcess.chosenBingoNumber)
-									{
-										a2[k][l].setIcon(bcIcon0);
-										GameProcess.bingo2[k][l]=true;
-									}
-								}
+								GameProcess.bingoCheck(i,j,GameProcess.p1Board,GameProcess.p2Board
+										,GameProcess.bingo1,GameProcess.bingo2,a1,a2
+										,bcIcon2,bcIcon0,GameProcess.bingoCheckChance1);
 							}
-							GameProcess.lineCount();
+							else if(e.getSource()==a2[i][j]&&GameProcess.playerTurn==false)
+							{
+								GameProcess.bingoCheck(i,j,GameProcess.p2Board,GameProcess.p1Board
+										,GameProcess.bingo2,GameProcess.bingo1,a2,a1
+										,bcIcon0,bcIcon2,GameProcess.bingoCheckChance2);
+							}
 						}
 					}
 				}
-			}
-			if(ChoiceNation.chosenNation1==2&&ChoiceNation.chosenNation2==1)//진영선택 : 오vs촉
-			{
-				for(int i=0; i<3; i++)
+				else if(ChoiceNation.chosenNation1==2&&ChoiceNation.chosenNation2==1)//진영선택 : 오vs촉
 				{
-					for(int j=0; j<25; j++)
+					for(int i=0; i<3; i++)
 					{
-						//bingo[][]가 체크 안된것만 체크 가능
-						if(e.getSource()==a1[i][j])
+						for(int j=0; j<25; j++)
 						{
-							GameProcess.chosenBingoNumber=GameProcess.p1Board[i][j];
-							if(GameProcess.p1Board[i][j]==GameProcess.chosenBingoNumber) //선택한 숫자와 보드판의 숫자가 맞으면
-				            {
-				               a1[i][j].setIcon(bcIcon2); //그 자리 버튼의 아이콘을 바꿔주고
-				               GameProcess.bingo1[i][j]=true; //빙고가 체크된걸로(true로)표시
-				            }
-							for(int k=0; k<3; k++)
+							if(e.getSource()==a1[i][j]&&GameProcess.playerTurn==true)
 							{
-								for(int l=0; l<25; l++)
-								{
-									if(GameProcess.p2Board[k][l]==GameProcess.chosenBingoNumber)
-									{
-										a2[k][l].setIcon(bcIcon1);
-										GameProcess.bingo2[k][l]=true;
-									}
-								}
+								GameProcess.bingoCheck(i,j,GameProcess.p1Board,GameProcess.p2Board
+										,GameProcess.bingo1,GameProcess.bingo2,a1,a2
+										,bcIcon2,bcIcon1,GameProcess.bingoCheckChance1);
 							}
-							GameProcess.lineCount();
+							else if(e.getSource()==a2[i][j]&&GameProcess.playerTurn==false)
+							{
+								GameProcess.bingoCheck(i,j,GameProcess.p2Board,GameProcess.p1Board
+										,GameProcess.bingo2,GameProcess.bingo1,a2,a1
+										,bcIcon1,bcIcon2,GameProcess.bingoCheckChance2);
+							}
 						}
 					}
 				}
-			}
-			if(ChoiceNation.chosenNation1==2&&ChoiceNation.chosenNation2==2)//진영선택 : 오vs오
-			{
-				for(int i=0; i<3; i++)
+				else if(ChoiceNation.chosenNation1==2&&ChoiceNation.chosenNation2==2)//진영선택 : 오vs오
 				{
-					for(int j=0; j<25; j++)
+					for(int i=0; i<3; i++)
 					{
-						//bingo[][]가 체크 안된것만 체크 가능
-						if(e.getSource()==a1[i][j])
+						for(int j=0; j<25; j++)
 						{
-							GameProcess.chosenBingoNumber=GameProcess.p1Board[i][j];
-							if(GameProcess.p1Board[i][j]==GameProcess.chosenBingoNumber) //선택한 숫자와 보드판의 숫자가 맞으면
-				            {
-				               a1[i][j].setIcon(bcIcon2); //그 자리 버튼의 아이콘을 바꿔주고
-				               GameProcess.bingo1[i][j]=true; //빙고가 체크된걸로(true로)표시
-				            }
-							for(int k=0; k<3; k++)
+							if(e.getSource()==a1[i][j]&&GameProcess.playerTurn==true)
 							{
-								for(int l=0; l<25; l++)
-								{
-									if(GameProcess.p2Board[k][l]==GameProcess.chosenBingoNumber)
-									{
-										a2[k][l].setIcon(bcIcon2);
-										GameProcess.bingo2[k][l]=true;
-									}
-								}
+								GameProcess.bingoCheck(i,j,GameProcess.p1Board,GameProcess.p2Board
+										,GameProcess.bingo1,GameProcess.bingo2,a1,a2
+										,bcIcon2,bcIcon2,GameProcess.bingoCheckChance1);
 							}
-							GameProcess.lineCount();
+							else if(e.getSource()==a2[i][j]&&GameProcess.playerTurn==false)
+							{
+								GameProcess.bingoCheck(i,j,GameProcess.p2Board,GameProcess.p1Board
+										,GameProcess.bingo2,GameProcess.bingo1,a2,a1
+										,bcIcon2,bcIcon2,GameProcess.bingoCheckChance2);
+							}
 						}
 					}
 				}
+				
+				if(GameProcess.playerTurn==true)
+				{
+					if(e.getSource()==btnAtt)//플레이어1 공격 스킬 버튼
+					{
+						GameProcess.bAttackSkill1=true;
+					}
+					else if(e.getSource()==btnDef)//방어스킬
+					{
+						
+					}
+					else if(e.getSource()==btnTrick)//책략스킬
+					{
+						
+					}
+					else if(e.getSource()==fury[1][0]) //공격필살기 버튼
+					{
+//			    	  new AttackFinishThread().start();
+//			    	  GameProcess.checkTurn1++;//공격기회+1,아이템사용기회+1
+//			    	  GameProcess.skillTurn1++;
+//			    	  fury[1][0].setEnabled(false);//버튼 사용 불가
+//			    	  GameProcess.usingAttackFinish1+=3;
+					}
+					else if(e.getSource()==fury[1][1]) //방어필살기 버튼
+					{
+						
+					}
+					else if(e.getSource()==fury[1][2]) //책략필살기 버튼
+					{
+						int[] arr={0,1,2,3,4,5};
+						jypgUseCnt=1;
+						String inputChoice;
+						inputChoice=JOptionPane.showInputDialog(arr);
+						Integer inputChoiceNum=Integer.parseInt(inputChoice);
+						System.out.println(inputChoice);
+						for(int k=0; k<6;k++)
+						{
+							  if(inputChoiceNum==k&&k<3)
+							  {
+								  GameProcess.jypg(0,k);
+								  break;
+							  }
+							  if(inputChoiceNum==k&&k>=3)
+							  {
+								  GameProcess.jypg(1,k%3);
+								  break;
+							  }
+						}
+					}
+				}
+
+				if(GameProcess.playerTurn==false)
+				{
+					if(e.getSource()==youBtnAtt)//플레이어2 공격 스킬 버튼
+					{
+						
+					}
+					else if(e.getSource()==youBtnDef)//방어스킬
+					{
+						
+					}
+					else if(e.getSource()==youBtnTrick)//책략스킬
+					{
+						
+					}
+					else if(e.getSource()==fury[0][0]) //플레이어2 공격필살기 버튼
+					{
+//			    	  GameProcess.checkTurn2++;
+//			    	  GameProcess.skillTurn2++;
+//			    	  fury[0][0].setEnabled(false);
+//			    	  GameProcess.usingAttackFinish2+=3;
+					}
+					else if(e.getSource()==fury[0][1]) //방어필살기 버튼
+					{
+						
+					}
+					else if(e.getSource()==fury[0][2]) //책략필살기 버튼
+					{
+						
+					}
+				}
 			}
-			
-			
 		}
-/*		for(int i=0; i<2;i++)
-		{
-			for(int j=0; j<3; j++)
-			{*/
-				if(e.getSource()==fury[1][2])
-				{
-					int[] arr={0,1,2,3,4,5};
-					jypgUseCnt=1;
-					String inputChoice;
-					inputChoice=JOptionPane.showInputDialog(arr);
-					Integer inputChoiceNum=Integer.parseInt(inputChoice);
-					System.out.println(inputChoice);
-					for(int k=0; k<6;k++)
-					{
-						  if(inputChoiceNum==k&&k<3)
-						  {
-							  GameProcess.jypg(0,k);
-							  break;
-						  }
-						  if(inputChoiceNum==k&&k>=3)
-						  {
-							  GameProcess.jypg(1,k%3);
-							  break;
-						  }
-					}
-
-				 }
-						  
-					 
-/*			  }
-		  }*/
-			
-		}
-
-
+	
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub

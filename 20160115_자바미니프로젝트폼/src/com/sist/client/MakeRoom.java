@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class MakeRoom extends JFrame implements ActionListener {
+public class MakeRoom extends JDialog implements ActionListener {
 	JLabel la1, la2, la3;
 	JTextField tf;
 	JPasswordField pf;
@@ -12,6 +12,7 @@ public class MakeRoom extends JFrame implements ActionListener {
 	JButton b1, b2;
 
 	public MakeRoom() {
+		this.setModal(true);
 		la1 = new JLabel("방이름");
 		la2 = new JLabel("상태");
 		la3 = new JLabel("비밀번호");

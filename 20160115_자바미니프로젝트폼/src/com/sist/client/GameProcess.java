@@ -18,43 +18,33 @@ public class GameProcess extends JPanel{
    static int[] numOfBingo2=new int[3];
 
    //스킬,필살기는 3이 되면 사용
-   static int attackSkill1 = 0;
-   static int attackFinish1 = 0;
-   static int defenseSkill1 = 0;
-   static int defenseFinish1 = 0;
-   static int strategySkill1 = 0;
-   static int strategyFinish1 = 0;
+   static int attackSkill1=0; static int attackFinish1=0;
+   static int defenseSkill1=0; static int defenseFinish1=0;
+   static int strategySkill1=0; static int strategyFinish1=0;
    
-   static int usingAttackSkill1 = 0; //스킬을 사옹하면 -1 
-   static int usingAttackFinish1 = 0;//필살기는 사용시 -3
-   static int usingDefenseSkill1 = 0;
-   static int usingDefenseFinish1 = 0;
-   static int usingStrategySkill1 = 0;
-   static int usingStrategyFinish1 = 0;
+   //스킬을 사옹하면 -1, 필살기는 사용시 -3
+   static int usingAttackSkill1=0; static int usingAttackFinish1=0;
+   static int usingDefenseSkill1=0; static int usingDefenseFinish1=0;
+   static int usingStrategySkill1=0; static int usingStrategyFinish1=0;
    
-   static boolean bAttackSkill1 = false; //아이콘을 클릭했을때 트루가 되고 사용시 false 
-   static boolean bAttackFinish1 = false;
-   static boolean bDefenseSkill1 = false;
-   static boolean bDefenseFinish1 = false;
-   static boolean bStrategySkill1 = false;
-   static boolean bStrategyFinish1 = false;
+   //아이콘을 클릭했을때 트루가 되고 사용시 false 
+   static boolean bAttackSkill1=false; static boolean bAttackFinish1=false;
+   static boolean bDefenseSkill1=false; static boolean bDefenseFinish1=false;
+   static boolean bStrategySkill1=false; static boolean bStrategyFinish1=false;
    
    //스킬
-   static int attackSkill2 = 0;
-   static int attackFinish2 = 0; //필살기는 3이 되면 사용, 사용시 -3
-   static int defenseSkill2 = 0;
-   static int defenseFinish2 = 0;
-   static int strategySkill2 = 0;
-   static int strategyFinish2 = 0;
+   static int attackSkill2=0; static int attackFinish2=0;
+   static int defenseSkill2=0; static int defenseFinish2=0;
+   static int strategySkill2=0; static int strategyFinish2=0;
       
-   static boolean bAttackSkill2 = false; //아이콘을 클릭했을때 트루가 되고 사용시 false 
-   static boolean bAttackFinish2 = false;
-   static boolean bDefenseSkill2 = false;
-   static boolean bDefenseFinish2 = false;
-   static boolean bStrategySkill2 = false;
-   static boolean bStrategyFinish2 = false;
+   static boolean bAttackSkill2=false; static boolean bAttackFinish2=false;
+   static boolean bDefenseSkill2=false; static boolean bDefenseFinish2=false;
+   static boolean bStrategySkill2=false; static boolean bStrategyFinish2=false;
    
-   static boolean playerTurn=false; //true=player1, false=player2 
+   static boolean playerTurn=true; //true=player1, false=player2
+   
+   static int bingoCheckChance1=1, bingoCheckChance2=1;//한 턴에 빙고 체크를 할 수 있는 횟수
+   static int skillChance1=1, skillChance2=1;
 
    static int[] gaugeScore={0,33,66,100};//게이지바
    
@@ -141,19 +131,31 @@ public class GameProcess extends JPanel{
          //이미지=
    }
 
-   static void CheckBingo1(JButton btn,ImageIcon icon)//빙고체크하고 상대 빙고도 뒤집어주기
+   //빙고체크
+   static void bingoCheck(int i, int j, int[][] board1, int[][]board2,
+		   boolean[][] b1, boolean[][] b2, JButton[][] btn1, JButton[][] btn2,
+		   ImageIcon icon1, ImageIcon icon2,int chance)
    {
-      for(int i=0; i<3; i++)
-      {
-         for(int j=0; j<25; j++)
-         {
-            if(p1Board[i][j]==chosenBingoNumber) //선택한 숫자와 보드판의 숫자가 맞으면
-            {
-               btn.setIcon(icon); //그 자리 버튼의 아이콘을 바꿔주고
-               bingo1[i][j]=true; //빙고가 체크된걸로(true로)표시
-            }
-         }
-      }
+	   chosenBingoNumber=board1[i][j];
+	   if(board1[i][j]==chosenBingoNumber) //선택한 숫자와 보드판의 숫자가 맞으면
+	   {
+          btn1[i][j].setIcon(icon1); //그 자리 버튼의 아이콘을 바꿔주고
+          b1[i][j]=true; //빙고가 체크된걸로(true로)표시
+       }
+	   for(int k=0; k<3; k++)
+	   {
+		   for(int l=0; l<25; l++)
+		   {
+			   //상대것도 빙고체크
+			   if(board2[k][l]==chosenBingoNumber)
+			   {
+				   btn2[k][l].setIcon(icon2);
+				   b2[k][l]=true;
+			   }
+		   }
+	   }
+	   lineCount();
+	   chance--;
    }
    
    static void gaugeCtrl(int lineNum, int a, int b, String str) //게이지 상승 및 궁극기 버튼 활성화 메소드
@@ -268,249 +270,94 @@ public class GameProcess extends JPanel{
 	   lineCount();
    }
    
+   //완성된 라인 체크 알고리즘
+   static int lineCountMethod(boolean[][] bingo, int pan)
+   {
+	   int line=0;
+	   for(int i=0; i<5; i++)
+	      {
+	         //가로
+	         if(bingo[pan][i*5]==true&&bingo[0][(i*5)+1]==true
+	               &&bingo[pan][(i*5)+2]==true&&bingo[0][(i*5)+3]==true
+	               &&bingo[pan][(i*5)+4]==true)
+	         {
+	            line++;
+	         }
+	         //세로
+	         if(bingo[pan][i]==true&&bingo[pan][i+5]==true
+	               &&bingo[pan][i+10]==true&&bingo[pan][i+15]==true
+	               &&bingo[pan][i+20]==true)
+	         {
+	            line++;
+	         }
+	      }
+	      //대각선
+	      if(bingo[pan][0]==true&&bingo[pan][6]==true
+	            &&bingo[pan][12]==true&&bingo[pan][18]==true
+	            &&bingo[pan][24]==true)
+	      {
+	         line++;
+	      }
+	      if(bingo[pan][4]==true&&bingo[pan][8]==true
+	            &&bingo[pan][12]==true&&bingo[pan][16]==true
+	            &&bingo[pan][20]==true)
+	      {
+	         line++;
+	      }
+	      return line;
+   }
+   
    static void lineCount() //라인 카운트
    {
-      int numOfLine1=0; //플레이어1 카운트
-      int numOfLine2=0;
-      int numOfLine3=0;
-      
-      int numOfLine4=0; //플레이어2 카운트
-      int numOfLine5=0;
-      int numOfLine6=0;
-      
       //빙고 줄 세기
       //첫번째판
-      for(int i=0; i<5; i++)
-      {
-         //가로
-         if(bingo1[0][i*5]==true&&bingo1[0][(i*5)+1]==true
-               &&bingo1[0][(i*5)+2]==true&&bingo1[0][(i*5)+3]==true
-               &&bingo1[0][(i*5)+4]==true)
-         {
-            numOfLine1++;
-         }
-         //세로
-         if(bingo1[0][i]==true&&bingo1[0][i+5]==true
-               &&bingo1[0][i+10]==true&&bingo1[0][i+15]==true
-               &&bingo1[0][i+20]==true)
-         {
-            numOfLine1++;
-         }
-      }
-      //대각선
-      if(bingo1[0][0]==true&&bingo1[0][6]==true
-            &&bingo1[0][12]==true&&bingo1[0][18]==true
-            &&bingo1[0][24]==true)
-      {
-         numOfLine1++;
-      }
-      if(bingo1[0][4]==true&&bingo1[0][8]==true
-            &&bingo1[0][12]==true&&bingo1[0][16]==true
-            &&bingo1[0][20]==true)
-      {
-         numOfLine1++;
-      }
-      numOfBingo1[0]=numOfLine1;
-      gaugeCtrl(numOfLine1, 1, 0, "투 신");
-      bingoIcon(numOfLine1, 4);
-      goongCtrl(numOfLine1,1,0);
-      attackSkill1=numOfLine1;
-      attackFinish1=numOfLine1;
+      numOfBingo1[0]=lineCountMethod(bingo1,0);
+      gaugeCtrl(numOfBingo1[0], 1, 0, "투 신");//카운트 되는 만큼 필살기
+      bingoIcon(numOfBingo1[0], 4);
+      goongCtrl(numOfBingo1[0],1,0);
+      attackSkill1=numOfBingo1[0];
+      attackFinish1=numOfBingo1[0];
       
       //두번째판
-      for(int i=0; i<5; i++)
-      {
-         //가로
-         if(bingo1[1][i*5]==true&&bingo1[1][(i*5)+1]==true
-               &&bingo1[1][(i*5)+2]==true&&bingo1[1][(i*5)+3]==true
-               &&bingo1[1][(i*5)+4]==true)
-         {
-            numOfLine2++;
-         }
-         //세로
-         if(bingo1[1][i]==true&&bingo1[1][i+5]==true
-               &&bingo1[1][i+10]==true&&bingo1[1][i+15]==true
-               &&bingo1[1][i+20]==true)
-         {
-            numOfLine2++;
-         }
-         
-      }
-      //대각선
-      if(bingo1[1][0]==true&&bingo1[1][6]==true
-            &&bingo1[1][12]==true&&bingo1[1][18]==true
-            &&bingo1[1][24]==true)
-      {
-         numOfLine2++;
-      }
-      if(bingo1[1][4]==true&&bingo1[1][8]==true
-            &&bingo1[1][12]==true&&bingo1[1][16]==true
-            &&bingo1[1][20]==true)
-      {
-         numOfLine2++;
-      }
-      numOfBingo1[1]=numOfLine2;
-      gaugeCtrl(numOfLine2, 1, 1, "적진기습");
-      bingoIcon(numOfLine2, 5);
-      goongCtrl(numOfLine2,1,1);
-      attackSkill1=numOfLine2;
-      attackFinish1=numOfLine2;
+      numOfBingo1[1]=lineCountMethod(bingo1,1);
+      gaugeCtrl(numOfBingo1[1], 1, 1, "적진기습");
+      bingoIcon(numOfBingo1[1], 5);
+      goongCtrl(numOfBingo1[1],1,1);
+      attackSkill1=numOfBingo1[1];
+      attackFinish1=numOfBingo1[1];
       
       //세번째판
-      for(int i=0; i<5; i++)
-      {
-         //가로
-         if(bingo1[2][i*5]==true&&bingo1[2][(i*5)+1]==true
-               &&bingo1[2][(i*5)+2]==true&&bingo1[2][(i*5)+3]==true
-               &&bingo1[2][(i*5)+4]==true)
-         {
-            numOfLine3++;
-         }
-         //세로
-         if(bingo1[2][i]==true&&bingo1[2][i+5]==true
-               &&bingo1[2][i+10]==true&&bingo1[2][i+15]==true
-               &&bingo1[2][i+20]==true)
-         {
-            numOfLine3++;
-         }
-         
-      }
-      //대각선
-      if(bingo1[2][0]==true&&bingo1[2][6]==true
-            &&bingo1[2][12]==true&&bingo1[2][18]==true
-            &&bingo1[2][24]==true)
-      {
-         numOfLine3++;
-      }
-      if(bingo1[2][4]==true&&bingo1[2][8]==true
-            &&bingo1[2][12]==true&&bingo1[2][16]==true
-            &&bingo1[2][20]==true)
-      {
-         numOfLine3++;
-      }
-      numOfBingo1[2]=numOfLine3;
-      gaugeCtrl(numOfLine3, 1, 2, "진영파괴");
-      bingoIcon(numOfLine3, 6);
-      goongCtrl(numOfLine3,1,2);
-      strategySkill1=numOfLine3;
-      strategyFinish1=numOfLine3;
+      numOfBingo1[2]=lineCountMethod(bingo1,2);
+      gaugeCtrl(numOfBingo1[2], 1, 2, "진영파괴");
+      bingoIcon(numOfBingo1[2], 6);
+      goongCtrl(numOfBingo1[2],1,2);
+      strategySkill1=numOfBingo1[2];
+      strategyFinish1=numOfBingo1[2];
       
       //상대판 체크
       //첫번째판
-      for(int i=0; i<5; i++)
-      {
-         //가로
-         if(bingo2[0][i*5]==true&&bingo2[0][(i*5)+1]==true
-               &&bingo2[0][(i*5)+2]==true&&bingo2[0][(i*5)+3]==true
-               &&bingo2[0][(i*5)+4]==true)
-         {
-            numOfLine4++;
-         }
-         //세로
-         if(bingo2[0][i]==true&&bingo2[0][i+5]==true
-               &&bingo2[0][i+10]==true&&bingo2[0][i+15]==true
-               &&bingo2[0][i+20]==true)
-         {
-            numOfLine4++;
-         }
-      }
-      //대각선
-      if(bingo2[0][0]==true&&bingo2[0][6]==true
-            &&bingo2[0][12]==true&&bingo2[0][18]==true
-            &&bingo2[0][24]==true)
-      {
-         numOfLine4++;
-      }
-      if(bingo2[0][4]==true&&bingo2[0][8]==true
-            &&bingo2[0][12]==true&&bingo2[0][16]==true
-            &&bingo2[0][20]==true)
-      {
-         numOfLine4++;
-      }
-      numOfBingo2[0]=numOfLine4;
-      gaugeCtrl(numOfLine4, 0, 0, "투 신");
-      bingoIcon(numOfLine4, 1);
-      goongCtrl(numOfLine4,0,0);
-      attackSkill2=numOfLine4;
-      attackFinish2=numOfLine4;
+      numOfBingo2[0]=lineCountMethod(bingo2,0);
+      gaugeCtrl(numOfBingo2[0], 0, 0, "투 신");
+      bingoIcon(numOfBingo2[0], 1);
+      goongCtrl(numOfBingo2[0],0,0);
+      attackSkill2=numOfBingo2[0];
+      attackFinish2=numOfBingo2[0];
       
       //두번째판
-      for(int i=0; i<5; i++)
-      {
-         //가로
-         if(bingo2[1][i*5]==true&&bingo2[1][(i*5)+1]==true
-               &&bingo2[1][(i*5)+2]==true&&bingo2[1][(i*5)+3]==true
-               &&bingo2[1][(i*5)+4]==true)
-         {
-            numOfLine5++;
-         }
-         //세로
-         if(bingo2[1][i]==true&&bingo2[1][i+5]==true
-               &&bingo2[1][i+10]==true&&bingo2[1][i+15]==true
-               &&bingo2[1][i+20]==true)
-         {
-            numOfLine5++;
-         }
-         
-      }
-      //대각선
-      if(bingo2[1][0]==true&&bingo2[1][6]==true
-            &&bingo2[1][12]==true&&bingo2[1][18]==true
-            &&bingo2[1][24]==true)
-      {
-         numOfLine5++;
-      }
-      if(bingo2[1][4]==true&&bingo2[1][8]==true
-            &&bingo2[1][12]==true&&bingo2[1][16]==true
-            &&bingo2[1][20]==true)
-      {
-         numOfLine5++;
-      }
-      numOfBingo2[1]=numOfLine5;
-      gaugeCtrl(numOfLine5, 0, 1, "적진기습");
-      bingoIcon(numOfLine5, 2);
-      goongCtrl(numOfLine5,0,1);
-      attackSkill2=numOfLine5;
-      attackFinish2=numOfLine5;
+      numOfBingo2[1]=lineCountMethod(bingo2,1);
+      gaugeCtrl(numOfBingo2[1], 0, 1, "적진기습");
+      bingoIcon(numOfBingo2[1], 2);
+      goongCtrl(numOfBingo2[1],0,1);
+      attackSkill2=numOfBingo2[1];
+      attackFinish2=numOfBingo2[1];
       
       //세번째판
-      for(int i=0; i<5; i++)
-      {
-         //가로
-         if(bingo2[2][i*5]==true&&bingo2[2][(i*5)+1]==true
-               &&bingo2[2][(i*5)+2]==true&&bingo2[2][(i*5)+3]==true
-               &&bingo2[2][(i*5)+4]==true)
-         {
-            numOfLine6++;
-         }
-         //세로
-         if(bingo2[2][i]==true&&bingo2[2][i+5]==true
-               &&bingo2[2][i+10]==true&&bingo2[2][i+15]==true
-               &&bingo2[2][i+20]==true)
-         {
-            numOfLine6++;
-         }
-         
-      }
-      //대각선
-      if(bingo2[2][0]==true&&bingo2[2][6]==true
-            &&bingo2[2][12]==true&&bingo2[2][18]==true
-            &&bingo2[2][24]==true)
-      {
-         numOfLine6++;
-      }
-      if(bingo2[2][4]==true&&bingo2[2][8]==true
-            &&bingo2[2][12]==true&&bingo2[2][16]==true
-            &&bingo2[2][20]==true)
-      {
-         numOfLine6++;
-      }
-      numOfBingo2[2]=numOfLine6;
-      gaugeCtrl(numOfLine6, 0, 2, "진영파괴");
-      bingoIcon(numOfLine6, 3);
-      goongCtrl(numOfLine6,0,2);
-      strategySkill2=numOfLine6;
-      strategyFinish2=numOfLine6;
+      numOfBingo2[2]=lineCountMethod(bingo2,2);
+      gaugeCtrl(numOfBingo2[2], 0, 2, "진영파괴");
+      bingoIcon(numOfBingo2[2], 3);
+      goongCtrl(numOfBingo2[2],0,2);
+      strategySkill2=numOfBingo2[2];
+      strategyFinish2=numOfBingo2[2];
             
       if(numOfBingo1[0]>=5||numOfBingo1[1]>=5||numOfBingo1[2]>=5)
       {
@@ -522,60 +369,5 @@ public class GameProcess extends JPanel{
     	  JOptionPane.showMessageDialog(new GameLayout(), "게임종료");
       }
    }
-
-   static void getSkill() //스킬 갯수 추가
-   {
-      if(attackSkill1>0)
-      {
-         //이미지 추가
-      }
-      if(defenseSkill1>0)
-      {
-         
-      }
-      if(strategySkill1>0)
-      {
-         
-      }
-      if(attackFinish1>3)
-      {
-         
-      }
-      if(defenseFinish1>3)
-      {
-         
-      }
-      if(strategyFinish1>3)
-      {
-         
-      }
-   }
-
-   static void clickSkill_Icon() //스킬 클릭
-   {
-      //스킬 사용버 메시지 띄우기
-   }
-   
-   static void useSkill1() //스킬사용
-   {
-      //상대판에만 사용 가능
-      
-      attackSkill1--;
-      defenseSkill1--;
-      strategySkill1--;
-      attackFinish1-=3;
-      defenseFinish1-=3;
-      strategyFinish1-=3;
-   }
-   
-   static void process()
-   {
-      rand();
-      insertBingoNumber1();
-      insertBingoNumber2();
-   }
-
-   
-   
 
 }
