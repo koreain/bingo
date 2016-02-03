@@ -40,7 +40,6 @@ public class ChoiceNation extends JPanel implements ActionListener{
 		}
 	}
 	
-	
 	public ChoiceNation()
 	{
 		for(int i=0;i<3;i++)
@@ -122,7 +121,6 @@ public class ChoiceNation extends JPanel implements ActionListener{
 		  g.drawImage(bg, 0, 0, 1280, 970, this); //배경 그리기
 		  g.drawImage(notice,80,110,360,130,this); //설명 그리기
 	}
-
 
 	@Override
 	public void actionPerformed(ActionEvent e) {

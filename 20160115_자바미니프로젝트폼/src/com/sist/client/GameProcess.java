@@ -23,9 +23,9 @@ public class GameProcess extends JPanel{
    static int strategySkill1=0; static int strategyFinish1=0;
    
    //스킬을 사옹하면 -1, 필살기는 사용시 -3
-   static int usingAttackSkill1=0; static int usingAttackFinish1=0;
-   static int usingDefenseSkill1=0; static int usingDefenseFinish1=0;
-   static int usingStrategySkill1=0; static int usingStrategyFinish1=0;
+   static int usingAttackSkill1=0;
+   static int usingDefenseSkill1=0;
+   static int usingStrategySkill1=0;
    
    //아이콘을 클릭했을때 트루가 되고 사용시 false 
    static boolean bAttackSkill1=false; static boolean bAttackFinish1=false;
@@ -48,7 +48,6 @@ public class GameProcess extends JPanel{
 
    static int[] gaugeScore={0,33,66,100};//게이지바
    
-   static int chosenNation=0;//위:0,촉:1,오:2
    static void rand()//중복되지 않는 랜덤 숫자배열 두개 만들기
    {      
       int su=0; //난수 발생시 저장할 변수
@@ -121,7 +120,7 @@ public class GameProcess extends JPanel{
    {
       int coin=(int)(Math.random()*2);
       if(coin==0)
-         playerTurn=true; 
+         playerTurn=true;
       else
          playerTurn=false;
       
@@ -159,24 +158,24 @@ public class GameProcess extends JPanel{
    
    static void gaugeCtrl(int lineNum, int a, int b, String str) //게이지 상승 및 궁극기 버튼 활성화 메소드
    {
-	  if(lineNum>=3)
-	  {
-		  if((GameLayout.goongUsable1[b]==true)&&a==1)
-		   {   GameLayout.gauge[a][b].setValue(gaugeScore[3]);
-		   	   GameLayout.gauge[a][b].setString(str);
-		   	   GameLayout.gauge[a][b].setFont(new Font("궁서체",Font.BOLD,20));
-		   	   GameLayout.gauge[a][b].setVisible(true);
-		   }
-		   else if((GameLayout.goongUsable2[b]==true)&&a==0)
-		   {
-			   GameLayout.gauge[a][b].setValue(gaugeScore[3]);
-		   	   GameLayout.gauge[a][b].setString(str);
-		   	   GameLayout.gauge[a][b].setFont(new Font("궁서체",Font.BOLD,20));
-		   	   GameLayout.gauge[a][b].setVisible(true);
-		   }
-	  }
-	  else
-		  GameLayout.gauge[a][b].setValue(gaugeScore[lineNum]);
+     if(lineNum>=3)
+     {
+        if(GameLayout.goongUsable1[b]==true&&a==1)
+         {   GameLayout.gauge[a][b].setValue(gaugeScore[3]);
+               GameLayout.gauge[a][b].setString(str);
+               GameLayout.gauge[a][b].setFont(new Font("궁서체",Font.BOLD,20));
+               GameLayout.gauge[a][b].setVisible(true);
+         }
+         else if(GameLayout.goongUsable2[b]==true&&a==0)
+         {
+            GameLayout.gauge[a][b].setValue(gaugeScore[3]);
+               GameLayout.gauge[a][b].setString(str);
+               GameLayout.gauge[a][b].setFont(new Font("궁서체",Font.BOLD,20));
+               GameLayout.gauge[a][b].setVisible(true);
+         }
+     }
+     else
+        GameLayout.gauge[a][b].setValue(gaugeScore[lineNum]);
    }
  
    static void goongCtrl(int lineNum, int a, int b)   //세줄완성=>필살기 사용 가능 
@@ -188,10 +187,13 @@ public class GameProcess extends JPanel{
 		   GameLayout.fury[a][b].setEnabled(true);
    }
 	  
-   static void bingoIcon(int lineNo,int a) //int a는 판숫자 (1~6);
+   static void bingoIcon(int lineNo,int a) //완성된 줄 카운트 다섯개,int a는 판숫자 (1~6);
    {
-	   if(lineNo>0)
-		   GameLayout.bingoScore[a-1][lineNo-1].setIcon(GameLayout.bingo2); 
+	  for(int i=0;i<lineNo;i++)
+	   {
+		  if(lineNo>0&&lineNo<6)
+			  GameLayout.bingoScore[a-1][i].setIcon(GameLayout.bingo2);//하나 완성되면 아이콘모양 교차하는 칼로 바꿈
+	   }
    }
    
    //진영파괴(JinYoung PaGoe)
@@ -282,36 +284,36 @@ public class GameProcess extends JPanel{
    {
 	   int line=0;
 	   for(int i=0; i<5; i++)
-	      {
-	         //가로
-	         if(bingo[pan][i*5]==true&&bingo[pan][(i*5)+1]==true
-	               &&bingo[pan][(i*5)+2]==true&&bingo[pan][(i*5)+3]==true
-	               &&bingo[pan][(i*5)+4]==true)
-	         {
-	            line++;
-	         }
-	         //세로
-	         if(bingo[pan][i]==true&&bingo[pan][i+5]==true
-	               &&bingo[pan][i+10]==true&&bingo[pan][i+15]==true
+	   {
+		   //가로
+		   if(bingo[pan][i*5]==true&&bingo[pan][(i*5)+1]==true
+				   &&bingo[pan][(i*5)+2]==true&&bingo[pan][(i*5)+3]==true
+				   &&bingo[pan][(i*5)+4]==true)
+		   {
+			   line++;
+		   }
+		   //세로
+		   if(bingo[pan][i]==true&&bingo[pan][i+5]==true
+				   &&bingo[pan][i+10]==true&&bingo[pan][i+15]==true
 	               &&bingo[pan][i+20]==true)
-	         {
+		   {
 	            line++;
-	         }
-	      }
-	      //대각선
-	      if(bingo[pan][0]==true&&bingo[pan][6]==true
-	            &&bingo[pan][12]==true&&bingo[pan][18]==true
-	            &&bingo[pan][24]==true)
-	      {
-	         line++;
-	      }
-	      if(bingo[pan][4]==true&&bingo[pan][8]==true
-	            &&bingo[pan][12]==true&&bingo[pan][16]==true
-	            &&bingo[pan][20]==true)
-	      {
-	         line++;
-	      }
-	      return line;
+		   }
+	   }
+	   //대각선
+	   if(bingo[pan][0]==true&&bingo[pan][6]==true
+			   &&bingo[pan][12]==true&&bingo[pan][18]==true
+			   &&bingo[pan][24]==true)
+	   {
+		   line++;
+	   }
+	   if(bingo[pan][4]==true&&bingo[pan][8]==true
+			   &&bingo[pan][12]==true&&bingo[pan][16]==true
+			   &&bingo[pan][20]==true)
+	   {
+		   line++;	
+	   }
+	   return line;
    }
    
    static void lineCount() //라인 카운트
@@ -322,16 +324,15 @@ public class GameProcess extends JPanel{
       gaugeCtrl(numOfBingo1[0], 1, 0, "투 신");//카운트 되는 만큼 필살기
       bingoIcon(numOfBingo1[0], 4);
       goongCtrl(numOfBingo1[0],1,0);
-      attackSkill1=numOfBingo1[0];
-      attackFinish1=numOfBingo1[0];
+      attackSkill1=numOfBingo1[0]+usingAttackSkill1;
       
       //두번째판
       numOfBingo1[1]=lineCountMethod(bingo1,1);
       gaugeCtrl(numOfBingo1[1], 1, 1, "적진기습");
       bingoIcon(numOfBingo1[1], 5);
       goongCtrl(numOfBingo1[1],1,1);
-      attackSkill1=numOfBingo1[1];
-      attackFinish1=numOfBingo1[1];
+      defenseSkill1=numOfBingo1[1];
+      defenseFinish1=numOfBingo1[1];
       
       //세번째판
       numOfBingo1[2]=lineCountMethod(bingo1,2);
@@ -355,8 +356,8 @@ public class GameProcess extends JPanel{
       gaugeCtrl(numOfBingo2[1], 0, 1, "적진기습");
       bingoIcon(numOfBingo2[1], 2);
       goongCtrl(numOfBingo2[1],0,1);
-      attackSkill2=numOfBingo2[1];
-      attackFinish2=numOfBingo2[1];
+      defenseSkill2=numOfBingo2[1];
+      defenseFinish2=numOfBingo2[1];
       
       //세번째판
       numOfBingo2[2]=lineCountMethod(bingo2,2);
@@ -365,7 +366,7 @@ public class GameProcess extends JPanel{
       goongCtrl(numOfBingo2[2],0,2);
       strategySkill2=numOfBingo2[2];
       strategyFinish2=numOfBingo2[2];
-            
+      
       if(numOfBingo1[0]>=5||numOfBingo1[1]>=5||numOfBingo1[2]>=5)
       {
          // 창을 하나 띄워서 빙고버튼을 누르게 함
@@ -376,5 +377,4 @@ public class GameProcess extends JPanel{
     	  JOptionPane.showMessageDialog(new GameLayout(), "게임종료");
       }
    }
-
 }

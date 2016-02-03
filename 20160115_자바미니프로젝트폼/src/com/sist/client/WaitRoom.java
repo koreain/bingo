@@ -22,7 +22,7 @@ public class WaitRoom extends JPanel implements ActionListener{
    private Cursor cur = new Cursor(Cursor.HAND_CURSOR);
    WaitRoom()
    {
-      String[] col1={"방번호","방이름","공개/비공개","인원"};
+	  String[] col1={"방번호","방이름","공개/비공개","인원"};
       String[][] row1=new String[0][4]; //초기 0값, but 데이터는 3개씩..
       model1=new DefaultTableModel(row1, col1);
       table1=new JTable(model1);
