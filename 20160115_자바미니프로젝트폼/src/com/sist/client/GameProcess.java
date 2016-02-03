@@ -322,7 +322,7 @@ public class GameProcess extends JPanel{
       gaugeCtrl(numOfBingo1[0], 1, 0, "투 신");//카운트 되는 만큼 필살기
       bingoIcon(numOfBingo1[0], 4);
       goongCtrl(numOfBingo1[0],1,0);
-      attackSkill1=numOfBingo1[0];
+      attackSkill1=numOfBingo1[0]+usingAttackSkill1;
       attackFinish1=numOfBingo1[0];
       
       //두번째판

@@ -97,6 +97,7 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 	static ImageIcon bcIcon1=new ImageIcon("img\\빙고체크-촉.png");
 	static ImageIcon bcIcon2=new ImageIcon("img\\빙고체크-오.png");
 	
+	static boolean bCheck = false;
 	
 	public void RanButton(int a, int b, int c, JPanel d, JPanel e)
 	{
@@ -442,6 +443,8 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 			ChoiceNation.jangSu2[i].setCursor(cur);
             
 		}
+		btnAtt.addActionListener(this);
+		
 		addKeyListener(this);
 		setFocusable(true);
 	}
@@ -486,8 +489,9 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 									,GameProcess.bingo1,GameProcess.bingo2,a1,a2
 									,bcIcon0,bcIcon0);
 							GameProcess.bingoCheckChance1--;
-							System.out.println(GameProcess.numOfBingo1[0]);
-							GameLayout.laCommand.setText("지휘권x"+String.valueOf(GameProcess.bingoCheckChance1));
+							GameProcess.attackSkill1=GameProcess.numOfBingo1[0]+GameProcess.usingAttackSkill1;
+							laAtt.setText("x"+String.valueOf(GameProcess.attackSkill1));
+							laCommand.setText("지휘권x"+String.valueOf(GameProcess.bingoCheckChance1));
 						}
 						else if(e.getSource()==a2[i][j]&&GameProcess.playerTurn==false)
 						{
@@ -509,6 +513,8 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 							GameProcess.bingoCheck(i,j,GameProcess.p1Board,GameProcess.p2Board
 									,GameProcess.bingo1,GameProcess.bingo2,a1,a2
 									,bcIcon0,bcIcon1);
+							GameProcess.attackSkill1=GameProcess.numOfBingo1[0]+GameProcess.usingAttackSkill1;
+							laAtt.setText("x"+String.valueOf(GameProcess.attackSkill1));
 						}
 						else if(e.getSource()==a2[i][j]&&GameProcess.playerTurn==false)
 						{
@@ -530,6 +536,8 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 								GameProcess.bingoCheck(i,j,GameProcess.p1Board,GameProcess.p2Board
 										,GameProcess.bingo1,GameProcess.bingo2,a1,a2
 										,bcIcon0,bcIcon2);
+								GameProcess.attackSkill1=GameProcess.numOfBingo1[0]+GameProcess.usingAttackSkill1;
+								laAtt.setText("x"+String.valueOf(GameProcess.attackSkill1));
 							}
 							else if(e.getSource()==a2[i][j]&&GameProcess.playerTurn==false)
 							{
@@ -551,6 +559,8 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 								GameProcess.bingoCheck(i,j,GameProcess.p1Board,GameProcess.p2Board
 										,GameProcess.bingo1,GameProcess.bingo2,a1,a2
 										,bcIcon1,bcIcon0);
+								GameProcess.attackSkill1=GameProcess.numOfBingo1[0]+GameProcess.usingAttackSkill1;
+								laAtt.setText("x"+String.valueOf(GameProcess.attackSkill1));
 							}
 							else if(e.getSource()==a2[i][j]&&GameProcess.playerTurn==false)
 							{
@@ -572,6 +582,8 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 								GameProcess.bingoCheck(i,j,GameProcess.p1Board,GameProcess.p2Board
 										,GameProcess.bingo1,GameProcess.bingo2,a1,a2
 										,bcIcon1,bcIcon1);
+								GameProcess.attackSkill1=GameProcess.numOfBingo1[0]+GameProcess.usingAttackSkill1;
+								laAtt.setText("x"+String.valueOf(GameProcess.attackSkill1));
 							}
 							else if(e.getSource()==a2[i][j]&&GameProcess.playerTurn==false)
 							{
@@ -593,6 +605,8 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 								GameProcess.bingoCheck(i,j,GameProcess.p1Board,GameProcess.p2Board
 										,GameProcess.bingo1,GameProcess.bingo2,a1,a2
 										,bcIcon1,bcIcon2);
+								GameProcess.attackSkill1=GameProcess.numOfBingo1[0]+GameProcess.usingAttackSkill1;
+								laAtt.setText("x"+String.valueOf(GameProcess.attackSkill1));
 							}
 							else if(e.getSource()==a2[i][j]&&GameProcess.playerTurn==false)
 							{
@@ -614,6 +628,8 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 								GameProcess.bingoCheck(i,j,GameProcess.p1Board,GameProcess.p2Board
 										,GameProcess.bingo1,GameProcess.bingo2,a1,a2
 										,bcIcon2,bcIcon0);
+								GameProcess.attackSkill1=GameProcess.numOfBingo1[0]+GameProcess.usingAttackSkill1;
+								laAtt.setText("x"+String.valueOf(GameProcess.attackSkill1));
 							}
 							else if(e.getSource()==a2[i][j]&&GameProcess.playerTurn==false)
 							{
@@ -635,6 +651,8 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 								GameProcess.bingoCheck(i,j,GameProcess.p1Board,GameProcess.p2Board
 										,GameProcess.bingo1,GameProcess.bingo2,a1,a2
 										,bcIcon2,bcIcon1);
+								GameProcess.attackSkill1=GameProcess.numOfBingo1[0]+GameProcess.usingAttackSkill1;
+								laAtt.setText("x"+String.valueOf(GameProcess.attackSkill1));
 							}
 							else if(e.getSource()==a2[i][j]&&GameProcess.playerTurn==false)
 							{
@@ -656,6 +674,8 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 								GameProcess.bingoCheck(i,j,GameProcess.p1Board,GameProcess.p2Board
 										,GameProcess.bingo1,GameProcess.bingo2,a1,a2
 										,bcIcon2,bcIcon2);
+								GameProcess.attackSkill1=GameProcess.numOfBingo1[0]+GameProcess.usingAttackSkill1;
+								laAtt.setText("x"+String.valueOf(GameProcess.attackSkill1));
 							}
 							else if(e.getSource()==a2[i][j]&&GameProcess.playerTurn==false)
 							{
@@ -671,7 +691,8 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 				{
 					if(e.getSource()==btnAtt)//플레이어1 공격 스킬 버튼
 					{
-						GameProcess.bAttackSkill1=true;
+						bCheck = true;
+						JOptionPane.showMessageDialog(this, "써보세요");
 					}
 					else if(e.getSource()==btnDef)//방어스킬
 					{
@@ -735,7 +756,25 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 					}
 				}
 				
-				for(int i=0; i<3; i++)//책략필살기 클릭 후, 상대 판 버튼 클릭
+				//공격스킬
+				for(int i=0;i<3;i++){
+					for(int j=0;j<25;j++){
+						if(e.getSource()==a2[i][j]&&bCheck){
+							GameProcess.usingAttackSkill1--;
+							GameProcess.attackSkill1=GameProcess.numOfBingo1[0]+GameProcess.usingAttackSkill1;
+							laAtt.setText("x"+String.valueOf(GameProcess.attackSkill1));
+							a2[i][j].setIcon(new ImageIcon("img\\빙고체크-락.png"));	
+//							a2[i][j].setEnabled(false);
+							
+							bCheck = false;
+							break;
+						}
+					}
+				}
+				
+				
+				//책략필살기 클릭 후, 상대 판 버튼 클릭
+				for(int i=0; i<3; i++)
 				{
 					if(e.getSource()==(jypgChoice[i]))
 					{
