@@ -97,7 +97,8 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 	static ImageIcon bcIcon1=new ImageIcon("img\\빙고체크-촉.png");
 	static ImageIcon bcIcon2=new ImageIcon("img\\빙고체크-오.png");
 	
-	static boolean bCheck = false;
+	static boolean bAttCheck = false; // 공격스킬 사용확인
+	static boolean bDefCheck = false; // 수비스킬 사용확인
 	
 	public void RanButton(int a, int b, int c, JPanel d, JPanel e)
 	{
@@ -444,6 +445,7 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
             
 		}
 		btnAtt.addActionListener(this);
+		btnDef.addActionListener(this);
 		
 		addKeyListener(this);
 		setFocusable(true);
@@ -491,6 +493,10 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 							GameProcess.bingoCheckChance1--;
 							GameProcess.attackSkill1=GameProcess.numOfBingo1[0]+GameProcess.usingAttackSkill1;
 							laAtt.setText("x"+String.valueOf(GameProcess.attackSkill1));
+							
+							GameProcess.defenseSkill1=GameProcess.numOfBingo1[1]+GameProcess.usingDefenseSkill1;
+							laDef.setText("x"+String.valueOf(GameProcess.defenseSkill1));
+							
 							laCommand.setText("지휘권x"+String.valueOf(GameProcess.bingoCheckChance1));
 						}
 						else if(e.getSource()==a2[i][j]&&GameProcess.playerTurn==false)
@@ -515,6 +521,8 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 									,bcIcon0,bcIcon1);
 							GameProcess.attackSkill1=GameProcess.numOfBingo1[0]+GameProcess.usingAttackSkill1;
 							laAtt.setText("x"+String.valueOf(GameProcess.attackSkill1));
+							GameProcess.defenseSkill1=GameProcess.numOfBingo1[1]+GameProcess.usingDefenseSkill1;
+							laDef.setText("x"+String.valueOf(GameProcess.defenseSkill1));
 						}
 						else if(e.getSource()==a2[i][j]&&GameProcess.playerTurn==false)
 						{
@@ -538,6 +546,8 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 										,bcIcon0,bcIcon2);
 								GameProcess.attackSkill1=GameProcess.numOfBingo1[0]+GameProcess.usingAttackSkill1;
 								laAtt.setText("x"+String.valueOf(GameProcess.attackSkill1));
+								GameProcess.defenseSkill1=GameProcess.numOfBingo1[1]+GameProcess.usingDefenseSkill1;
+								laDef.setText("x"+String.valueOf(GameProcess.defenseSkill1));
 							}
 							else if(e.getSource()==a2[i][j]&&GameProcess.playerTurn==false)
 							{
@@ -561,6 +571,8 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 										,bcIcon1,bcIcon0);
 								GameProcess.attackSkill1=GameProcess.numOfBingo1[0]+GameProcess.usingAttackSkill1;
 								laAtt.setText("x"+String.valueOf(GameProcess.attackSkill1));
+								GameProcess.defenseSkill1=GameProcess.numOfBingo1[1]+GameProcess.usingDefenseSkill1;
+								laDef.setText("x"+String.valueOf(GameProcess.defenseSkill1));
 							}
 							else if(e.getSource()==a2[i][j]&&GameProcess.playerTurn==false)
 							{
@@ -584,6 +596,8 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 										,bcIcon1,bcIcon1);
 								GameProcess.attackSkill1=GameProcess.numOfBingo1[0]+GameProcess.usingAttackSkill1;
 								laAtt.setText("x"+String.valueOf(GameProcess.attackSkill1));
+								GameProcess.defenseSkill1=GameProcess.numOfBingo1[1]+GameProcess.usingDefenseSkill1;
+								laDef.setText("x"+String.valueOf(GameProcess.defenseSkill1));
 							}
 							else if(e.getSource()==a2[i][j]&&GameProcess.playerTurn==false)
 							{
@@ -607,6 +621,8 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 										,bcIcon1,bcIcon2);
 								GameProcess.attackSkill1=GameProcess.numOfBingo1[0]+GameProcess.usingAttackSkill1;
 								laAtt.setText("x"+String.valueOf(GameProcess.attackSkill1));
+								GameProcess.defenseSkill1=GameProcess.numOfBingo1[1]+GameProcess.usingDefenseSkill1;
+								laDef.setText("x"+String.valueOf(GameProcess.defenseSkill1));
 							}
 							else if(e.getSource()==a2[i][j]&&GameProcess.playerTurn==false)
 							{
@@ -630,6 +646,8 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 										,bcIcon2,bcIcon0);
 								GameProcess.attackSkill1=GameProcess.numOfBingo1[0]+GameProcess.usingAttackSkill1;
 								laAtt.setText("x"+String.valueOf(GameProcess.attackSkill1));
+								GameProcess.defenseSkill1=GameProcess.numOfBingo1[1]+GameProcess.usingDefenseSkill1;
+								laDef.setText("x"+String.valueOf(GameProcess.defenseSkill1));
 							}
 							else if(e.getSource()==a2[i][j]&&GameProcess.playerTurn==false)
 							{
@@ -653,6 +671,8 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 										,bcIcon2,bcIcon1);
 								GameProcess.attackSkill1=GameProcess.numOfBingo1[0]+GameProcess.usingAttackSkill1;
 								laAtt.setText("x"+String.valueOf(GameProcess.attackSkill1));
+								GameProcess.defenseSkill1=GameProcess.numOfBingo1[1]+GameProcess.usingDefenseSkill1;
+								laDef.setText("x"+String.valueOf(GameProcess.defenseSkill1));
 							}
 							else if(e.getSource()==a2[i][j]&&GameProcess.playerTurn==false)
 							{
@@ -676,6 +696,8 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 										,bcIcon2,bcIcon2);
 								GameProcess.attackSkill1=GameProcess.numOfBingo1[0]+GameProcess.usingAttackSkill1;
 								laAtt.setText("x"+String.valueOf(GameProcess.attackSkill1));
+								GameProcess.defenseSkill1=GameProcess.numOfBingo1[1]+GameProcess.usingDefenseSkill1;
+								laDef.setText("x"+String.valueOf(GameProcess.defenseSkill1));
 							}
 							else if(e.getSource()==a2[i][j]&&GameProcess.playerTurn==false)
 							{
@@ -689,14 +711,15 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 				
 				if(GameProcess.playerTurn==true)
 				{
-					if(e.getSource()==btnAtt)//플레이어1 공격 스킬 버튼
+					if(e.getSource()==btnAtt && GameProcess.attackSkill1!=0)//플레이어1 공격 스킬 버튼
 					{
-						bCheck = true;
-						JOptionPane.showMessageDialog(this, "써보세요");
+						bAttCheck = true;
+						JOptionPane.showMessageDialog(this, "공격스킬써보세요");
 					}
-					else if(e.getSource()==btnDef)//방어스킬
+					else if(e.getSource()==btnDef && GameProcess.defenseSkill1!=0)//방어스킬
 					{
-						
+						bDefCheck = true;
+						JOptionPane.showMessageDialog(this, "수비스킬써보세요");
 					}
 					else if(e.getSource()==btnTrick)//책략스킬
 					{
@@ -759,14 +782,20 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 				//공격스킬
 				for(int i=0;i<3;i++){
 					for(int j=0;j<25;j++){
-						if(e.getSource()==a2[i][j]&&bCheck){
+						if(e.getSource()==a2[i][j]&&bAttCheck){
 							GameProcess.usingAttackSkill1--;
 							GameProcess.attackSkill1=GameProcess.numOfBingo1[0]+GameProcess.usingAttackSkill1;
 							laAtt.setText("x"+String.valueOf(GameProcess.attackSkill1));
 							a2[i][j].setIcon(new ImageIcon("img\\빙고체크-락.png"));	
 //							a2[i][j].setEnabled(false);
-							
-							bCheck = false;
+							bAttCheck = false;
+							break;
+						}else if(e.getSource()==a2[i][j]&&bDefCheck){
+							GameProcess.usingDefenseSkill1--;
+							GameProcess.defenseSkill1=GameProcess.numOfBingo1[1]+GameProcess.usingDefenseSkill1;
+							laDef.setText("x"+String.valueOf(GameProcess.defenseSkill1));
+							a2[i][j].setIcon(new ImageIcon("img\\"+(GameProcess.p2Board[i][j])+".png"));
+							bDefCheck = false;
 							break;
 						}
 					}
