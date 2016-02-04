@@ -41,6 +41,8 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 	static JButton youBtnTrick;
 	static JButton youBtnAvatar;
 	
+	static boolean[][] panCheck = new boolean[3][25]; // 공격한 곳을 확인하기위한 변수
+	
 	//아이템 갯수 확인 및 아이디
 	static JLabel laAtt;  // 공격스킬 개수 확인
 	static JLabel laDef;  // 수비스킬 개수 확인
@@ -69,13 +71,20 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 	static ImageIcon trickIcon=new ImageIcon("img\\스킬아이콘-책략.png");
 	static ImageIcon avatarIcon=new ImageIcon("img\\m1.jpg");
 	static ImageIcon youAvatarIcon=new ImageIcon("img\\m2.jpg");
-	static ImageIcon jypgLine=new ImageIcon("img\\진영파괴이미지.jpg");  
+	static ImageIcon jypgLine=new ImageIcon("img\\진영파괴이미지.jpg");
+	
+	static ImageIcon defPGIcon=new ImageIcon("img\\진영파괴이미지.jpg"); 
+	static JButton defPGchoice1, defPGchoice2;
+	static JPanel defPan1=new JPanel();
+	static JPanel defPan2=new JPanel();
+	
 	static JButton[] jypgChoice=new JButton[6];  
 	static JPanel jypgPan1=new JPanel();  
 	static JPanel jypgPan2=new JPanel();  
 	static ImageIcon jypgEnd=new ImageIcon("img\\궁극기소진아이콘.png");  
 	static JButton[][] furyEnd=new JButton[2][3];  
 
+	static ImageIcon sendIcon;
 	
 	//플레이어 2 빙고판 레이아웃 (상대판)
 	static JPanel p=new JPanel();
@@ -278,6 +287,20 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 			}
 		}
 		
+		defPGchoice2=new JButton(jypgLine);
+		defPGchoice2.setContentAreaFilled(false);
+		defPGchoice2.addActionListener(this);
+		defPGchoice2.setBorderPainted(false);
+		defPan2.add(defPGchoice2);
+		
+		defPGchoice1=new JButton(jypgLine);
+		defPGchoice1.setContentAreaFilled(false);
+		defPGchoice1.addActionListener(this);
+		defPGchoice1.setBorderPainted(false);
+		defPan1.add(defPGchoice1);
+		
+		
+		
 		FlowLayout jypg=new FlowLayout(FlowLayout.LEFT,0,0);
 		jypgPan1.setLayout(jypg);
 		jypgPan1.setBackground(null);
@@ -294,6 +317,20 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 		jypgPan2.setBounds(32, 23, 895, 110);
 		add(jypgPan2);
 		jypgPan2.setVisible(false);
+		
+		defPan1.setLayout(new FlowLayout(FlowLayout.CENTER));
+		defPan1.setBackground(Color.black);
+		defPan1.setOpaque(false);
+		defPan1.setBounds(900, 605, 113, 190);
+		add(defPan1);
+		defPan1.setVisible(false);
+		
+		defPan2.setLayout(new FlowLayout(FlowLayout.CENTER));
+		defPan2.setBackground(Color.black);
+		defPan2.setOpaque(false);
+		defPan2.setBounds(900, 102, 113, 190);
+		add(defPan2);
+		defPan2.setVisible(false);
 		
 		Color RED=new Color(255,0,0);
 		Color GREEN=new Color(0,147,0);
@@ -473,7 +510,6 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		
 		//빙고 체크(체크된 빙고가 아닐 때+스킬아이템을 클릭하지 않았을 때)
 		if(GameProcess.bAttackSkill1==false&&GameProcess.bAttackFinish1==false&&GameProcess.bDefenseSkill1==false
 				&&GameProcess.bDefenseFinish1==false&&GameProcess.bStrategySkill1==false&&GameProcess.bStrategyFinish1==false)
@@ -735,7 +771,9 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 					}
 					else if(e.getSource()==fury[1][1]) //방어필살기 버튼
 					{
-						
+						if(goongUsable1[1]){
+							defPan2.setVisible(true);
+						}
 					}
 					else if(e.getSource()==fury[1][2]) //책략필살기 버튼
 					{
@@ -783,24 +821,65 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 				for(int i=0;i<3;i++){
 					for(int j=0;j<25;j++){
 						if(e.getSource()==a2[i][j]&&bAttCheck){
+							if(GameProcess.bingo1[i][j]){
+								JOptionPane.showMessageDialog(this, "장난치냐??");
+								GameProcess.usingAttackSkill1++;
+							}else{
+								a2[i][j].setIcon(new ImageIcon("img\\빙고체크-락.png"));
+							}
 							GameProcess.usingAttackSkill1--;
 							GameProcess.attackSkill1=GameProcess.numOfBingo1[0]+GameProcess.usingAttackSkill1;
 							laAtt.setText("x"+String.valueOf(GameProcess.attackSkill1));
-							a2[i][j].setIcon(new ImageIcon("img\\빙고체크-락.png"));	
-//							a2[i][j].setEnabled(false);
 							bAttCheck = false;
+							panCheck[i][j] = true; // 공격한 곳 확인.
 							break;
 						}else if(e.getSource()==a2[i][j]&&bDefCheck){
+							
+							if(panCheck[i][j]){
+								if(GameProcess.bingo2[i][j]==true){
+									if(ChoiceNation.chosenNation2==0)
+				                        a2[i][j].setIcon(new ImageIcon("img\\빙고체크-위.png"));
+				                     else if(ChoiceNation.chosenNation2==1)
+				                        a2[i][j].setIcon(new ImageIcon("img\\빙고체크-촉.png"));
+				                     else if(ChoiceNation.chosenNation2==2)
+				                        a2[i][j].setIcon(new ImageIcon("img\\빙고체크-오.png"));
+								}else{
+									a2[i][j].setIcon(new ImageIcon("img\\"+(GameProcess.p2Board[i][j])+".png"));
+								}
+							}else{
+								JOptionPane.showMessageDialog(this, "장난치냐??");
+								GameProcess.usingDefenseSkill1++;
+							}
 							GameProcess.usingDefenseSkill1--;
 							GameProcess.defenseSkill1=GameProcess.numOfBingo1[1]+GameProcess.usingDefenseSkill1;
 							laDef.setText("x"+String.valueOf(GameProcess.defenseSkill1));
-							a2[i][j].setIcon(new ImageIcon("img\\"+(GameProcess.p2Board[i][j])+".png"));
 							bDefCheck = false;
 							break;
 						}
 					}
 				}
-				
+				//수비필살기 클릭 후, 상대판 버튼 클릭
+				if(e.getSource()==defPGchoice2){
+					
+					GameProcess.usingAttackSkill1 -=GameProcess.numOfBingo1[0];
+					GameProcess.usingDefenseSkill1 -=GameProcess.numOfBingo1[1];
+					GameProcess.usingStrategySkill1 -=GameProcess.numOfBingo1[2];
+					
+					GameProcess.attackSkill1=GameProcess.numOfBingo1[0]+GameProcess.usingAttackSkill1;
+					GameProcess.defenseSkill1=GameProcess.numOfBingo1[1]+GameProcess.usingDefenseSkill1;
+					GameProcess.strategySkill1=GameProcess.numOfBingo1[2]+GameProcess.usingStrategySkill1;
+					laAtt.setText("x"+String.valueOf(GameProcess.attackSkill1));
+					laDef.setText("x"+String.valueOf(GameProcess.defenseSkill1));
+					laTrick.setText("x"+String.valueOf(GameProcess.strategySkill1));
+					
+					goongUsable1[1]=false;
+					fury[1][1].setEnabled(false);
+					fury[1][1].setVisible(false);
+					gauge[1][1].setBackground(Color.DARK_GRAY);
+					gauge[1][1].setString("궁극기소진");
+					defPan2.setVisible(false);
+					furyEnd[1][1].setVisible(true);
+				}
 				
 				//책략필살기 클릭 후, 상대 판 버튼 클릭
 				for(int i=0; i<3; i++)

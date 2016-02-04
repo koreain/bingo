@@ -190,8 +190,11 @@ public class GameProcess extends JPanel{
 	  
    static void bingoIcon(int lineNo,int a) //int a는 판숫자 (1~6);
    {
-	   if(lineNo>0)
-		   GameLayout.bingoScore[a-1][lineNo-1].setIcon(GameLayout.bingo2); 
+	   for(int i=0;i<lineNo;i++)
+	      {
+	        if(lineNo>0&&lineNo<6)
+	           GameLayout.bingoScore[a-1][i].setIcon(GameLayout.bingo2);
+	      }
    }
    
    //진영파괴(JinYoung PaGoe)
