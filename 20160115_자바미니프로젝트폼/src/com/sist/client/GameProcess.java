@@ -16,30 +16,24 @@ public class GameProcess extends JPanel{
    static boolean[][] bingo2=new boolean[3][25];
    static int[] numOfBingo1=new int[3]; //각 판 별로 카운트처리
    static int[] numOfBingo2=new int[3];
-
-   //스킬,필살기는 3이 되면 사용
-   static int attackSkill1=0; static int attackFinish1=0;
-   static int defenseSkill1=0; static int defenseFinish1=0;
-   static int strategySkill1=0; static int strategyFinish1=0;
    
-   //스킬을 사옹하면 -1, 필살기는 사용시 -3
+   //numOfBing+usingAttackSkill로 항상 사용, 스킬을 사옹하면 -1, 필살기는 사용시 -3
    static int usingAttackSkill1=0;
    static int usingDefenseSkill1=0;
    static int usingStrategySkill1=0;
    
    //아이콘을 클릭했을때 트루가 되고 사용시 false 
-   static boolean bAttackSkill1=false; static boolean bAttackFinish1=false;
-   static boolean bDefenseSkill1=false; static boolean bDefenseFinish1=false;
-   static boolean bStrategySkill1=false; static boolean bStrategyFinish1=false;
+   static boolean bAttackSkill1=false;
+   static boolean bDefenseSkill1=false;
+   static boolean bStrategySkill1=false;
    
-   //스킬
-   static int attackSkill2=0; static int attackFinish2=0;
-   static int defenseSkill2=0; static int defenseFinish2=0;
-   static int strategySkill2=0; static int strategyFinish2=0;
-      
-   static boolean bAttackSkill2=false; static boolean bAttackFinish2=false;
-   static boolean bDefenseSkill2=false; static boolean bDefenseFinish2=false;
-   static boolean bStrategySkill2=false; static boolean bStrategyFinish2=false;
+   //플레이어2스킬
+   static int usingAttackSkill2=0;
+   static int usingDefenseSkill2=0;
+   static int usingStrategySkill2=0;
+   static boolean bAttackSkill2=false;
+   static boolean bDefenseSkill2=false;
+   static boolean bStrategySkill2=false;
    
    static boolean playerTurn=true; //true=player1, false=player2
    
@@ -148,8 +142,11 @@ public class GameProcess extends JPanel{
 			   //상대것도 빙고체크
 			   if(board2[k][l]==chosenBingoNumber)
 			   {
-				   btn2[k][l].setIcon(icon2);
-				   b2[k][l]=true;
+				   if(GameLayout.panCheck1[k][l]==false)
+				   {
+					   btn2[k][l].setIcon(icon2);
+					   b2[k][l]=true;
+				   }
 			   }
 		   }
 	   }
@@ -324,23 +321,18 @@ public class GameProcess extends JPanel{
       gaugeCtrl(numOfBingo1[0], 1, 0, "투 신");//카운트 되는 만큼 필살기
       bingoIcon(numOfBingo1[0], 4);
       goongCtrl(numOfBingo1[0],1,0);
-      attackSkill1=numOfBingo1[0]+usingAttackSkill1;
       
       //두번째판
       numOfBingo1[1]=lineCountMethod(bingo1,1);
       gaugeCtrl(numOfBingo1[1], 1, 1, "적진기습");
       bingoIcon(numOfBingo1[1], 5);
       goongCtrl(numOfBingo1[1],1,1);
-      defenseSkill1=numOfBingo1[1];
-      defenseFinish1=numOfBingo1[1];
       
       //세번째판
       numOfBingo1[2]=lineCountMethod(bingo1,2);
       gaugeCtrl(numOfBingo1[2], 1, 2, "진영파괴");
       bingoIcon(numOfBingo1[2], 6);
       goongCtrl(numOfBingo1[2],1,2);
-      strategySkill1=numOfBingo1[2];
-      strategyFinish1=numOfBingo1[2];
       
       //상대판 체크
       //첫번째판
@@ -348,24 +340,18 @@ public class GameProcess extends JPanel{
       gaugeCtrl(numOfBingo2[0], 0, 0, "투 신");
       bingoIcon(numOfBingo2[0], 1);
       goongCtrl(numOfBingo2[0],0,0);
-      attackSkill2=numOfBingo2[0];
-      attackFinish2=numOfBingo2[0];
       
       //두번째판
       numOfBingo2[1]=lineCountMethod(bingo2,1);
       gaugeCtrl(numOfBingo2[1], 0, 1, "적진기습");
       bingoIcon(numOfBingo2[1], 2);
       goongCtrl(numOfBingo2[1],0,1);
-      defenseSkill2=numOfBingo2[1];
-      defenseFinish2=numOfBingo2[1];
       
       //세번째판
       numOfBingo2[2]=lineCountMethod(bingo2,2);
       gaugeCtrl(numOfBingo2[2], 0, 2, "진영파괴");
       bingoIcon(numOfBingo2[2], 3);
       goongCtrl(numOfBingo2[2],0,2);
-      strategySkill2=numOfBingo2[2];
-      strategyFinish2=numOfBingo2[2];
       
       if(numOfBingo1[0]>=5||numOfBingo1[1]>=5||numOfBingo1[2]>=5)
       {
