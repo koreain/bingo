@@ -22,7 +22,7 @@ public class CoinFlip extends JDialog{
 		cfBack=Toolkit.getDefaultToolkit().getImage("img\\선후공배경.jpg");
 		fCoin=Toolkit.getDefaultToolkit().getImage("img\\선후공0.png");
 		bCoin=Toolkit.getDefaultToolkit().getImage("img\\선후공1.png");
-		new FrontThread().start();
+		new CoinThread().start();
 	}
 	@Override
 	public void paint(Graphics g) {
@@ -35,17 +35,16 @@ public class CoinFlip extends JDialog{
 			g.drawImage(bCoin, x, y, 100,100 ,this);
 		}
 	}
-	class FrontThread extends Thread{
-		int a=0;
-		int b=(int)(Math.random()*10)+20;
+	class CoinThread extends Thread{
 		public void run(){
+			GameProcess.coinRand();//플레이어 턴 난수를 받는다
 			try{
-				while(a<b){
-					if(a%2==0)
+				while(GameProcess.coinA<GameProcess.coinB){
+					if(GameProcess.coinA%2==0)
 						type=0;
 					else
 						type=1;
-					a++;
+					GameProcess.coinA++;
 					Thread.sleep(200);
 					repaint();
 				}

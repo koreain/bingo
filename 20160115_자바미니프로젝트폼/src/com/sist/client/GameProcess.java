@@ -42,6 +42,16 @@ public class GameProcess extends JPanel{
 
    static int[] gaugeScore={0,33,66,100};//게이지바
    
+   static int coinA=0;
+   static int coinB=0;
+   static void coinRand() //플레이어턴을 정하는 난수 발생
+   {
+	   coinB=(int)(Math.random()*10)+20;
+	   if(coinA%2==0)
+		   playerTurn=true;
+	   else
+		   playerTurn=false;
+   }
    static void rand()//중복되지 않는 랜덤 숫자배열 두개 만들기
    {      
       int su=0; //난수 발생시 저장할 변수
@@ -240,9 +250,11 @@ public class GameProcess extends JPanel{
 	   {
 			  for(int i=panCol*25; i<24+(panCol*25); i++)
 			  {
-				ImageIcon originNum=new ImageIcon("img\\"+GameProcess.numArr2[i]+".png");
+				ImageIcon originNum=new ImageIcon("img\\빙고판-상대.png");
+//				ImageIcon originNum=new ImageIcon("img\\"+GameProcess.numArr2[i]+".png");
 				int newArr=(int)(Math.random()*25+(panCol*25));
-				ImageIcon newImgNum=new ImageIcon("img\\"+GameProcess.numArr2[newArr]+".png");
+				ImageIcon newImgNum=new ImageIcon("img\\빙고판-상대.png");
+//				ImageIcon newImgNum=new ImageIcon("img\\"+GameProcess.numArr2[newArr]+".png");
 				int temp=numArr2[i];
 				numArr2[i]=numArr2[newArr];
 				numArr2[newArr]=temp;
