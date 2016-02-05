@@ -4,12 +4,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-
+import java.util.*;
 import javax.swing.*;
 import javax.swing.border.*;
 import sun.net.www.content.image.jpeg;
 
 public class GameLayout extends JPanel implements ActionListener, KeyListener{
+	
+	//시간제한 타이머
+	JProgressBar timer=new JProgressBar();
+	static boolean timeRun=true;
+	static int colorInt=0;
 	//배경화면
 	Image bg; //추상클래스 abstract!! 단독으로 메모리 할당을 못한다.
 	Image vs; //가운데  vs 텍스트
@@ -279,6 +284,17 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 	///////////////////////생성자
 	GameLayout()
 	{	
+		
+		timer=new JProgressBar();
+		add(timer);
+		timer.setBackground(Color.WHITE);
+		timer.setMinimum(0);
+		timer.setMaximum(100);
+		timer.setStringPainted(true);
+		timer.setString("20초");
+		timer.setFont(new Font("맑은고딕",Font.BOLD,10));
+		timer.setBounds(890, 420, 150, 30);
+		
 		for(int i=0;i<3;i++) //궁극기 초기화
 		{
 			goongUsable1[i]=true;
@@ -520,6 +536,7 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 		
 		addKeyListener(this);
 		setFocusable(true);
+		new TimeLimit().start();
 	}
 	public void imageSetting(JButton btn)
 
@@ -1156,4 +1173,63 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 	{
 		
 	}
+	public class TimeLimit extends Thread
+	{	
+		HSL2RGB colorConvert=new HSL2RGB();
+		int cnt=0;
+		int[] rgb=colorConvert.HsltoRGB(0, 0, 0.5);
+		int percent=0; //시간제한바를 채우는 퍼센트 (20초:100퍼센트 즉, 0.2초: 1퍼센트)
+		double residueTime=20; //남은시간표시 (초기값:20초)
+		public void run()
+		{	//Color redSpectrum=new Color(colorInt,0,0);
+			try 
+			{ 	
+			  while(timeRun)//timeRun이 false일때 멈춤 (나가기,항복,턴종료)
+			  {	  
+				  cnt++;
+				  percent++;
+				  if(percent>100)//100퍼센트가 되면 다시 0으로 초기화
+						{
+						  percent=0;
+						  residueTime=20;
+						  colorInt=0;
+						  rgb=colorConvert.HsltoRGB(colorInt, 0, 0.5);
+						}	
+					Thread.sleep(200);
+					colorInt=(int)(Math.ceil(2.55*(percent)));
+					System.out.print("칼라매개변수"+colorInt+"\t");
+					residueTime-=0.2;
+					if(residueTime<0.2)
+						residueTime=0;
+					System.out.println(residueTime+"\t");
+					String rt =String.valueOf(residueTime);
+					if(rt.length()>=4)
+					{
+						String rr=rt.substring(0,4);
+						System.out.print(rr+"\t");
+						timer.setString(rr+"초");
+					}
+					else
+					{
+						String rr=rt;
+						System.out.print(rr+"\t");
+						timer.setString(rr+"초");
+					}
+					rgb=colorConvert.HsltoRGB(colorInt, 0, 0.5);
+					System.out.println(cnt+"번째칼라   R: "+rgb[0]+" "+"G: "+rgb[1]+" "+"B: "+rgb[2]);
+					System.out.println(rt+"\t");
+					timer.setValue(percent);
+					timer.setForeground(new Color(rgb[0],rgb[1],rgb[2]));
+					System.out.println();
+			  }	
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.getMessage();
+			}
+			
+		}
+	}
 }
+
+
+

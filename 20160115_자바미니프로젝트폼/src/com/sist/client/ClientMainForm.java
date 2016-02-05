@@ -1,6 +1,9 @@
 package com.sist.client;
 import java.awt.*;
 import javax.swing.*;
+
+import com.sist.client.GameLayout.TimeLimit;
+
 import java.awt.event.*;
 import java.net.*; 
 import java.io.*;
