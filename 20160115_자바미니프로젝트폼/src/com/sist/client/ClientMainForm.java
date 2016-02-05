@@ -8,14 +8,12 @@ public class ClientMainForm extends JFrame
 implements ActionListener
 {
 	Login login=new Login();
-//	Loading2 ld2=new Loading2();
 	WaitRoom wr=new WaitRoom();
 	ChoiceNation cn=new ChoiceNation();
 	CardLayout card=new CardLayout();
 	GameLayout game=new GameLayout();
 	GameInfo gi=new GameInfo();
-	
-	//스킬설명이미지 다이얼로그
+	CoinFlip cf=new CoinFlip();
 	
 	ImageIcon mainIcon;//타이틀창 아이콘
 	
@@ -33,7 +31,6 @@ implements ActionListener
 		add("GAME",game);
 		setSize(1200,970);
 		setVisible(true);
-		
 		login.b1.addActionListener(this);//카드레이아웃이 될 버튼들 추가
 		login.b2.addActionListener(this);
 		login.b3.addActionListener(this);//회원가입
@@ -69,13 +66,13 @@ implements ActionListener
 		{
 			System.exit(0);
 		}
-		else if(e.getSource()==login.b3) // 회원가입 버튼.
+		else if(e.getSource()==login.b3) // 회원가입 버튼
 		{
 			SignUp su = new SignUp();
 			su.setVisible(true);
 		}
 		
-		if(e.getSource()==wr.b5)
+		if(e.getSource()==wr.b5) // 게임정보 버튼
 		{
 			gi.setVisible(true); 
 		}
@@ -91,6 +88,7 @@ implements ActionListener
 		else if(e.getSource()==cn.nation0||e.getSource()==cn.nation1
 				||e.getSource()==cn.nation2)
 		{
+			cf.setVisible(true);
 			card.show(getContentPane(), "GAME");
 			game.requestFocus(); 
 		}
