@@ -9,6 +9,9 @@ import java.awt.event.MouseListener;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.border.*;
+
+import com.sist.client.GameLayout.TimeLimit;
+
 import sun.net.www.content.image.jpeg;
 
 public class GameLayout extends JPanel implements ActionListener, KeyListener{
@@ -568,6 +571,8 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 		btnAtt.setCursor(cur);
 		btnDef.setCursor(cur);
 		btnTrick.setCursor(cur);
+		
+		timeOut.addActionListener(this); //턴종료 버튼
 		
 		addKeyListener(this);
 		setFocusable(true);
@@ -1134,8 +1139,14 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 				}
 			}
 			requestFocus();
-		}
+			if(e.getSource()==timeOut)//턴턴턴
+			{
+				ClientMainForm.t1.interrupt();
+				ClientMainForm.t1=new TimeLimit();
+				ClientMainForm.t1.start();
+			}
 
+	}
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
@@ -1213,15 +1224,15 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 	{
 		
 	}
-	public static class TimeLimit extends Thread
+	public static class TimeLimit extends Thread //턴턴턴
 	{	
-		Random ran=new Random();
+		boolean restart=true;
 		int cnt=0;
 		int[] rgb=new int[3];
 		int percent=0; //시간제한바를 채우는 퍼센트 (20초:100퍼센트 즉, 0.2초: 1퍼센트)
 		double residueTime=20; //남은시간표시 (초기값:20초)
 		public void run()
-		{	//Color redSpectrum=new Color(colorInt,0,0);
+		{	timeRun=true;
 			try 
 			{ 	
 			  while(timeRun)//timeRun이 false일때 멈춤 (나가기,항복,턴종료)
@@ -1238,31 +1249,32 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 						}	
 					Thread.sleep(200);
 					colorInt=(int)(Math.ceil(2.55*(percent)));
-					System.out.print("칼라매개변수"+colorInt+"\t");
+					//System.out.print("칼라매개변수"+colorInt+"\t");
 					residueTime-=0.2;
 					if(residueTime<0.2)
 						residueTime=0;
-					System.out.println(residueTime+"\t");
+					//System.out.println(residueTime+"\t");
 					String rt =String.valueOf(residueTime);
 					if(rt.length()>=4)
 					{
 						String rr=rt.substring(0,4);
-						System.out.print(rr+"\t");
+						//System.out.print(rr+"\t");
 						timer.setString("制限時間:"+rr);
 					}
 					else
 					{
 						String rr=rt;
-						System.out.print(rr+"\t");
+						//System.out.print(rr+"\t");
 						timer.setString("制限時間:"+rr);
 					}
 					rgb[0]=colorInt;
 					rgb[1]=255-colorInt;
-					System.out.println(cnt+"번째칼라   R: "+rgb[0]+" "+"G: "+rgb[1]+" "+"B: "+rgb[2]);
-					System.out.println(rt+"\t");
+					//System.out.println(cnt+"번째칼라   R: "+rgb[0]+" "+"G: "+rgb[1]+" "+"B: "+rgb[2]);
+					//System.out.println(rt+"\t");
 					timer.setValue(percent);
 					timer.setForeground(new Color(rgb[0],rgb[1],rgb[2]));
-					System.out.println();
+					//System.out.println();
+
 			  }	
 			} catch (Exception e) {
 				// TODO: handle exception
@@ -1271,6 +1283,7 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 			
 		}
 	}
+
 }
 
 

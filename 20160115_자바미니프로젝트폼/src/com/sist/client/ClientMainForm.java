@@ -17,13 +17,12 @@ implements ActionListener
 	GameLayout game=new GameLayout();
 	GameInfo gi=new GameInfo();
 	ImageIcon mainIcon;//타이틀창 아이콘
-	
+	static Thread t1=new TimeLimit();//시간제한바 스레드
 	ClientMainForm() 
 	{
 		super("삼국지 전략빙고");//타이틀 제목
 		mainIcon=new ImageIcon("img\\타이틀아이콘.png");
 		this.setIconImage(mainIcon.getImage());
-		
 		
 		setLayout(card);//BorderLayout
 		add("LOG",login);
@@ -43,6 +42,7 @@ implements ActionListener
 		cn.nation0.addActionListener(this);
 		cn.nation1.addActionListener(this);
 		cn.nation2.addActionListener(this);
+		game.exit.addActionListener(this); //항복 버튼
 		
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false); //윈도우창 고정
@@ -84,21 +84,28 @@ implements ActionListener
 		}
 		else if(e.getSource()==wr.b3) //1:1게임을 누르면 진영선택창
 		{
+			new GameProcess();
 			card.show(getContentPane(), "ChoiceNation");
+			System.out.println(GameProcess.numOfBingo1[0]);
 		}
 		else if(e.getSource()==cn.nation0||e.getSource()==cn.nation1
 				||e.getSource()==cn.nation2)
 		{
 			CoinFlip cf=new CoinFlip();
-			cf.coinEnd=true;
+			cf.coinEnd=true; 
 			cf.setVisible(true);
-			if(cf.coinEnd==false)
+			if(cf.coinEnd==false) // 선플레이서가 정해지는 쓰레드가 종료되면,,, 시간제한바 쓰레드를 돌려라
 			{
 				card.show(getContentPane(), "GAME");
-				new TimeLimit().start();
-				game.requestFocus(); 
+				t1.start();
+				game.requestFocus();
 			}
 		}
+		else if(e.getSource()==game.exit)
+		{
+			card.show(getContentPane(), "WR");
+		}
+		
 	}
 }
 
