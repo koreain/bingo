@@ -7,6 +7,7 @@ import javax.swing.*;
 import com.sun.xml.internal.ws.assembler.dev.ServerTubelineAssemblyContext;
 
 public class CoinFlip extends JDialog{
+	static boolean coinEnd;
 	Image cfBack; //배경이미지
 	Image fCoin, bCoin; //선후공 이미지
 	int type=0;
@@ -51,6 +52,7 @@ public class CoinFlip extends JDialog{
 				}
 				Thread.sleep(3000);
 				setVisible(false);
+				coinEnd=false;
 			}catch(Exception ex){}
 		}
 	}

@@ -4,6 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.border.*;
@@ -12,9 +14,20 @@ import sun.net.www.content.image.jpeg;
 public class GameLayout extends JPanel implements ActionListener, KeyListener{
 	
 	//시간제한 타이머
-	JProgressBar timer=new JProgressBar();
+	static JProgressBar timer=new JProgressBar();
 	static boolean timeRun=true;
 	static int colorInt=0;
+	
+	//턴종료 버튼
+	static JButton timeOut=new JButton();
+	static ImageIcon timeImg=new ImageIcon("img\\턴종료_기본.png");
+	static ImageIcon timeImg2=new ImageIcon("img\\턴종료_커서.png");
+	
+	//항복 버튼
+	static JButton exit=new JButton();
+	static ImageIcon exitImg=new ImageIcon("img\\항복.png");
+	static ImageIcon exitImg2=new ImageIcon("img\\항복_커서.png");
+	
 	//배경화면
 	Image bg; //추상클래스 abstract!! 단독으로 메모리 할당을 못한다.
 	Image vs; //가운데  vs 텍스트
@@ -284,16 +297,38 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 	///////////////////////생성자
 	GameLayout()
 	{	
-		
+		//시간제한 바 추가
 		timer=new JProgressBar();
 		add(timer);
 		timer.setBackground(Color.WHITE);
 		timer.setMinimum(0);
 		timer.setMaximum(100);
 		timer.setStringPainted(true);
-		timer.setString("20초");
-		timer.setFont(new Font("맑은고딕",Font.BOLD,10));
-		timer.setBounds(890, 420, 150, 30);
+		timer.setFont(new Font("맑은고딕",Font.BOLD,16));
+		timer.setBounds(888, 422, 210, 25);
+		
+		//턴 종료버튼 추가
+		add(timeOut);
+		timeOut.setCursor(cur);
+		timeOut.setBounds(886, 449, 212, 55);
+		timeOut.setIcon(timeImg);
+		timeOut.setRolloverIcon(timeImg2);
+		timeOut.setBorderPainted(false);//버튼 경계선 제거
+		timeOut.setContentAreaFilled(false); //선택했던 버튼 표시 제거
+		timeOut.setFocusPainted(false); //버튼영역 배경 제거
+		timeOut.setPressedIcon(timeImg2);
+		
+		//항복(나가기) 버튼 추가
+		add(exit);
+		exit.setCursor(cur);
+		exit.setBounds(1106, 420, exitImg.getIconWidth(), exitImg.getIconHeight());
+		exit.setIcon(exitImg);
+		exit.setRolloverIcon(exitImg2);
+		exit.setBorderPainted(false);//버튼 경계선 제거
+		exit.setContentAreaFilled(false); //선택했던 버튼 표시 제거
+		exit.setFocusPainted(false); //버튼영역 배경 제거
+		exit.setPressedIcon(exitImg2);
+		
 		
 		for(int i=0;i<3;i++) //궁극기 초기화
 		{
@@ -536,7 +571,12 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 		
 		addKeyListener(this);
 		setFocusable(true);
-		new TimeLimit().start();
+		//
+	}
+	@Override
+	public synchronized void addMouseListener(MouseListener l) {
+		// TODO Auto-generated method stub
+		super.addMouseListener(l);
 	}
 	public void imageSetting(JButton btn)
 
@@ -1173,11 +1213,11 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 	{
 		
 	}
-	public class TimeLimit extends Thread
+	public static class TimeLimit extends Thread
 	{	
-		HSL2RGB colorConvert=new HSL2RGB();
+		Random ran=new Random();
 		int cnt=0;
-		int[] rgb=colorConvert.HsltoRGB(0, 0, 0.5);
+		int[] rgb=new int[3];
 		int percent=0; //시간제한바를 채우는 퍼센트 (20초:100퍼센트 즉, 0.2초: 1퍼센트)
 		double residueTime=20; //남은시간표시 (초기값:20초)
 		public void run()
@@ -1193,7 +1233,8 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 						  percent=0;
 						  residueTime=20;
 						  colorInt=0;
-						  rgb=colorConvert.HsltoRGB(colorInt, 0, 0.5);
+						  rgb[0]=colorInt;
+						  rgb[1]=255;
 						}	
 					Thread.sleep(200);
 					colorInt=(int)(Math.ceil(2.55*(percent)));
@@ -1207,15 +1248,16 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 					{
 						String rr=rt.substring(0,4);
 						System.out.print(rr+"\t");
-						timer.setString(rr+"초");
+						timer.setString("制限時間:"+rr);
 					}
 					else
 					{
 						String rr=rt;
 						System.out.print(rr+"\t");
-						timer.setString(rr+"초");
+						timer.setString("制限時間:"+rr);
 					}
-					rgb=colorConvert.HsltoRGB(colorInt, 0, 0.5);
+					rgb[0]=colorInt;
+					rgb[1]=255-colorInt;
 					System.out.println(cnt+"번째칼라   R: "+rgb[0]+" "+"G: "+rgb[1]+" "+"B: "+rgb[2]);
 					System.out.println(rt+"\t");
 					timer.setValue(percent);
