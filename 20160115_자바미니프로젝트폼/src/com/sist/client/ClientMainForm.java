@@ -90,14 +90,14 @@ implements ActionListener
 		{
 			CoinFlip cf=new CoinFlip(); 
 			cf.coinEnd=true;
-			cf.setVisible(true); 
+			cf.setVisible(true);
 			if(cf.coinEnd==false) 
 			{ 
 				card.show(getContentPane(), "GAME"); 
 				t1.start();
 				game.requestFocus();  
-			} 
-
+			}
+//			GameProcess.gameReset();
 		}
 		else if(e.getSource()==game.exit) //게임이 끝났을 때 나가기 버튼
 		{

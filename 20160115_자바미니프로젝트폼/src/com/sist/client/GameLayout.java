@@ -18,11 +18,11 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 	static boolean timeRun=true;
 	static int colorInt=0;
 	//턴종료 버튼  
-	static JButton timeOut=new JButton();  
+	static JButton timeOut=new JButton();
 	static ImageIcon timeImg=new ImageIcon("img\\턴종료_기본.png");  
 	static ImageIcon timeImg2=new ImageIcon("img\\턴종료_커서.png");  
 	//항복 버튼  
-	static JButton exit=new JButton();  
+	static JButton exit=new JButton();
 	static ImageIcon exitImg=new ImageIcon("img\\항복.png");  
 	static ImageIcon exitImg2=new ImageIcon("img\\항복_커서.png");  
 	//배경화면
@@ -150,11 +150,15 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 	
 	static JButton regame;
 	static JButton gameEnd;
+	
+	static
+	{
+		
+	}
 	/////////빙고버튼설정
-	public void Rand()
+	public static void Rand()
 	{
 		GameProcess.rand(); // GameProcess 클래스 안쪽으로 들어가서~ 랜덤메소드 호출
-		
 		for(int i=0; i<75;i++)
 		{
 		  if(i<25)	
@@ -171,7 +175,7 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 		  }
 		}
 	}
-	public void RanButton(int a, int b, int c, JPanel d, JPanel e)
+	public static void RanButton(int a, int b, int c, JPanel d, JPanel e)
 	{
 		ImageIcon m=new ImageIcon("img\\"+GameProcess.numArr1[a]+".png");
 		a1[b][a-c]= new JButton(m);

@@ -381,4 +381,41 @@ public class GameProcess extends JPanel{
 	   {
 	   }
    }
+   
+   static void gameReset()
+   {
+	   //빙고버튼이미지,빙고판숫자(rand)   
+	   //GameLayout.a1=new Jbutton[3][25];
+	   //GameLayout.a2=new Jbutton[3][25];
+	   GameProcess.rand();
+	   for(int i=0; i<3; i++)
+	   {
+		   numOfBingo1[i]=0;
+		   numOfBingo2[i]=0;
+		   for(int j=0; j<25; j++)
+		   {
+			   GameLayout.a1[i][j].setIcon(new ImageIcon("img\\"+GameProcess.numArr1[(i*25)+j]+".png"));
+			   GameLayout.a2[i][j].setIcon(new ImageIcon("img\\빙고판-상대.png"));
+			   bingo1[i][j]=false;
+			   bingo2[i][j]=false;
+			   GameLayout.panCheck1[i][j]=false;
+			   GameLayout.panCheck2[i][j]=false;
+		   }
+	   }
+	   //빙고체크false,numOfBingo  // usingSkill,스킬갯수Label
+	   usingAttackSkill1=0;
+	   usingDefenseSkill1=0;
+	   usingStrategySkill1=0;
+	   usingAttackSkill2=0;
+	   usingDefenseSkill2=0;
+	   usingStrategySkill2=0;
+	   bingoCheckChance1=1;
+	   bingoCheckChance2=1;
+	   skillChance1=1;
+	   skillChance2=1;
+	   //필살기프로그레스바,필살기버튼   
+	   GameLayout.gauge=new JProgressBar[2][3];
+	   GameLayout.fury=new JButton[2][3];
+	   //전술명령,지휘권Label
+   }
 }
