@@ -80,9 +80,7 @@ public class ChoiceNation extends JPanel implements ActionListener{
 				chosenNation1=0;
 				jangsu();
 			}
-			
 		});
-
 		nation1.addActionListener(new ActionListener()
 		{ 
 			@Override 
@@ -92,7 +90,6 @@ public class ChoiceNation extends JPanel implements ActionListener{
 				jangsu();
 			}
 		});
-
 		nation2.addActionListener(new ActionListener()
 		{ 
 			@Override 
@@ -102,10 +99,6 @@ public class ChoiceNation extends JPanel implements ActionListener{
 				jangsu();
 			}
 		});
-		
-		//장수얼굴 버튼 이벤트 처리
-	
-		
 		add(nation0); // 화면에 나라 버튼 아이콘 3개 추가
 		add(nation1);
 		add(nation2);
@@ -113,15 +106,12 @@ public class ChoiceNation extends JPanel implements ActionListener{
 		nation0.setCursor(cur); //버튼 위에 커서를 올리면 손모양으로 변화되게 설정
 		nation1.setCursor(cur);
 		nation2.setCursor(cur);
-
 	}
-	
 	@Override
 	public void paintComponent(Graphics g){
 		  g.drawImage(bg, 0, 0, 1280, 970, this); //배경 그리기
 		  g.drawImage(notice,80,110,360,130,this); //설명 그리기
 	}
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub

@@ -12,7 +12,9 @@ public class MakeRoom extends JDialog implements ActionListener {
 	JButton b1, b2;
 
 	public MakeRoom() {
-		this.setModal(true);
+		setModal(true);
+		setResizable(false);
+		
 		la1 = new JLabel("방이름");
 		la2 = new JLabel("상태");
 		la3 = new JLabel("비밀번호");
@@ -61,11 +63,6 @@ public class MakeRoom extends JDialog implements ActionListener {
 		// setDefaultCloseOperation(EXIT_ON_CLOSE);
 		open.addActionListener(this);
 		noopen.addActionListener(this);
-	}
-
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		new MakeRoom();
 	}
 
 	@Override

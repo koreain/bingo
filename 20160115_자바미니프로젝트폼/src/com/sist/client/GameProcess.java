@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.image.*;
 import java.awt.event.*;
 public class GameProcess extends JPanel{
+	GameLayout gl=new GameLayout();
+	
    static int[][] p1Board= new int[3][25];   //플레이어1 빙고판 숫자
    static int[][] p2Board= new int[3][25];   //플레이어2 빙고판
    
@@ -365,14 +367,21 @@ public class GameProcess extends JPanel{
       bingoIcon(numOfBingo2[2], 3);
       goongCtrl(numOfBingo2[2],0,2);
       
-      if(numOfBingo1[0]>=5||numOfBingo1[1]>=5||numOfBingo1[2]>=5)
-      {
-         // 창을 하나 띄워서 빙고버튼을 누르게 함
-         JOptionPane.showMessageDialog(new GameLayout(), "게임종료");
-      }
-      if(numOfBingo2[0]>=5||numOfBingo2[1]>=5||numOfBingo2[2]>=5)
-      {
-    	  JOptionPane.showMessageDialog(new GameLayout(), "게임종료");
-      }
+      gameEnd();
+   }
+   
+   static void gameEnd()
+   {
+	   if(numOfBingo1[0]>=5||numOfBingo1[1]>=5||numOfBingo1[2]>=5)
+	   {
+		   BingoEnd be=new BingoEnd();
+		   GameLayout gl=new GameLayout();
+		   gl.imageVisibleFalse();
+		   be.setVisible(true);
+	   }
+	   if(numOfBingo2[0]>=5||numOfBingo2[1]>=5||numOfBingo2[2]>=5)
+	   {
+		   JOptionPane.showMessageDialog(new GameLayout(), "게임종료");
+	   }
    }
 }
