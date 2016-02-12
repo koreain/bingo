@@ -375,13 +375,10 @@ public class GameProcess extends JPanel{
 	   if(numOfBingo1[0]>=5||numOfBingo1[1]>=5||numOfBingo1[2]>=5)
 	   {
 		   BingoEnd be=new BingoEnd();
-		   GameLayout gl=new GameLayout();
-		   gl.imageVisibleFalse();
 		   be.setVisible(true);
 	   }
 	   if(numOfBingo2[0]>=5||numOfBingo2[1]>=5||numOfBingo2[2]>=5)
 	   {
-		   JOptionPane.showMessageDialog(new GameLayout(), "게임종료");
 	   }
    }
 }

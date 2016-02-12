@@ -23,7 +23,6 @@ public class BingoEnd extends JDialog{
 }
 class BingoEndImage extends JPanel
 {
-	GameLayout gl=new GameLayout();
 	Cursor cur = new Cursor(Cursor.HAND_CURSOR);
 	Image back, boom; //배경이미지
 	JButton endBtn;

@@ -12,6 +12,7 @@ import javax.swing.border.*;
 import sun.net.www.content.image.jpeg;
 import com.sist.client.GameLayout.TimeLimit; 
 public class GameLayout extends JPanel implements ActionListener, KeyListener{
+	BingoEndImage bei=new BingoEndImage();
 	//시간제한 타이머 
 	static JProgressBar timer=new JProgressBar();  
 	static boolean timeRun=true;
@@ -577,6 +578,7 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 		gameEnd.setCursor(cur);
 		
 		timeOut.addActionListener(this); //턴종료 버튼 
+		bei.endBtn.addActionListener(this);
 		addKeyListener(this);
 		setFocusable(true);
 	}
@@ -641,6 +643,9 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 		 }
 		 p.setVisible(false);
 		 pp.setVisible(false);
+		 timer.setVisible(false);
+		 timeOut.setVisible(false);
+		 exit.setVisible(false);
 		 imageX+=1200;
 		 repaint();
 	}
@@ -691,6 +696,9 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 		 }
 		 p.setVisible(true);
 		 pp.setVisible(true);
+		 timer.setVisible(true);
+		 timeOut.setVisible(true);
+		 exit.setVisible(true);
 		 imageX-=1200;
 		 repaint();
 	}	
@@ -1165,7 +1173,12 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 			ClientMainForm.t1.interrupt();  
 			ClientMainForm.t1=new TimeLimit();  
 			ClientMainForm.t1.start();  
-		}  
+		}
+		if(e.getSource()==bei.endBtn)
+		{
+			imageVisibleFalse();
+			JOptionPane.showMessageDialog(this,"ㄴㄴㄴㄴ");
+		}
 		//재도전
 		else if(e.getSource()==regame)
 		{
