@@ -163,7 +163,6 @@ public class SignUp extends JDialog implements ActionListener, FocusListener, It
 		return true;
 	}
 	
-	
 	public void insertUser(){
 		UserDTO dto = getViewData();
 		UserDAO dao = new UserDAO();
