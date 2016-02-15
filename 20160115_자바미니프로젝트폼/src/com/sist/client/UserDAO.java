@@ -44,12 +44,22 @@ public class UserDAO {
 				dto.setUser_id(rs.getString("user_id"));
 				dto.setUser_pw(rs.getString("user_pw"));
 				dto.setUser_name(rs.getString("user_name"));
+				dto.setUser_nickname(rs.getString("user_nickname"));
 				dto.setUser_sex(rs.getString("user_sex"));
-				dto.setUser_email(rs.getString("user_email"));
-				dto.setUser_intro(rs.getString("user_intro"));
+				dto.setUser_win(rs.getInt("user_win"));
+				dto.setUser_lose(rs.getInt("user_lose"));
+				dto.setUser_avatar(rs.getString("user_avatar"));
 				list.add(dto);
 			}
 		}catch(Exception e){
+		}finally{
+			try{
+				if(rs!=null) rs.close();
+				if(ps!=null) ps.close();
+				if(conn!=null) conn.close();
+			}catch(Exception ex){
+				
+			}
 		}
 		return list;
 	}
@@ -70,12 +80,22 @@ public class UserDAO {
 				dto.setUser_id(rs.getString("user_id"));
 				dto.setUser_pw(rs.getString("user_pw"));
 				dto.setUser_name(rs.getString("user_name"));
+				dto.setUser_nickname(rs.getString("user_nickname"));
 				dto.setUser_sex(rs.getString("user_sex"));
-				dto.setUser_email(rs.getString("user_email"));
-				dto.setUser_intro(rs.getString("user_intro"));
+				dto.setUser_win(rs.getInt("user_win"));
+				dto.setUser_lose(rs.getInt("user_lose"));
+				dto.setUser_avatar(rs.getString("user_avatar"));
 			}
 		}catch(Exception e){
 			System.out.println(e+"getUserDTO에서 에러");
+		}finally{
+			try{
+				if(rs!=null) rs.close();
+				if(ps!=null) ps.close();
+				if(conn!=null) conn.close();
+			}catch(Exception ex){
+				
+			}
 		}
 		return dto;
 	}
@@ -87,15 +107,17 @@ public class UserDAO {
 		PreparedStatement ps = null;
 		try{
 			conn = getConn();
-			String sql = "insert into user_info(user_id,user_pw,user_name,user_sex,"
-							+ "user_email,user_intro) values(?,?,?,?,?,?)";
+			String sql = "insert into user_info(user_id,user_pw,user_name,user_nickname,user_sex,"
+							+ "user_win,user_lose,user_avatar) values(?,?,?,?,?,?,?,?)";
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, dto.getUser_id());
 			ps.setString(2, dto.getUser_pw());
 			ps.setString(3, dto.getUser_name());
-			ps.setString(4, dto.getUser_sex());
-			ps.setString(5, dto.getUser_email());
-			ps.setString(6, dto.getUser_intro());
+			ps.setString(4, dto.getUser_nickname());
+			ps.setString(5, dto.getUser_sex());
+			ps.setInt(6, dto.getUser_win());
+			ps.setInt(7, dto.getUser_lose());
+			ps.setString(8, dto.getUser_avatar());
 			int result = ps.executeUpdate();
 			
 			if(result>0) // 가입성공
@@ -105,55 +127,14 @@ public class UserDAO {
 			
 		}catch(Exception e){
 			System.out.println(e+"insertUser에서 에러");
+		}finally{
+			try{
+				if(ps!=null) ps.close();
+				if(conn!=null) conn.close();
+			}catch(Exception ex){
+				
+			}
 		}
 		return check;
 	}
-	
-	
-	
-	// 데이터베이스 정보 다시 불러오기
-//	public void userSelectAll(DefaultTableModel model){
-//		Connection conn = null;
-//		PreparedStatement ps = null;
-//		ResultSet rs = null;
-//		
-//		try{
-//			conn = getConn();
-//            String sql = "select * from user_info order by user_name asc";
-//            ps = conn.prepareStatement(sql);
-//            rs = ps.executeQuery();
-//           
-//            // DefaultTableModel에 있는 데이터 지우기
-//            for(int i=0; i<model.getRowCount();) {
-//                model.removeRow(0);
-//            }
-// 
-//            while (rs.next()){
-//                Object data[] = {rs.getString(1), rs.getString(2),rs.getString(3), 
-//                				rs.getString(4), rs.getString(5), rs.getString(6)};
-//                model.addRow(data);                
-//            }
-//		}catch(Exception e){
-//			System.out.println(e +"userSelectAll에서 에러");
-//		}finally{
-//			if(rs != null){
-//				try{
-//					rs.close();
-//				}catch(SQLException e){
-//				}
-//			}
-//			if(ps != null){
-//				try{
-//					ps.close();
-//				}catch(SQLException e){
-//				}
-//			}
-//			if(conn != null){
-//				try{
-//					conn.close();
-//				}catch(SQLException e){
-//				}
-//			}
-//		}
-//	}
 }

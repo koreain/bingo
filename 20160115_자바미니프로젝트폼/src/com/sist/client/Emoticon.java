@@ -7,7 +7,6 @@ public class Emoticon extends JFrame{
 	ImageIcon[] emoticon = new ImageIcon[9];
 	public Emoticon(){
 		setLayout(new GridLayout(3, 3));
-		
 		for(int i=0;i<btnEmoticon.length;i++){
 			emoticon[i] = new ImageIcon("img\\emo"+i+".gif");
 			btnEmoticon[i] = new JButton(emoticon[i]);

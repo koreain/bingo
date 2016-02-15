@@ -51,6 +51,7 @@ implements ActionListener
 		try
 		{
 			UIManager.setLookAndFeel("com.jtattoo.plaf.bernstein.BernsteinLookAndFeel");
+			
 		}catch(Exception ex){}
 		new ClientMainForm();
 	}

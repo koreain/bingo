@@ -2,6 +2,9 @@ package com.sist.client;
 
 import javax.swing.*;
 import javax.swing.text.*;
+
+import sun.net.www.content.image.jpeg;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.text.DateFormat;
@@ -13,19 +16,21 @@ public class ChatInGame extends JFrame implements ActionListener{
 	JTextPane pane; // JTextArea  두개다 여러줄 문자줄 떄 사용
 	JTextField tf;
 	JComboBox box;
-	JButton btn;
+	JButton btn, btn2;
+	JPanel p;
 	Boolean btnCheck = false;
 	Emoticon emo = new Emoticon();
 	Style[] style = new Style[9];
 	SimpleDateFormat simp = new SimpleDateFormat("a hh:mm:ss");
-	static boolean bChack = false;
+	boolean bCheck = false;
+	int a;
 	public ChatInGame(){
 		pane = new JTextPane();
 		pane.setEditable(false);
 		JScrollPane js = new JScrollPane(pane);
 		tf = new JTextField(21);
 		btn = new JButton(new ImageIcon("img\\tjdrb.gif"));
-		
+		btn2 = new JButton();
 		setUndecorated(true); // 타이틀바 사라지게
 		setOpacity(0.7f);
 		
@@ -41,13 +46,25 @@ public class ChatInGame extends JFrame implements ActionListener{
 		tf.setBackground(Color.black);
 		tf.setForeground(Color.white);
 		
+
 		
-		JPanel p = new JPanel();
-		p.add(tf);
-		p.add(box);
-		p.add(btn);
-		add("Center",js);
-		add("South",p);
+		btn2.setIcon(new ImageIcon("img\\tjdrb.gif"));
+		p = new JPanel();
+		p.add("Center", btn2);
+		p.setVisible(false);
+		setLayout(null);
+		js.setBounds(0, 0, 415, 225);
+		tf.setBounds(5, 233, 270, 25);
+		box.setBounds(280, 233, 80, 25);
+		btn.setBounds(365, 228, 40, 35);
+		p.setBounds(360, 180, 50, 50);
+		add(js);
+		add(tf);
+		add(box);
+		add(btn);
+		add(p);
+		
+		
 		setSize(420,300);
 		Toolkit tk = Toolkit.getDefaultToolkit(); // getDefaultToolkit 객체 생성
 		Dimension ds = tk.getScreenSize(); // 현재 스크린 사이즈를 저장
@@ -106,9 +123,8 @@ public class ChatInGame extends JFrame implements ActionListener{
 		// TODO Auto-generated method stub
 		if(e.getSource()==tf){
 			Date date = new Date();
-			
 			String data = tf.getText();
-			if(data.length()<1){
+			if(data.length()<1 && bCheck==false){
 				setVisible(false);
 				return;
 			}
@@ -117,6 +133,20 @@ public class ChatInGame extends JFrame implements ActionListener{
 			append(simp.format(date)+" : "+data, color);
 			
 			tf.setText("");
+			if(bCheck == true){
+				Document doc = pane.getDocument();
+				
+				try {
+					doc.insertString(doc.getLength(), "\n", style[a]);
+				} catch (BadLocationException e1) {
+					e1.printStackTrace();
+				}
+				emo.setVisible(false);
+				btnCheck = false;
+				tf.requestFocus();
+			}
+			bCheck = false;
+			p.setVisible(false);
 		}
 		if(e.getSource()==btn){
 			if(btnCheck){
@@ -131,26 +161,13 @@ public class ChatInGame extends JFrame implements ActionListener{
 			tf.requestFocus();
 		}
 		for(int i=0;i<9;i++){
-			
 			if(e.getSource()==emo.btnEmoticon[i]){
-				
-				Date date = new Date();
-				String data = tf.getText();
-				initStyle();
-				String color = box.getSelectedItem().toString();
-				
-				append(simp.format(date)+" : "+data, color);
-				Document doc = pane.getDocument();
-				
-				try {
-					doc.insertString(doc.getLength(), "\n", style[i]);
-				} catch (BadLocationException e1) {
-					e1.printStackTrace();
-				}
-				tf.setText("");
 				emo.setVisible(false);
-				btnCheck = false;
+				a=i;
+				bCheck = true;
 				tf.requestFocus();
+				btn2.setIcon(emo.emoticon[i]);
+				p.setVisible(true);
 			}
 		}
 		

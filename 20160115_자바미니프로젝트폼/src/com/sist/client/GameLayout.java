@@ -1,5 +1,6 @@
 package com.sist.client;
 import java.awt.*;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -10,7 +11,7 @@ import java.util.Random;
 import javax.swing.*;
 import javax.swing.border.*;
 import sun.net.www.content.image.jpeg;
-import com.sist.client.GameLayout.TimeLimit; 
+import com.sist.client.GameLayout.TimeLimit;
 public class GameLayout extends JPanel implements ActionListener, KeyListener{
 	//시간제한 타이머 
 	static JProgressBar timer=new JProgressBar();  
@@ -377,7 +378,6 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 		defPan1.setBounds(900, 600, 113, 190);
 		add(defPan1);
 		defPan1.setVisible(false);
-		
 		defPan2.setLayout(new FlowLayout(FlowLayout.CENTER));
 		defPan2.setBackground(Color.black);
 		defPan2.setOpaque(false);
