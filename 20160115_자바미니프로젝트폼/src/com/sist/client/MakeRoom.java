@@ -10,6 +10,8 @@ public class MakeRoom extends JDialog implements ActionListener {
 	JPasswordField pf;
 	JRadioButton open, noopen;
 	JButton b1, b2;
+	ChatRoom ch=new ChatRoom();
+	private Cursor cur = new Cursor(Cursor.HAND_CURSOR);
 
 	public MakeRoom() {
 		setModal(true);
@@ -36,6 +38,9 @@ public class MakeRoom extends JDialog implements ActionListener {
 		JPanel p = new JPanel();
 		p.add(b1);
 		p.add(b2);
+		b1.setCursor(cur);
+		b2.setCursor(cur);
+
 
 		setLayout(null);
 		la1.setBounds(10, 15, 40, 30);
@@ -63,8 +68,13 @@ public class MakeRoom extends JDialog implements ActionListener {
 		// setDefaultCloseOperation(EXIT_ON_CLOSE);
 		open.addActionListener(this);
 		noopen.addActionListener(this);
+		b1.addActionListener(this);
+		b2.addActionListener(this);
 	}
-
+	public String getTitle() {
+		String data=tf.getText();
+		return data;
+	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
@@ -77,6 +87,14 @@ public class MakeRoom extends JDialog implements ActionListener {
 			pf.setVisible(true);
 			la3.setVisible(true);
 			pf.requestFocus();
+		} else if(e.getSource()==b1) {
+			setVisible(false);
+			la3.setVisible(false);
+			pf.setText("");
+			tf.setText("");
+			open.setSelected(true);
+			pf.setVisible(false);
+			ch.setVisible(true);
 		}
 	}
 
