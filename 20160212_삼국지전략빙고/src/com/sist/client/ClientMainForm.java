@@ -126,8 +126,8 @@ implements ActionListener, Runnable
 			ClientMainForm.t1.interrupt();
 			card.show(getContentPane(), "WR");
 			game.removeAll();
-			game=new GameLayout();
 			GameProcess.gameReset();
+			game=new GameLayout();
 			//game.gameReset();
 			add(game,"GAME");
 			System.out.println("플레이어1 첫번쨰 숫자: "+GameProcess.numArr1[0]);
