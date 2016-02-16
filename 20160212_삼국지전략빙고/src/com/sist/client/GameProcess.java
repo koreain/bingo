@@ -400,6 +400,10 @@ public class GameProcess extends JPanel{
 		GameProcess.skillChance2=1;
 		GameProcess.coinA=0;
 		GameProcess.coinB=0;
+		GameProcess.skillChance1=1;
+		GameProcess.skillChance2=1;
+		GameProcess.bingoCheckChance1=1;
+		GameProcess.bingoCheckChance2=1;
    }   
    
 }

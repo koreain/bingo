@@ -287,11 +287,11 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 		btnDef = new JButton(defIcon);       //나의 방어스킬 버튼    
 		btnTrick = new JButton(trickIcon);   //나의 전략스킬 버튼    
 		btnAvatar = new JButton(avatarIcon); //나의 아바타        		                                     
-		laAtt = new JLabel("x0");            //나의 공격아이템 개수 라벨
-		laDef = new JLabel("x0");            //나의 방어아이템 개수 라벨
-		laTrick = new JLabel("x0");          //나의 전략아이템 개수 라벨
-		laTactic = new JLabel("전술명령x"+GameProcess.skillChance1);		//나의 스킬사용가능 횟수 라벨    
-		laCommand = new JLabel("지휘권x"+GameProcess.bingoCheckChance1);  //나의 빙고체크가능 횟수 라벨
+		laAtt = new JLabel("x"+(String.valueOf((GameProcess.numOfBingo1[0]+GameProcess.usingAttackSkill1))));            //나의 공격아이템 개수 라벨
+		laDef = new JLabel("x"+(String.valueOf((GameProcess.numOfBingo1[1]+GameProcess.usingDefenseSkill1))));            //나의 방어아이템 개수 라벨
+		laTrick = new JLabel("x"+(String.valueOf((GameProcess.numOfBingo1[2]+GameProcess.usingStrategySkill1))));          //나의 전략아이템 개수 라벨
+		laTactic = new JLabel("전술명령x"+String.valueOf(GameProcess.skillChance1));		//나의 스킬사용가능 횟수 라벨    
+		laCommand = new JLabel("지휘권x"+String.valueOf(GameProcess.bingoCheckChance1));  //나의 빙고체크가능 횟수 라벨
 		laNickname = new JLabel("아이디");                                //나의 아이디         
 		laNickname.setFont(new Font("궁서체",Font.PLAIN,35));
 		
@@ -532,11 +532,11 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 			jypgChoice[i].setVisible(false);
 			if(i<3)
 			{
-				jypgChoice[i].setBounds(32+316*i, 23, jypgLine.getIconWidth(), jypgLine.getIconHeight());
+				jypgChoice[i].setBounds(40+279*i, 27, jypgLine.getIconWidth(), jypgLine.getIconHeight());
 			}
 			else
 			{
-				jypgChoice[i].setBounds(32+316*(i%3), 528, jypgLine.getIconWidth(), jypgLine.getIconHeight());
+				jypgChoice[i].setBounds(40+279*(i%3), 530, jypgLine.getIconWidth(), jypgLine.getIconHeight());
 			}
 		}
 		//레이아웃으로 묶어서 배치
@@ -1203,6 +1203,8 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 					GameProcess.usingStrategySkill1--;
 					useTrick--;
 					laTrick.setText("x"+String.valueOf(GameProcess.numOfBingo1[2]+GameProcess.usingStrategySkill1));
+					GameProcess.skillChance1--;
+					laTactic.setText("전술명령x"+String.valueOf(GameProcess.skillChance1));
 					bTrcikCheck1=false;
 					repaint();
 				}
