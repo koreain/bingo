@@ -168,7 +168,8 @@ public class SignUp extends JDialog implements ActionListener, FocusListener, It
  		UserDAO dao = new UserDAO(); 
  		boolean bCheck = dao.insertUser(dto); 
  		if(bCheck){ 
- 			JOptionPane.showMessageDialog(this, "가입완료"); 
+ 			JOptionPane.showMessageDialog(this, "가입완료");
+ 			dispose();
  		}else 
  			JOptionPane.showMessageDialog(this, "가입실패"); 
  	} 

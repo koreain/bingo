@@ -3,6 +3,7 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.util.StringTokenizer;
+import java.util.Vector;
 import java.net.*;
 import java.io.*;
 import com.sist.client.GameLayout.TimeLimit;
@@ -15,6 +16,7 @@ implements ActionListener, Runnable
 	CardLayout card=new CardLayout();
 	GameLayout game=new GameLayout();
 	GameInfo gi=new GameInfo();
+	//MakeRoom mr=new MakeRoom();
 	
 	ImageIcon mainIcon;//타이틀창 아이콘
 	static Thread t1=new TimeLimit();//시간제한바 스레드 
@@ -22,6 +24,7 @@ implements ActionListener, Runnable
 	Socket s;
     BufferedReader in;
     OutputStream out;
+    
 	ClientMainForm()
 	{
 		super("삼국지 전략빙고");//타이틀 제목
@@ -62,26 +65,70 @@ implements ActionListener, Runnable
 	}
 	
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(ActionEvent e){
 		// TODO Auto-generated method stub
 		if(e.getSource()==login.b1) //로그인을 누르면 대기실로 이동
 		{
+			boolean loginOk=false;
+			boolean idOk=false;
 			String id=login.tf.getText();
-			String name="a";
-			String sex="a";
-			String pos="a";
-			String sendData=id+"|"+name+"|"+sex+"|"+pos+"\n";
-			try
+			String pw=String.valueOf(login.pf.getPassword());
+			UserDAO user=new UserDAO();
+			UserDTO userInfo=new UserDTO(); // id로 접근한 한사람의 정보 
+			userInfo=user.getUserDTO(id);
+			String[] arrayId=new String[user.getList().size()];
+			for(int i=0; i<user.getList().size();i++)
 			{
-				s=new Socket("211.238.142.39", 33333);
-				in=new BufferedReader(
-	    				new InputStreamReader(s.getInputStream()));
-	    			out=s.getOutputStream();
-	    	    out.write((sendData).getBytes());
-	    			System.out.println(s.getInetAddress());
-			}catch(Exception ex){}
-			new Thread(this).start();
-			card.show(getContentPane(), "WR");
+				arrayId[i]=user.getList().get(i).getUser_id();
+			}
+			for(int i=0; i<arrayId.length;i++)
+			{
+				if(arrayId[i].equals(id))
+				{
+					idOk=true;
+				
+					if(userInfo.getUser_pw().equals(pw))
+					{
+						loginOk=true;
+						JOptionPane.showMessageDialog(login,"정상적으로 로그인 했습니다.");
+					}
+					else if(!userInfo.getUser_pw().equals(pw))
+					{
+						loginOk=false;
+						JOptionPane.showMessageDialog(login,"비밀번호를 확인해 주세요");
+						login.pf.setText("");
+						login.pf.requestFocus();
+					}
+				}
+				
+			}
+			if(!idOk)
+			{
+				JOptionPane.showMessageDialog(login,"아이디가 존재하지 않습니다.");
+				login.tf.setText("");
+				login.pf.setText("");
+				login.tf.requestFocus();
+			}
+
+			if(loginOk)
+			{
+				UserDTO sendData=userInfo;//넘겨줄 유저정보 재정의
+				card.show(getContentPane(), "WR");
+			}
+			/*try
+			{
+				if(loginOk)
+				{
+					s=new Socket("211.238.142.40", 33333);
+					in=new BufferedReader(
+		    				new InputStreamReader(s.getInputStream()));
+		    			out=s.getOutputStream();
+		    	    //out.write((sendData).getBytes());
+		    		//System.out.println(s.getInetAddress());
+				}
+							}catch(Exception ex){}*/
+			/*new Thread(this).start();*/
+			//card.show(getContentPane(), "WR");
 		}
 		else if(e.getSource()==login.b2) //취소를 누르면 프로그램 종료
 		{
@@ -130,8 +177,6 @@ implements ActionListener, Runnable
 			game=new GameLayout();
 			//game.gameReset();
 			add(game,"GAME");
-			System.out.println("플레이어1 첫번쨰 숫자: "+GameProcess.numArr1[0]);
-			System.out.println("플에이어1 첫번쨰 숫자(T/F): "+GameProcess.bingo1[0][0]);
 			System.out.println("플레이어턴 구분>> true:플레이어1 /// false:플레이어2");
 			System.out.println("플레이어턴: "+GameProcess.playerTurn);
 		}
@@ -139,6 +184,7 @@ implements ActionListener, Runnable
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
+
 		try
 		{
 			while(true)
@@ -146,10 +192,7 @@ implements ActionListener, Runnable
 				String msg=in.readLine();
 				StringTokenizer st=
 					new StringTokenizer(msg, "|");
-				String[] data={st.nextToken(),
-					       st.nextToken(),
-					       st.nextToken(),
-					       st.nextToken()};
+				String[] data={st.nextToken(), st.nextToken()};
 			    wr.model2.addRow(data);
 			}
 		}catch(Exception ex){}
