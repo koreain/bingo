@@ -2,11 +2,12 @@ package com.sist.client;
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
-import java.net.*; 
+import java.util.StringTokenizer;
+import java.net.*;
 import java.io.*;
 import com.sist.client.GameLayout.TimeLimit;
 public class ClientMainForm extends JFrame
-implements ActionListener
+implements ActionListener, Runnable
 {
 	Login login=new Login();
 	WaitRoom wr=new WaitRoom();
@@ -17,7 +18,11 @@ implements ActionListener
 	
 	ImageIcon mainIcon;//타이틀창 아이콘
 	static Thread t1=new TimeLimit();//시간제한바 스레드 
-	ClientMainForm() 
+	
+	Socket s;
+    BufferedReader in;
+    OutputStream out;
+	ClientMainForm()
 	{
 		super("삼국지 전략빙고");//타이틀 제목
 		mainIcon=new ImageIcon("img\\타이틀아이콘.png");
@@ -61,6 +66,21 @@ implements ActionListener
 		// TODO Auto-generated method stub
 		if(e.getSource()==login.b1) //로그인을 누르면 대기실로 이동
 		{
+			String id=login.tf.getText();
+			String name="a";
+			String sex="a";
+			String pos="a";
+			String sendData=id+"|"+name+"|"+sex+"|"+pos+"\n";
+			try
+			{
+				s=new Socket("211.238.142.39", 33333);
+				in=new BufferedReader(
+	    				new InputStreamReader(s.getInputStream()));
+	    			out=s.getOutputStream();
+	    	    out.write((sendData).getBytes());
+	    			System.out.println(s.getInetAddress());
+			}catch(Exception ex){}
+			new Thread(this).start();
 			card.show(getContentPane(), "WR");
 		}
 		else if(e.getSource()==login.b2) //취소를 누르면 프로그램 종료
@@ -116,5 +136,22 @@ implements ActionListener
 			System.out.println("플레이어턴: "+GameProcess.playerTurn);
 		}
 	}
-
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		try
+		{
+			while(true)
+			{
+				String msg=in.readLine();
+				StringTokenizer st=
+					new StringTokenizer(msg, "|");
+				String[] data={st.nextToken(),
+					       st.nextToken(),
+					       st.nextToken(),
+					       st.nextToken()};
+			    wr.model2.addRow(data);
+			}
+		}catch(Exception ex){}
+	}
 }

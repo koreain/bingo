@@ -400,14 +400,11 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 		 }
 		 for(int i=0; i<6; i++)
 		 {
-			 jypgChoice[i].setVisible(false);
 			 for(int j=0; j<5; j++)
 			 {
 				 bingoScore[i][j].setVisible(false);
 			 }
 		 }
-		 defPGchoice1.setVisible(false);
-		 defPGchoice2.setVisible(false);
 		 for(int i=0; i<3;i++) //장수 얼굴 버튼 액션리스너
 		 {
 			 ChoiceNation.jangSu1[i].setVisible(false);
@@ -439,10 +436,10 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 		 laNickname.setVisible(true);
 		 laTactic.setVisible(true);
 		 laCommand.setVisible(true);
-		 youLaAtt.setVisible(true);         
-		 youLaDef.setVisible(true);                    
-		 youLaTrick.setVisible(true);                  
-		 youLaNickname.setVisible(true);               
+		 youLaAtt.setVisible(true);
+		 youLaDef.setVisible(true);
+		 youLaTrick.setVisible(true);
+		 youLaNickname.setVisible(true);
 		 youLaTactic.setVisible(true);
 		 youLaCommand.setVisible(true);
 		 for(int i=0; i<2; i++)
@@ -455,14 +452,11 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 		 }
 		 for(int i=0; i<6; i++)
 		 {
-			 jypgChoice[i].setVisible(true);
 			 for(int j=0; j<5; j++)
 			 {
 				 bingoScore[i][j].setVisible(true);
 			 }
 		 }
-		 defPGchoice1.setVisible(true);
-		 defPGchoice2.setVisible(true);
 		 for(int i=0; i<3;i++) //장수 얼굴 버튼 액션리스너
 		 {
 			 ChoiceNation.jangSu1[i].setVisible(true);
@@ -567,12 +561,14 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 		
 		defPGchoice2=new JButton(jjgs); 
 		defPGchoice2.setContentAreaFilled(false);
+		defPGchoice2.setCursor(cur);
 		defPGchoice2.addActionListener(this);
 		defPGchoice2.setBorderPainted(false);
 		defPan2.add(defPGchoice2);
 		
 		defPGchoice1=new JButton(jjgs);
 		defPGchoice1.setContentAreaFilled(false);
+		defPGchoice1.setCursor(cur);
 		defPGchoice1.addActionListener(this);
 		defPGchoice1.setBorderPainted(false);
 		defPan1.add(defPGchoice1);
