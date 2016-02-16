@@ -17,7 +17,6 @@ public class CoinFlip extends JDialog{
 		setModal(true);
 		setSize(600,380);
 		setResizable(false);
-		setModal(true);
 		setLocationRelativeTo(null);
 		setVisible(false);
 		cfBack=Toolkit.getDefaultToolkit().getImage("img\\선후공배경.jpg");

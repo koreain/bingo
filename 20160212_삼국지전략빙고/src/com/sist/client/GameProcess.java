@@ -51,7 +51,7 @@ public class GameProcess extends JPanel{
 	   if(coinA%2==0)
 		   playerTurn=true;
 	   else
-		   playerTurn=true;//false
+		   playerTurn=false;//false
    }
    static void rand()//중복되지 않는 랜덤 숫자배열 두개 만들기
    {      
@@ -398,6 +398,8 @@ public class GameProcess extends JPanel{
 		GameProcess.bingoCheckChance2=1;
 		GameProcess.skillChance1=1;
 		GameProcess.skillChance2=1;
+		GameProcess.coinA=0;
+		GameProcess.coinB=0;
    }   
    
 }

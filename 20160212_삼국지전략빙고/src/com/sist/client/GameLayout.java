@@ -400,7 +400,6 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 		 }
 		 for(int i=0; i<6; i++)
 		 {
-			 jypgChoice[i].setVisible(false);
 			 for(int j=0; j<5; j++)
 			 {
 				 bingoScore[i][j].setVisible(false);
@@ -455,7 +454,6 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 		 }
 		 for(int i=0; i<6; i++)
 		 {
-			 jypgChoice[i].setVisible(true);
 			 for(int j=0; j<5; j++)
 			 {
 				 bingoScore[i][j].setVisible(true);
@@ -538,11 +536,11 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 			jypgChoice[i].setVisible(false);
 			if(i<3)
 			{
-				jypgChoice[i].setBounds(32+316*i, 23, jypgLine.getIconWidth(), jypgLine.getIconHeight());
+				jypgChoice[i].setBounds(40+279*i, 27, jypgLine.getIconWidth(), jypgLine.getIconHeight());
 			}
 			else
 			{
-				jypgChoice[i].setBounds(32+316*(i%3), 528, jypgLine.getIconWidth(), jypgLine.getIconHeight());
+				jypgChoice[i].setBounds(40+279*(i%3), 530, jypgLine.getIconWidth(), jypgLine.getIconHeight());
 			}
 		}
 		//레이아웃으로 묶어서 배치
@@ -1242,13 +1240,13 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 			System.out.println(i+"번째 포문 실행할때 궁활용여부2는? ===> "+goongUsable2[2]);
 			System.out.println(e.getSource().toString());
 			if(e.getSource()==jypgChoice[i]&&goongUsable1[2]==true)
-			{		System.out.println(i+"번째 플레이어1 포문 시작 (궁활용가능여부): "+goongUsable1[2]);
+			{		//System.out.println(i+"번째 플레이어1 포문 시작 (궁활용가능여부): "+goongUsable1[2]);
 				new SFImageThread().start();
-					System.out.println(i+"번째 플레이어1 포문 결과 쓰레드 실행됨");
+					//System.out.println(i+"번째 플레이어1 포문 결과 쓰레드 실행됨");
 				GameProcess.jypg(0,i);
-					System.out.println(i+"번째 플레이어1 포문 결과 진영파괴 메소드 돌아감");
+					//System.out.println(i+"번째 플레이어1 포문 결과 진영파괴 메소드 돌아감");
 				goongUsable1[2]=false;
-					System.out.println(i+"번째 플레이어1 포문 결과 (궁활용가능여부): "+goongUsable1[2]);
+					//System.out.println(i+"번째 플레이어1 포문 결과 (궁활용가능여부): "+goongUsable1[2]);
 				fury[1][2].setEnabled(false);
 				fury[1][2].setVisible(false);
 				gauge[1][2].setBackground(Color.DARK_GRAY);
@@ -1256,20 +1254,20 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 				for(int j=0; j<3; j++)
 				{
 					jypgChoice[j].setVisible(false);//
-					System.out.println(j+"번쨰 버튼 숨김처리 완료");
+					//System.out.println(j+"번쨰 버튼 숨김처리 완료");
 				}
 				furyEndBtn[1][2].setVisible(true);
 				GameProcess.skillChance1--;
 				laTactic.setText("전술명령x"+String.valueOf(GameProcess.skillChance1));
 				repaint();
 				SFImageThread.interrupted();//???????????????????
-				System.out.println("궁극기 이미지1 쓰레드 사망");
-				for(int j=0; j<6; j++)
+				//System.out.println("궁극기 이미지1 쓰레드 사망");
+				/*for(int j=0; j<6; j++)
 				{
 					jypgChoice[j].setOpaque(false);
 					jypgChoice[j].setVisible(false);//
 					System.out.println(j+"번쨰 버튼 숨김처리 완료");
-				}
+				}*/
 			}
 			
 			if(e.getSource()==jypgChoice[i+3]&&goongUsable2[2]==true)
@@ -1294,12 +1292,12 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 				repaint();
 				SFImageThread.interrupted();//???????????????????
 				System.out.println("궁극기 이미지2 쓰레드 사망");
-				for(int j=0; j<6; j++)
+/*				for(int j=0; j<6; j++)
 				{
 					jypgChoice[j].setOpaque(false);
 					jypgChoice[j].setVisible(false);//
 					System.out.println(j+"번쨰 버튼 숨김처리 완료");
-				}
+				}*/
 			}
 			System.out.println(i+"번째 포문 종료");
 
