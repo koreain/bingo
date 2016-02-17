@@ -97,7 +97,7 @@ implements ActionListener
 				t1.start();
 				game.requestFocus();  
 			}
-//			GameProcess.gameReset();
+		//	GameProcess.gameReset();
 		}
 		else if(e.getSource()==game.exit) //게임이 끝났을 때 나가기 버튼
 		{

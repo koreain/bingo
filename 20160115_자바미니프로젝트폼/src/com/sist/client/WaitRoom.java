@@ -138,7 +138,7 @@ public class WaitRoom extends JPanel implements ActionListener {
 
 		String data = name + ">> " + tf.getText();
 		if (e.getSource() == tf) {
-			if (data.length() < 1)
+			if (data.length() < name.length()+4)
 				return;
 			initStyle();
 			String color = box.getSelectedItem().toString();

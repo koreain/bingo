@@ -14,18 +14,17 @@ import javax.swing.text.StyleContext;
 
 public class ChatRoom extends JDialog implements ActionListener {
 	JPanel pan1, pan2 = new JPanel();
-	MakeRoom mr;
 	JTextField idtf1, idtf2 = new JTextField();
 	JTextArea ta;
 	JTextField tf;
-	JComboBox box;
 	JTable table;
 	DefaultTableModel model;
-	JButton b1, b2, b3;
+	JButton b1, b2, b3, b4;
+	
 	private Cursor cur = new Cursor(Cursor.HAND_CURSOR);
 
 	public ChatRoom() {
-		setTitle(mr.getTitle());
+		setTitle("º≠πˆø°º≠ πﬁæ∆ø√ πÊ¿Ã∏ß");
 		JPanel pan1 = new JPanel();
 		JPanel pan2 = new JPanel();
 		JTextField idtf1 = new JTextField();
@@ -36,22 +35,19 @@ public class ChatRoom extends JDialog implements ActionListener {
 		ta = new JTextArea();
 		ta.setEditable(false);
 		JScrollPane js1 = new JScrollPane(ta);
-		tf = new JTextField();
-		box = new JComboBox();
-		box.addItem("black");
-		box.addItem("blue");
-		box.addItem("green");
-		box.addItem("cyan");
-		box.addItem("pink");
-		b1 = new JButton("¡ÿ   ∫Ò");
-		b2 = new JButton("√    ¥Î");
+		tf = new JTextField(20);
+		b1 = new JButton("√    ¥Î");
+		b2 = new JButton("∞≠   ≈");
 		b3 = new JButton("≥™∞°±‚");
+		b4 = new JButton("¡ÿ   ∫Ò");
 		b1.setFont(new Font("∏º¿∫ ∞ÌµÒ", Font.BOLD, 20));
 		b2.setFont(new Font("∏º¿∫ ∞ÌµÒ", Font.BOLD, 20));
 		b3.setFont(new Font("∏º¿∫ ∞ÌµÒ", Font.BOLD, 20));
+		b4.setFont(new Font("∏º¿∫ ∞ÌµÒ", Font.BOLD, 20));
 		b1.setCursor(cur);
 		b2.setCursor(cur);
 		b3.setCursor(cur);
+		b4.setCursor(cur);
 
 		String[] col = { "ID", "¥Î»≠∏Ì", "º∫∫∞" };
 		String[][] row = new String[0][3];
@@ -75,7 +71,7 @@ public class ChatRoom extends JDialog implements ActionListener {
 
 		js1.setBounds(10, 215, 375, 120);
 		tf.setBounds(10, 340, 270, 30);
-		box.setBounds(285, 340, 100, 30);
+		b4.setBounds(285, 340, 100, 30);
 		js2.setBounds(400, 15, 190, 185);
 		JPanel p = new JPanel();
 		p.setLayout(new GridLayout(3, 1, 5, 5));
@@ -87,14 +83,16 @@ public class ChatRoom extends JDialog implements ActionListener {
 		add(js1);
 		add(js2);
 		add(tf);
-		add(box);
-		add(p);
+		add(b4);
+		add("Center", p);
 		setSize(620, 420);
 		setVisible(false);
 		b1.addActionListener(this);
 		b2.addActionListener(this);
 		b3.addActionListener(this);
-		setLocationRelativeTo(null);
+		b4.addActionListener(this);
+		tf.addActionListener(this);
+
 		setModal(true);
 		setResizable(false);
 	}
@@ -107,8 +105,19 @@ public class ChatRoom extends JDialog implements ActionListener {
 		} else if (e.getSource() == b2) {
 
 		} else if (e.getSource() == b3) {
+			ta.setText("");
 			dispose();
 			setVisible(false);
+		} else if (e.getSource() == b4) {
+			
+		} else if (e.getSource() == tf) {
+			String text = tf.getText();
+			if (text.length() < 1) {
+				return;
+			}
+			ta.append(text + "\n");
+			ta.setCaretPosition(ta.getDocument().getLength());
+			tf.setText("");
 		}
 	}
 }

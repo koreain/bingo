@@ -11,6 +11,7 @@ public class MakeRoom extends JDialog implements ActionListener {
 	JRadioButton open, noopen;
 	JButton b1, b2;
 	ChatRoom ch=new ChatRoom();
+	
 	private Cursor cur = new Cursor(Cursor.HAND_CURSOR);
 
 	public MakeRoom() {
@@ -71,10 +72,6 @@ public class MakeRoom extends JDialog implements ActionListener {
 		b1.addActionListener(this);
 		b2.addActionListener(this);
 	}
-	public String getTitle() {
-		String data=tf.getText();
-		return data;
-	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
@@ -94,6 +91,7 @@ public class MakeRoom extends JDialog implements ActionListener {
 			tf.setText("");
 			open.setSelected(true);
 			pf.setVisible(false);
+			ch.setLocationRelativeTo(null);
 			ch.setVisible(true);
 		}
 	}
