@@ -3,101 +3,93 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.image.*;
 import java.awt.event.*;
-public class GameProcess extends JPanel{
+public class GameProcess{
+	static int[][] p1Board= new int[3][25];   //플레이어1 빙고판 실제 숫자
+	static int[][] p2Board= new int[3][25];   //플레이어2 빙고판 실제 숫자
 	
-   static int[][] p1Board= new int[3][25];   //플레이어1 빙고판 실제 숫자
-   static int[][] p2Board= new int[3][25];   //플레이어2 빙고판 실제 숫자
+	//랜덤으로 섞을 숫자 생성
+	static int[] numArr1=new int[75]; //플레이어1  
+	static int[] numArr2=new int[75]; //플레이어2
+	
+	static int chosenBingoNumber; //선택된 빙고번호
+	static boolean[][] bingo1=new boolean[3][25]; //빙고처리
+	static boolean[][] bingo2=new boolean[3][25];
+	static int[] numOfBingo1=new int[3]; //각 판 별로 카운트처리
+	static int[] numOfBingo2=new int[3];
+	
+	//numOfBing+usingAttackSkill로 항상 사용, 스킬을 사옹하면 -1, 필살기는 사용시 -3
+	static int usingAttackSkill1=0;
+	static int usingDefenseSkill1=0;
+	static int usingStrategySkill1=0;
+	//플레이어2스킬
+	static int usingAttackSkill2=0;
+	static int usingDefenseSkill2=0;
+	static int usingStrategySkill2=0;
+	
+	static boolean playerTurn=true; //true=player1, false=player2
    
-   //랜덤으로 섞을 숫자 생성
-   static int[] numArr1=new int[75]; //플레이어1  
-   static int[] numArr2=new int[75]; //플레이어2
-   
-   static int chosenBingoNumber; //선택된 빙고번호
-   static boolean[][] bingo1=new boolean[3][25]; //빙고처리
-   static boolean[][] bingo2=new boolean[3][25];
-   static int[] numOfBingo1=new int[3]; //각 판 별로 카운트처리
-   static int[] numOfBingo2=new int[3];
-   
-   //numOfBing+usingAttackSkill로 항상 사용, 스킬을 사옹하면 -1, 필살기는 사용시 -3
-   static int usingAttackSkill1=0;
-   static int usingDefenseSkill1=0;
-   static int usingStrategySkill1=0;
-   
-   //아이콘을 클릭했을때 트루가 되고 사용시 false 
-   static boolean bAttackSkill1=false;
-   static boolean bDefenseSkill1=false;
-   static boolean bStrategySkill1=false;
-   
-   //플레이어2스킬
-   static int usingAttackSkill2=0;
-   static int usingDefenseSkill2=0;
-   static int usingStrategySkill2=0;
-   static boolean bAttackSkill2=false;
-   static boolean bDefenseSkill2=false;
-   static boolean bStrategySkill2=false;
-   
-   static boolean playerTurn=true; //true=player1, false=player2
-   
-   static int bingoCheckChance1=1, bingoCheckChance2=1;//한 턴에 빙고 체크를 할 수 있는 횟수
-   static int skillChance1=1, skillChance2=1;
-
-   static int[] gaugeScore={0,33,66,100};//게이지바
-   
-   static int coinA=0;
-   static int coinB=0;
-   static void coinRand() //플레이어턴을 정하는 난수 발생
-   {
-	   coinB=(int)(Math.random()*10)+10;
-	   if(coinA%2==0)
-		   playerTurn=true;
-	   else
-		   playerTurn=true;//false
-   }
-   static void rand()//중복되지 않는 랜덤 숫자배열 두개 만들기
-   {      
-      int su=0; //난수 발생시 저장할 변수
-      boolean bDash=false; //중복여부 확인
-      for(int i=0; i<75; i++)
-      {
-         bDash=true;
-         while(bDash) // 난수발생, 중복 학인
-         {
-            su=(int)(Math.random()*75)+1;
-            bDash=false;
-            for(int j=0; j<i; j++)
-            {
-               if(numArr1[j]==su)
-               {
-                  bDash=true; //중복이 있으면 멈추고 while문을 다시 수행(랜덤값을 다시 줌)
-                  break;
-               }
-            }
-         }
-         numArr1[i]=su;
+	static int bingoCheckChance1=1, bingoCheckChance2=1;//한 턴에 빙고 체크를 할 수 있는 횟수
+	static int skillChance1=1, skillChance2=1;
+	
+	static int[] gaugeScore={0,33,66,100};//게이지바
+	
+	static int coinA=0;
+	static int coinB=0;
+	
+	static boolean playerWon=false;
+	static void coinRand() //플레이어턴을 정하는 난수 발생
+	{
+		coinB=(int)(Math.random()*10)+5;
+		if(coinA%2==0)
+			playerTurn=true;
+		else
+			playerTurn=true;//false
+	}
+	static void rand()//중복되지 않는 랜덤 숫자배열 두개 만들기
+	{      
+		int su=0; //난수 발생시 저장할 변수
+		boolean bDash=false; //중복여부 확인
+		for(int i=0; i<75; i++)
+		{
+			bDash=true;
+			while(bDash) // 난수발생, 중복 학인
+			{
+				su=(int)(Math.random()*75)+1;
+				bDash=false;
+				for(int j=0; j<i; j++)
+				{
+					if(numArr1[j]==su)
+					{
+						bDash=true; //중복이 있으면 멈추고 while문을 다시 수행(랜덤값을 다시 줌)
+						break;
+					}
+				}
+			}
+			numArr1[i]=su;
          
-      }
-      for(int i=0; i<75; i++)
-      {
-         bDash=true;
-         while(bDash) // 난수발생, 중복 학인
-         {
-            su=(int)(Math.random()*75)+1; //판 크기+10개(상대가 못맞출 수도 있게)의 난수 입력
-            bDash=false;
-            for(int j=0; j<i; j++)
-            {
-               if(numArr2[j]==su)
-               {
-                  bDash=true; //중복이 있으면 멈추고 while문을 다시 수행(랜덤값을 다시 줌)
-                  break;
-               }
-            }
-         }
-         numArr2[i]=su;
-         
-      }
-      insertBingoNumber1();//판에 숫자 배치
-      insertBingoNumber2();
-   }
+		}
+		for(int i=0; i<75; i++)
+		{
+			bDash=true;
+			while(bDash) // 난수발생, 중복 학인
+			{
+				su=(int)(Math.random()*75)+1; //판 크기+10개(상대가 못맞출 수도 있게)의 난수 입력
+				bDash=false;
+	            for(int j=0; j<i; j++)
+	            {
+	            	if(numArr2[j]==su)
+	            	{
+	            		bDash=true; //중복이 있으면 멈추고 while문을 다시 수행(랜덤값을 다시 줌)
+	            		break;
+	            	}
+	            }
+			}
+			numArr2[i]=su;
+			
+		}
+		insertBingoNumber1();//판에 숫자 배치
+		insertBingoNumber2();
+	}
 
    static void insertBingoNumber1()//플레이어1 판에 숫자 배치
    {
@@ -366,19 +358,14 @@ public class GameProcess extends JPanel{
       bingoIcon(numOfBingo2[2], 3);
       goongCtrl(numOfBingo2[2],0,2);
       
-      gameEnd();
-   }
-   
-   static void gameEnd()
-   {
-	   if(numOfBingo1[0]>=5||numOfBingo1[1]>=5||numOfBingo1[2]>=5)
-	   {
-		   BingoEnd be=new BingoEnd();
-		   be.setVisible(true);
-	   }
-	   if(numOfBingo2[0]>=5||numOfBingo2[1]>=5||numOfBingo2[2]>=5)
-	   {
-	   }
+      if(numOfBingo1[0]>=5||numOfBingo1[1]>=5||numOfBingo1[2]>=5)
+      {
+    	  GameLayout.bingoEnd=true;
+      }
+      if(numOfBingo2[0]>=5||numOfBingo2[1]>=5||numOfBingo2[2]>=5)
+      {
+    	  GameLayout.bingoEnd=true;
+      }
    }
    
    //게임 나가면서(항복 또는 재시작) GameProcess 클래스 내 static 변수들 초기화 메소드

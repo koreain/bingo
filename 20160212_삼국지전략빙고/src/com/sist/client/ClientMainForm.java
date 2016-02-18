@@ -3,9 +3,12 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.util.StringTokenizer;
+import java.util.Vector;
 import java.net.*;
 import java.io.*;
 import com.sist.client.GameLayout.TimeLimit;
+import com.sist.client.GameLayout.endThread;
+import com.sist.common.Function;
 public class ClientMainForm extends JFrame
 implements ActionListener, Runnable
 {
@@ -17,11 +20,12 @@ implements ActionListener, Runnable
 	GameInfo gi=new GameInfo();
 	
 	ImageIcon mainIcon;//타이틀창 아이콘
-	static Thread t1=new TimeLimit();//시간제한바 스레드 
-	
+	Thread t1=game.new TimeLimit();//시간제한바 스레드 
 	Socket s;
     BufferedReader in;
     OutputStream out;
+ // 개인 정보
+    String myId,myRoom;
 	ClientMainForm()
 	{
 		super("삼국지 전략빙고");//타이틀 제목
@@ -39,18 +43,18 @@ implements ActionListener, Runnable
 		login.b2.addActionListener(this);
 		login.b3.addActionListener(this);//회원가입
 		
-		wr.b3.addActionListener(this); //test
-		wr.b5.addActionListener(this); //게임정보 
-		wr.b6.addActionListener(this); //나가기
+		wr.b2.addActionListener(this); //test(게임방법)
+		wr.b3.addActionListener(this); //게임정보 
+		wr.b4.addActionListener(this); //나가기
 		
 		cn.nation0.addActionListener(this);
 		cn.nation1.addActionListener(this);
 		cn.nation2.addActionListener(this);
-		game.exit.addActionListener(this); //항복 버튼 
+		
+		GameLayout.exit.addActionListener(this); //항복 버튼 
 		
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false); //윈도우창 고정
-		
 	}
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -60,28 +64,80 @@ implements ActionListener, Runnable
 		}catch(Exception ex){}
 		new ClientMainForm();
 	}
-	
+	public void connection(String id,String name,
+	         String sex,String avata)
+	{
+		try
+		{
+			s=new Socket("211.238.142.40", 33333);
+			// s => server
+			in=new BufferedReader(
+					new InputStreamReader(
+							s.getInputStream()));
+			out=s.getOutputStream();
+			out.write((Function.LOGIN+"|"+id+"|"+
+					name+"|"+sex+"|"+
+					avata+"\n").getBytes());
+		}catch(Exception ex){}
+		new Thread(this).start();
+	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if(e.getSource()==login.b1) //로그인을 누르면 대기실로 이동
 		{
-			String id=login.tf.getText();
-			String name="a";
-			String sex="a";
-			String pos="a";
-			String sendData=id+"|"+name+"|"+sex+"|"+pos+"\n";
-			try
-			{
-				s=new Socket("211.238.142.39", 33333);
-				in=new BufferedReader(
-	    				new InputStreamReader(s.getInputStream()));
-	    			out=s.getOutputStream();
-	    	    out.write((sendData).getBytes());
-	    			System.out.println(s.getInetAddress());
-			}catch(Exception ex){}
-			new Thread(this).start();
-			card.show(getContentPane(), "WR");
+			boolean loginOk=false; 
+			boolean idOk=false; 
+			String id=login.tf.getText(); 
+			String pw=String.valueOf(login.pf.getPassword()); 
+			UserDAO user=new UserDAO(); 
+			UserDTO userInfo=new UserDTO(); // id로 접근한 한사람의 정보  
+			userInfo=user.getUserDTO(id); 
+			String[] arrayId=new String[user.getList().size()]; 
+			for(int i=0; i<user.getList().size();i++) 
+			{ 
+				arrayId[i]=user.getList().get(i).getUser_id(); 
+			} 
+			for(int i=0; i<arrayId.length;i++) 
+			{ 
+				if(arrayId[i].equals(id)) 
+				{ 
+					idOk=true; 
+				 
+					if(userInfo.getUser_pw().equals(pw)) 
+					{ 
+						loginOk=true; 
+					} 
+					else if(!userInfo.getUser_pw().equals(pw)) 
+					{ 
+						loginOk=false; 
+						JOptionPane.showMessageDialog(login,"비밀번호를 확인해 주세요"); 
+						login.pf.setText(""); 
+							login.pf.requestFocus(); 
+						} 
+					} 
+					 
+				} 
+				if(!idOk) 
+				{ 
+					JOptionPane.showMessageDialog(login,"아이디가 존재하지 않습니다."); 
+					login.tf.setText(""); 
+					login.pf.setText(""); 
+					login.tf.requestFocus(); 
+				} 
+	
+				if(loginOk) 
+				{ 
+//					UserDTO sendData=userInfo;//넘겨줄 유저정보 재정의 
+		            myId=userInfo.getUser_id();
+		            String myName=userInfo.getUser_nickname();
+		            String mySex=userInfo.getUser_sex();
+		            String myAvatar=userInfo.getUser_avatar();
+		            connection(myId,myName,mySex,myAvatar);
+		            myRoom="대기실";
+					card.show(getContentPane(), "WR"); 
+				} 
+
 		}
 		else if(e.getSource()==login.b2) //취소를 누르면 프로그램 종료
 		{
@@ -92,48 +148,68 @@ implements ActionListener, Runnable
 			SignUp su = new SignUp();
 			su.setVisible(true);
 		}
-		
-		else if(e.getSource()==wr.b5) // 게임정보 버튼
+		else if(e.getSource()==wr.b2) //1:1게임을 누르면 진영선택창
+		{
+			card.show(getContentPane(), "ChoiceNation");
+		}
+		else if(e.getSource()==wr.b3) // 게임정보 버튼
 		{
 			gi.setVisible(true); 
 		}
-		else if(e.getSource()==wr.b6) //나가기를 누르면 프로그램 종료
+		else if(e.getSource()==wr.b4) //나가기를 누르면 프로그램 종료
 		{
 			dispose();
 			System.exit(0);
-		}
-		else if(e.getSource()==wr.b3) //1:1게임을 누르면 진영선택창
-		{
-			card.show(getContentPane(), "ChoiceNation");
 		}
 		else if(e.getSource()==cn.nation0||e.getSource()==cn.nation1
 				||e.getSource()==cn.nation2)
 		{
 			CoinFlip cf=new CoinFlip(); 
-			cf.coinEnd=true;
+			CoinFlip.coinEnd=true;
 			cf.setVisible(true); 
-			if(cf.coinEnd==false) 
+			if(CoinFlip.coinEnd==false) 
 			{ 
 				card.show(getContentPane(), "GAME"); 
-				ClientMainForm.t1=new TimeLimit();
+				game.new TimeLimit();
 				t1.start();
 				game.requestFocus();  
-			} 
-			
+			}
+			GameLayout.endBtn.addActionListener(this);//빙고마무리버튼
+			GameLayout.gameEnd.addActionListener(this);//인게임 나가기 버튼
 		}
-		else if(e.getSource()==game.exit) //게임이 끝났을 때 나가기 버튼
+		else if(e.getSource()==GameLayout.exit) //항복 버튼
 		{
-			ClientMainForm.t1.interrupt();
+			int exitValue=JOptionPane.showConfirmDialog(this, "항복하시겠습니까?", "항복", JOptionPane.YES_NO_OPTION);
+			if(exitValue==JOptionPane.YES_OPTION) //예를 누르면 게임 끝내기 쓰레드
+			{
+				GameLayout.imageVisibleFalse();
+				repaint();
+				GameProcess.playerWon=false;
+				game.new endThread().start();
+			}
+		}
+		else if(e.getSource()==GameLayout.endBtn)//빙고 마무리
+		{
+			GameLayout.endBtn.setVisible(false);
+			GameLayout.endBackX+=975;
+			GameProcess.playerWon=true;
+			game.new endThread().start();
+		}
+		else if(e.getSource()==GameLayout.gameEnd) //나가기
+		{
+			if(GameProcess.playerWon==true) //승패 이미지 없애기
+				GameLayout.wonX+=1200;
+			else if(GameProcess.playerWon==false)
+				GameLayout.loseX+=1200;
+			GameLayout.bingoEnd=false;
+			repaint();
+			t1.interrupt();
 			card.show(getContentPane(), "WR");
 			game.removeAll();
 			GameProcess.gameReset();
 			game=new GameLayout();
-			//game.gameReset();
 			add(game,"GAME");
-			System.out.println("플레이어1 첫번쨰 숫자: "+GameProcess.numArr1[0]);
-			System.out.println("플에이어1 첫번쨰 숫자(T/F): "+GameProcess.bingo1[0][0]);
-			System.out.println("플레이어턴 구분>> true:플레이어1 /// false:플레이어2");
-			System.out.println("플레이어턴: "+GameProcess.playerTurn);
+			GameLayout.imageVisibleTrue();
 		}
 	}
 	@Override
@@ -143,14 +219,39 @@ implements ActionListener, Runnable
 		{
 			while(true)
 			{
-				String msg=in.readLine();
-				StringTokenizer st=
-					new StringTokenizer(msg, "|");
-				String[] data={st.nextToken(),
-					       st.nextToken(),
-					       st.nextToken(),
-					       st.nextToken()};
-			    wr.model2.addRow(data);
+				// 클라이언트 => 요청값을 받는다
+	            String msg=in.readLine();
+	            StringTokenizer st=
+	               new StringTokenizer(msg, "|");
+	            // 100|id|sex|name|avata
+	            int protocol=Integer.parseInt(st.nextToken());
+	            switch(protocol)
+	            {
+	                case Function.LOGIN:
+	                {
+	                   String[] data={
+	                      st.nextToken(),   //id (Server에서 보낸 값)
+	                      st.nextToken(),   //nickname (Server에서 보낸 값)
+	                      st.nextToken(),   //sex (Server에서 보낸 값)
+	                      st.nextToken()   //pos (Server에서 보낸 값)
+	                   };
+	                   wr.model2.addRow(data);
+	                }
+	                break;
+	                case Function.MYLOG:
+	                {
+	                   String id=st.nextToken();
+	                   card.show(getContentPane(), "WR");
+	                }
+	                break;
+	                /*case Function.WAITCHAT:
+	                {
+	                   wr.ta.append(st.nextToken()+"\n");
+	                   wr.bar.setValue(wr.bar.getMaximum());
+	                   wr.tf.setText("");
+	                }*/
+
+	            }
 			}
 		}catch(Exception ex){}
 	}

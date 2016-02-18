@@ -169,6 +169,7 @@ public class SignUp extends JDialog implements ActionListener, FocusListener, It
  		boolean bCheck = dao.insertUser(dto); 
  		if(bCheck){ 
  			JOptionPane.showMessageDialog(this, "가입완료"); 
+ 			dispose();
  		}else 
  			JOptionPane.showMessageDialog(this, "가입실패"); 
  	} 
@@ -293,7 +294,9 @@ public class SignUp extends JDialog implements ActionListener, FocusListener, It
  				tf_nickname.requestFocus(); 
  			}else{ 
  				insertUser(); 
+ 				
  			} 
+ 			
  		} 
  	} 
  	@Override 

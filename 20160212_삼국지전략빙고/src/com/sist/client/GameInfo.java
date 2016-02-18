@@ -9,7 +9,8 @@ public class GameInfo extends JDialog{
 		this.setModal(true);
 		setSize(800,600);
 		setLocationRelativeTo(null);
-		setVisible(false);	
+		setResizable(false);
+		setVisible(false);
 	}
 }
 class GameView extends JPanel{
