@@ -9,6 +9,9 @@ import java.io.*;
 import com.sist.client.GameLayout.TimeLimit;
 import com.sist.client.GameLayout.endThread;
 import com.sist.common.Function;
+import com.sist.server.Server;
+import com.sun.security.ntlm.Client;
+import sun.awt.WindowClosingListener;
 public class ClientMainForm extends JFrame
 implements ActionListener, Runnable
 {
@@ -18,9 +21,11 @@ implements ActionListener, Runnable
 	CardLayout card=new CardLayout();
 	GameLayout game=new GameLayout();
 	GameInfo gi=new GameInfo();
+	//MakeRoom mr=new MakeRoom();
 	
 	ImageIcon mainIcon;//타이틀창 아이콘
-	Thread t1=game.new TimeLimit();//시간제한바 스레드 
+	static Thread t1=new TimeLimit();//시간제한바 스레드 
+	Thread paintthread=game.new paintThread();
 	Socket s;
     BufferedReader in;
     OutputStream out;
@@ -55,6 +60,20 @@ implements ActionListener, Runnable
 		
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false); //윈도우창 고정
+		
+		this.addWindowListener(new WindowAdapter(){
+			public void windowClosing(WindowEvent e) { 
+				try 
+				{   //내아이디를 보내주고 waitVc 목록에서 지워주길 요청한다..
+					out.write((Function.EXIT+"\n").getBytes());
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				dispose();
+				System.exit(0);
+			}
+        });
 	}
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -69,7 +88,7 @@ implements ActionListener, Runnable
 	{
 		try
 		{
-			s=new Socket("211.238.142.40", 33333);
+			s=new Socket("localhost", 33333); //211.238.142.39 localhost
 			// s => server
 			in=new BufferedReader(
 					new InputStreamReader(
@@ -133,9 +152,11 @@ implements ActionListener, Runnable
 		            String myName=userInfo.getUser_nickname();
 		            String mySex=userInfo.getUser_sex();
 		            String myAvatar=userInfo.getUser_avatar();
+		            int myWin=userInfo.getUser_win();
+		            int myLose=userInfo.getUser_lose();
 		            connection(myId,myName,mySex,myAvatar);
 		            myRoom="대기실";
-					card.show(getContentPane(), "WR"); 
+//					card.show(getContentPane(), "WR"); 
 				} 
 
 		}
@@ -158,6 +179,13 @@ implements ActionListener, Runnable
 		}
 		else if(e.getSource()==wr.b4) //나가기를 누르면 프로그램 종료
 		{
+			try 
+	         {   //내아이디를 보내주고 waitVc 목록에서 지워주길 요청한다..
+	            out.write((Function.EXIT+"\n").getBytes());
+	         } catch (IOException e1) {
+	            // TODO Auto-generated catch block
+	            e1.printStackTrace();
+	         }
 			dispose();
 			System.exit(0);
 		}
@@ -170,9 +198,11 @@ implements ActionListener, Runnable
 			if(CoinFlip.coinEnd==false) 
 			{ 
 				card.show(getContentPane(), "GAME"); 
-				game.new TimeLimit();
+				t1=new TimeLimit();
 				t1.start();
-				game.requestFocus();  
+				paintthread=game.new paintThread();
+				paintthread.start();
+				game.requestFocus();
 			}
 			GameLayout.endBtn.addActionListener(this);//빙고마무리버튼
 			GameLayout.gameEnd.addActionListener(this);//인게임 나가기 버튼
@@ -182,8 +212,8 @@ implements ActionListener, Runnable
 			int exitValue=JOptionPane.showConfirmDialog(this, "항복하시겠습니까?", "항복", JOptionPane.YES_NO_OPTION);
 			if(exitValue==JOptionPane.YES_OPTION) //예를 누르면 게임 끝내기 쓰레드
 			{
+				GameLayout.IFNoticeVisible();
 				GameLayout.imageVisibleFalse();
-				repaint();
 				GameProcess.playerWon=false;
 				game.new endThread().start();
 			}
@@ -193,17 +223,25 @@ implements ActionListener, Runnable
 			GameLayout.endBtn.setVisible(false);
 			GameLayout.endBackX+=975;
 			GameProcess.playerWon=true;
+			GameLayout.IFNoticeVisible();
 			game.new endThread().start();
 		}
 		else if(e.getSource()==GameLayout.gameEnd) //나가기
 		{
+			for(int i=0; i<2; i++)
+			{
+				for(int j=0; j<3; j++)
+				{
+					GameLayout.fury[i][j].setVisible(true);
+				}
+			}
 			if(GameProcess.playerWon==true) //승패 이미지 없애기
 				GameLayout.wonX+=1200;
 			else if(GameProcess.playerWon==false)
 				GameLayout.loseX+=1200;
 			GameLayout.bingoEnd=false;
-			repaint();
 			t1.interrupt();
+			paintthread.interrupt();
 			card.show(getContentPane(), "WR");
 			game.removeAll();
 			GameProcess.gameReset();
@@ -220,39 +258,66 @@ implements ActionListener, Runnable
 			while(true)
 			{
 				// 클라이언트 => 요청값을 받는다
-	            String msg=in.readLine();
+				String msg=in.readLine();
 	            StringTokenizer st=
 	               new StringTokenizer(msg, "|");
 	            // 100|id|sex|name|avata
 	            int protocol=Integer.parseInt(st.nextToken());
 	            switch(protocol)
 	            {
-	                case Function.LOGIN:
-	                {
-	                   String[] data={
-	                      st.nextToken(),   //id (Server에서 보낸 값)
-	                      st.nextToken(),   //nickname (Server에서 보낸 값)
-	                      st.nextToken(),   //sex (Server에서 보낸 값)
-	                      st.nextToken()   //pos (Server에서 보낸 값)
-	                   };
-	                   wr.model2.addRow(data);
-	                }
-	                break;
-	                case Function.MYLOG:
-	                {
-	                   String id=st.nextToken();
-	                   card.show(getContentPane(), "WR");
-	                }
-	                break;
-	                /*case Function.WAITCHAT:
-	                {
-	                   wr.ta.append(st.nextToken()+"\n");
-	                   wr.bar.setValue(wr.bar.getMaximum());
-	                   wr.tf.setText("");
-	                }*/
+	            case Function.LOGIN:
+	            {
+	            	String[] data={
+	            			st.nextToken(),   //id (Server에서 보낸 값)
+	            			st.nextToken(),   //nickname (Server에서 보낸 값)
+	            			st.nextToken(),   //sex (Server에서 보낸 값)
+	            			st.nextToken()   //pos (Server에서 보낸 값)
+	            	};
 
+	            	wr.model2.addRow(data);
 	            }
+	            break;
+	            case Function.MYLOG:
+	            {
+	            	String id=st.nextToken();
+	            	card.show(getContentPane(), "WR");
+	            }
+	            break;
+	            case Function.SAMELOGIN:
+	            {
+	            	JOptionPane.showMessageDialog(login, "이미 접속중입니다.");
+	            }
+	            break;
+	            case Function.EXIT:
+	            {
+	            	String id=st.nextToken();
+	            	for(int i=0; i<wr.model2.getRowCount();i++)
+	            	{   
+	            		String temp=wr.model2.getValueAt(i, 0).toString();
+	            		if(id.equals(temp))
+	            		{
+	            			wr.model2.removeRow(i);
+	            			break;
+	            		}
+	            	}
+	            }
+	            break;
+	            case Function.MYEXIT:
+	            {
+	            	dispose();
+	            	System.exit(0);
+	            }
+	            break;
+                /*case Function.WAITCHAT:
+                {
+                   wr.ta.append(st.nextToken()+"\n");
+                   wr.bar.setValue(wr.bar.getMaximum());
+                   wr.tf.setText("");
+                }*/
+	            }
+	            
 			}
 		}catch(Exception ex){}
+	
 	}
 }

@@ -85,9 +85,9 @@ JTextField tf;
 			la3.setVisible(false); 
 			pf.setText(""); 
 			tf.setText(""); 
-			open.setSelected(true); 
-			pf.setVisible(false); 
-			ch.setVisible(true); 
+			open.setSelected(true);
+			pf.setVisible(false);
+			ch.setVisible(true);
 		}
 	}
 }

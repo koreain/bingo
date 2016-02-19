@@ -39,7 +39,7 @@ public class GameProcess{
 	static boolean playerWon=false;
 	static void coinRand() //플레이어턴을 정하는 난수 발생
 	{
-		coinB=(int)(Math.random()*10)+5;
+		coinB=(int)(Math.random()*10)+10;
 		if(coinA%2==0)
 			playerTurn=true;
 		else

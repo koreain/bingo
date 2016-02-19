@@ -84,25 +84,40 @@ public class Server implements Runnable{
                 {
                    case Function.LOGIN:
                    {
+                      boolean sameId=false;
                       // 정보를 저장한다
                       id=st.nextToken();
                       name=st.nextToken();
                       sex=st.nextToken();
                       avata=st.nextToken();
                       pos="대기실";
-                      // 대기실에 있는 사람에게 정보 전송
-                      messageAll(Function.LOGIN+"|"+id+"|"
-                            +name+"|"+sex+"|"+pos);//기존에 로그인해있던 유저들에게 접속자 정보를 보낸다
-                      // 저장
-                      waitVc.addElement(this); //접속한 1인 정보를 유저들정보 waitVc벡터에 저장 후,
-                      messageTo(Function.MYLOG+"|"+id); //메세지를 다시 본인에게 날려준다.
-                      for(Client client:waitVc) 
+                      for(Client client:waitVc)
                       {
-                         messageTo(Function.LOGIN+"|"
-                                  +client.id+"|"
-                               +client.name+"|"
-                                  +client.sex+"|"
-                               +client.pos);
+                         if(client.id.equals(id))
+                            sameId=true;
+                      }
+                      if(sameId)
+                      {
+                         messageTo(Function.SAMELOGIN+"|"+id);
+                         in.close();
+                         out.close();
+                      }
+                      else
+                      {
+                         // 대기실에 있는 사람에게 정보 전송
+                         messageAll(Function.LOGIN+"|"+id+"|"
+                               +name+"|"+sex+"|"+pos);//기존에 로그인해있던 유저들에게 접속자 정보를 보낸다
+                         // 저장
+                         waitVc.addElement(this); //접속한 1인 정보를 유저들정보 waitVc벡터에 저장 후,
+                         messageTo(Function.MYLOG+"|"+id); //메세지를 다시 본인에게 날려준다.
+                         for(Client client:waitVc) 
+                         {
+                            messageTo(Function.LOGIN+"|"
+                                     +client.id+"|"
+                                  +client.name+"|"
+                                     +client.sex+"|"
+                                  +client.pos);
+                         }
                       }
                       // 개설된 방 정보
                    }
@@ -112,6 +127,22 @@ public class Server implements Runnable{
                       String data=st.nextToken();
                       messageAll(Function.WAITCHAT+"|["+name+"]"+data);
                    }
+                   case Function.EXIT:
+                   {
+                      messageAll(Function.EXIT+"|"+id);//남아있는 사람 처리
+                      messageTo(Function.MYEXIT+"|");//나가는 사람 처리
+                       for(int i=0;i<waitVc.size();i++)
+                       {
+                          Client client=waitVc.elementAt(i);
+                          if(id.equals(client.id))
+                          {
+                             waitVc.removeElementAt(i);
+                             in.close(); //통신닫기 중요!!!
+                             out.close();//통신닫기 중요!!!
+                          }
+                       }
+                   }
+                   break;
                 }
                 
              }

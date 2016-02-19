@@ -3,6 +3,7 @@ package com.sist.common;
 public class Function {
    public static final int LOGIN=100;
    public static final int MYLOG=110; //로그인 => 대기실 화면으로 바꿔줄때
+   public static final int SAMELOGIN=120; //같은 아이디/비번 로그인시 차단..
    
    // 방
    public static final int MAKEROOM=200;
@@ -42,6 +43,25 @@ public class Function {
    //종료
    public static final int CHATEND=900;
    public static final int MYCHATEND=910;
-   
-   
+   public static final int EXIT=1000; //완전나가기
+   public static final int MYEXIT=2000; //완전나가기
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

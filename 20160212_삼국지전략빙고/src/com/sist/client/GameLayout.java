@@ -18,13 +18,13 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 	static int colorInt=0;
 	
 	//턴종료 버튼  
-	static JButton timeOut=new JButton();  
-	static ImageIcon timeImg=new ImageIcon("img\\턴종료_기본.png");  
-	static ImageIcon timeImg2=new ImageIcon("img\\턴종료_커서.png");  
+	static JButton timeOut=new JButton();
+	static ImageIcon timeImg=new ImageIcon("img\\턴종료_기본.png");
+	static ImageIcon timeImg2=new ImageIcon("img\\턴종료_커서.png");
 	//항복 버튼  
-	static JButton exit=new JButton();  
-	static ImageIcon exitImg=new ImageIcon("img\\항복.png");  
-	static ImageIcon exitImg2=new ImageIcon("img\\항복_커서.png");  
+	static JButton exit=new JButton();
+	static ImageIcon exitImg=new ImageIcon("img\\항복.png");
+	static ImageIcon exitImg2=new ImageIcon("img\\항복_커서.png");
 	//배경화면
 	Image bg; //추상클래스 abstract!! 단독으로 메모리 할당을 못한다.
 	Image vs; //가운데  vs 텍스트
@@ -396,8 +396,8 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 			 for(int j=0; j<3; j++)
 			 {
 				 gauge[i][j].setVisible(false);
-				 fury[i][j].setVisible(false);
 				 furyEndBtn[i][j].setVisible(false);
+				 fury[i][j].setVisible(false);
 			 }
 		 }
 		 for(int i=0; i<6; i++)
@@ -448,7 +448,6 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 			 for(int j=0; j<3; j++)
 			 {
 				 gauge[i][j].setVisible(true);
-				 fury[i][j].setVisible(true);
 			 }
 		 }
 		 for(int i=0; i<6; i++)
@@ -462,6 +461,66 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 		 {
 			 ChoiceNation.jangSu1[i].setVisible(true);
 			 ChoiceNation.jangSu2[i].setVisible(true);
+		 }
+		 if(!goongUsable1[0])
+		 {
+			 furyEndBtn[1][0].setVisible(true);
+			 fury[1][0].setVisible(false);
+		 }
+		 else if(goongUsable1[0])
+		 {
+			 furyEndBtn[1][0].setVisible(false);
+			 fury[1][0].setVisible(true);
+		 }
+		 if(!goongUsable1[1])
+		 {
+			 furyEndBtn[1][1].setVisible(true);
+			 fury[1][1].setVisible(false);
+		 }
+		 else if(goongUsable1[1])
+		 {
+			 furyEndBtn[1][1].setVisible(false);
+			 fury[1][1].setVisible(true);
+		 }
+		 if(!goongUsable1[2])
+		 {
+			 furyEndBtn[1][2].setVisible(true);
+			 fury[1][2].setVisible(false);
+		 }
+		 else if(goongUsable1[2])
+		 {
+			 furyEndBtn[1][2].setVisible(false);
+			 fury[1][2].setVisible(true);
+		 }
+		 if(!goongUsable2[0])
+		 {
+			 furyEndBtn[0][0].setVisible(true);
+			 fury[0][0].setVisible(false);
+		 }
+		 else if(goongUsable2[0])
+		 {
+			 furyEndBtn[0][0].setVisible(false);
+			 fury[0][0].setVisible(true);
+		 }
+		 if(!goongUsable2[1])
+		 {
+			 furyEndBtn[0][1].setVisible(true);
+			 fury[0][1].setVisible(false);
+		 }
+		 else if(goongUsable2[1])
+		 {
+			 furyEndBtn[0][1].setVisible(false);
+			 fury[0][1].setVisible(true);
+		 }
+		 if(!goongUsable2[2])
+		 {
+			 furyEndBtn[0][2].setVisible(true);
+			 fury[0][2].setVisible(false);
+		 }
+		 else if(goongUsable2[2])
+		 {
+			 furyEndBtn[0][2].setVisible(false);
+			 fury[0][2].setVisible(true);
 		 }
 		 p.setVisible(true);
 		 pp.setVisible(true);
@@ -835,45 +894,48 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 		imageVisibleFalse(); //배경을 제외한 모든 오브젝트가 사라진 뒤
 		GameLayout.endBackX-=975;
 		GameLayout.endBtn.setVisible(true);
-		repaint();
 	}
 	public static void IFNoticeVisible()
 	{
 		if(bAttCheck1||bAttCheck2)
-		  {
-			  aNoticeX+=1190;
-			  bAttCheck1=false;
-			  bAttCheck2=false;
-		  }
-		  else if(bDefCheck1||bDefCheck2)
-		  {
-			  dNoticeX+=1190;
-			  bDefCheck1=false;
-			  bDefCheck2=false;
-		  }
-		  else if(bTrickCheck1||bTrickCheck2)
-		  {
-			  sNoticeX+=1190;
-			  bTrickCheck1=false;
-			  bTrickCheck2=false;
-		  }
-		  else if(bDefFCheck1||bDefFCheck2)
-		  {
-			  dFNoticeX+=1190;
-			  bDefFCheck1=false;
-			  bDefFCheck2=false;
-			  defPGchoice2.setVisible(false);
-		  }
-		  else if(bTrickFCheck1||bTrickFCheck2)
-		  {
-			  sFNoticeX+=1190;
-			  bTrickFCheck1=false;
-			  bTrickFCheck2=false;
-			  for(int i=0; i<6; i++)
-			  {
-				  jypgChoice[i].setVisible(false);
-			  }
-		  }
+		{
+			aNoticeX+=1190;
+			bAttCheck1=false;
+			bAttCheck2=false;
+		}
+		else if(bDefCheck1||bDefCheck2)
+		{
+			dNoticeX+=1190;
+			bDefCheck1=false;
+			bDefCheck2=false;
+		}
+		else if(bTrickCheck1||bTrickCheck2)
+		{
+		 sNoticeX+=1190;
+		 bTrickCheck1=false;
+		 bTrickCheck2=false;
+		}
+		else if(bDefFCheck1||bDefFCheck2)
+		{
+		 dFNoticeX+=1190;
+		 bDefFCheck1=false;
+		 bDefFCheck2=false;
+		 defPGchoice2.setVisible(false);
+		}
+		else if(bTrickFCheck1||bTrickFCheck2)
+		{
+		 sFNoticeX+=1190;
+		 bTrickFCheck1=false;
+		 bTrickFCheck2=false;
+		 for(int i=0; i<6; i++)
+		 {
+			 jypgChoice[i].setVisible(false);
+		 }
+		}
+	}
+	public static void btnEnableFalse()
+	{
+		
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) 
@@ -1114,14 +1176,15 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 				}
 		}
 			
-		////////////스킬버튼
-		if(GameProcess.playerTurn==true)
+		////////////스킬버튼 누르기
+		if(GameProcess.playerTurn==true&&bAttCheck1==false&&bDefCheck1==false&&bTrickCheck1==false
+				&&bAttCheck2==false&&bDefCheck2==false&&bTrickCheck2==false
+				&&bDefFCheck1==false&&bDefFCheck2==false&&bTrickFCheck1==false&&bTrickFCheck2==false)
 		{
 			if(e.getSource()==btnAtt && GameProcess.numOfBingo1[0]+GameProcess.usingAttackSkill1>0)//플레이어1 공격 스킬 버튼
 			{
 				bAttCheck1 = true; //스킬사용 가능하게 true
 				aNoticeX-=1190; //스킬설명 가져오기(1200으로 화면 밖에 있던 것이 -1190 해서 화면에 나옴)
-				repaint(); //다시 화면에 그려줌
 			}
 			else if(e.getSource()==btnDef && GameProcess.numOfBingo1[1]+GameProcess.usingDefenseSkill1>0)//방어스킬
 			{
@@ -1138,13 +1201,11 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 				}
 				bDefCheck1 = true;
 				dNoticeX-=1190;
-				repaint();
 			}
 			else if(e.getSource()==btnTrick && GameProcess.numOfBingo1[2]+GameProcess.usingStrategySkill1>0)//책략스킬
 			{
 				bTrickCheck1=true;
 				sNoticeX-=1190;
-				repaint();
 			}
 			else if(e.getSource()==fury[1][0]) //공격필살기 버튼
 			{
@@ -1170,7 +1231,6 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 				{  
 					defPan2.setVisible(true);  
 				}  
-				repaint();
 				bDefFCheck1=true;
 			}
 			//!@#$%	
@@ -1183,14 +1243,15 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 					{
 						jypgChoice[i].setVisible(true);//
 					}
-					repaint();
 					bTrickFCheck1=true;
 				}
 			}
 		}
 		
 		//플레이어2
-		if(GameProcess.playerTurn==false)
+		if(GameProcess.playerTurn==false&&bAttCheck1==false&&bDefCheck1==false&&bTrickCheck1==false
+				&&bAttCheck2==false&&bDefCheck2==false&&bTrickCheck2==false
+				&&bDefFCheck1==false&&bDefFCheck2==false&&bTrickFCheck1==false&&bTrickFCheck2==false)
 		{
 			if(e.getSource()==youBtnAtt)//플레이어2 공격 스킬 버튼
 			{
@@ -1218,7 +1279,7 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 			}
 		}
 		
-		//공격,방어,책략스킬
+		//공격,방어,책략스킬 사용
 		for(int i=0;i<3;i++){
 			for(int j=0;j<25;j++){
 				if(e.getSource()==a2[i][j]&&bAttCheck1&&!GameProcess.bingo2[i][j]&&!panCheck1[i][j]){//공격스킬
@@ -1231,7 +1292,6 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 					GameProcess.skillChance1--;
 					laTactic.setText("전술명령x"+String.valueOf(GameProcess.skillChance1));
 					panCheck1[i][j] = true; // 공격한 곳 확인.
-					repaint();
 				}else if(e.getSource()==a2[i][j]&&bDefCheck1&&panCheck1[i][j]){//방어스킬
 					new DImageThread().start();
 					GameProcess.usingDefenseSkill1--;
@@ -1252,7 +1312,6 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 					GameProcess.skillChance1--;
 					laTactic.setText("전술명령x"+String.valueOf(GameProcess.skillChance1));
 					panCheck1[i][j]=false;
-					repaint();
 				}
 				else if(e.getSource()==a2[i][j]&&bTrickCheck1&&!GameProcess.bingo2[i][j]&&!panCheck1[i][j]) 
 				{
@@ -1264,12 +1323,11 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 					GameProcess.skillChance1--;
 					laTactic.setText("전술명령x"+String.valueOf(GameProcess.skillChance1));
 					bTrickCheck1=false;
-					repaint();
 				}
 			}
 		}
 		//수비필살기 클릭 후, 상대판 버튼 클릭
-		if(e.getSource()==defPGchoice2)
+		if(e.getSource()==defPGchoice2&&bDefFCheck1==true)
 		{
 			new DFImageThread().start();
 				
@@ -1314,8 +1372,6 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 				furyEndBtn[1][2].setVisible(true);
 				GameProcess.skillChance1--;
 				laTactic.setText("전술명령x"+String.valueOf(GameProcess.skillChance1));
-				repaint();
-				SFImageThread.interrupted();//???????????????????
 				for(int j=0; j<6; j++)
 				{
 					jypgChoice[j].setOpaque(false);
@@ -1340,8 +1396,6 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 				furyEndBtn[0][2].setVisible(true);
 				GameProcess.skillChance2--;
 				youLaTactic.setText("전술명령x"+String.valueOf(GameProcess.skillChance2));
-				repaint();
-				SFImageThread.interrupted();//???????????????????
 				for(int j=0; j<6; j++)
 				{
 					jypgChoice[j].setOpaque(false);
@@ -1353,11 +1407,16 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 		
 		if(e.getSource()==timeOut)//턴턴턴  
 		{  
-			new TimeLimit().interrupt();  
-			new TimeLimit();
-			new TimeLimit().start();  
+			IFNoticeVisible();
+			ClientMainForm.t1.interrupt();
+			ClientMainForm.t1=new TimeLimit();
+			ClientMainForm.t1.start();
+			bAttCheck1=false;bAttCheck2=false; //스킬 사용 가능 초기화
+			bDefCheck1=false;bDefCheck2=false;
+			bDefFCheck1=false;bDefFCheck2=false;
+			bTrickCheck1=false;bTrickCheck2=false;
+			bTrickFCheck1=false;bTrickFCheck2=false;
 		}
-
 		requestFocus();
 	}
 	
@@ -1390,14 +1449,12 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 		public void run(){
 			GameLayout.aNoticeX+=1190; //게임설명은 없어지고
 			imageVisibleFalse(); //배경을 제외한 모든 오브젝트가 사라진 뒤
-			repaint();
 			while(GameLayout.aImageX>=0)
 			{
 				try
 				{
 					GameLayout.aImageX-=3; //스킬이미지가 날아옴
 					Thread.sleep(1);
-					repaint();
 				}catch(Exception ex){}
 			}
 			try
@@ -1406,22 +1463,6 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 			}catch(Exception ex){}
 			GameLayout.aImageX=1200; //게임이미지 없애기
 			imageVisibleTrue();
-			if(!goongUsable1[0])
-			{
-				furyEndBtn[1][0].setVisible(true);
-				fury[1][0].setVisible(false);
-			}
-			if(!goongUsable1[1])
-			{
-				furyEndBtn[1][1].setVisible(true);
-				fury[1][1].setVisible(false);
-			}
-			if(!goongUsable1[2])
-			{
-				furyEndBtn[1][2].setVisible(true);
-				fury[1][2].setVisible(false);
-			}
-			repaint();
 		}
 	}
 	class DImageThread extends Thread //방어스킬 이미지 쓰레드
@@ -1429,14 +1470,12 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 		public void run(){
 			GameLayout.dNoticeX+=1190; //게임설명은 없어지고
 			imageVisibleFalse(); //배경을 제외한 모든 오브젝트가 사라진 뒤
-			repaint();
 			while(GameLayout.dImageX>=0)
 			{
 				try
 				{
 					GameLayout.dImageX-=3; //스킬이미지가 날아옴
 					Thread.sleep(1);
-					repaint();
 				}catch(Exception ex){}
 			}
 			try
@@ -1445,22 +1484,6 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 			}catch(Exception ex){}
 			GameLayout.dImageX=1200; //게임이미지 없애기
 			imageVisibleTrue();
-			if(!goongUsable1[0])
-			{
-				furyEndBtn[1][0].setVisible(true);
-				fury[1][0].setVisible(false);
-			}
-			if(!goongUsable1[1])
-			{
-				furyEndBtn[1][1].setVisible(true);
-				fury[1][1].setVisible(false);
-			}
-			if(!goongUsable1[2])
-			{
-				furyEndBtn[1][2].setVisible(true);
-				fury[1][2].setVisible(false);
-			}
-			repaint();
 		}
 	}
 	class SImageThread extends Thread //전략스킬 이미지 쓰레드
@@ -1468,14 +1491,12 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 		public void run(){
 			GameLayout.sNoticeX+=1190; //게임설명은 없어지고
 			imageVisibleFalse(); //배경을 제외한 모든 오브젝트가 사라진 뒤
-			repaint();
 			while(GameLayout.sImageX>=0)
 			{
 				try
 				{
 					GameLayout.sImageX-=3; //스킬이미지가 날아옴
 					Thread.sleep(1);
-					repaint();
 				}catch(Exception ex){}
 			}
 			try
@@ -1484,43 +1505,24 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 			}catch(Exception ex){}
 			GameLayout.sImageX=1200; //게임이미지 없애기
 			imageVisibleTrue();
-			if(!goongUsable1[0])
-			{
-				furyEndBtn[1][0].setVisible(true);
-				fury[1][0].setVisible(false);
-			}
-			if(!goongUsable1[1])
-			{
-				furyEndBtn[1][1].setVisible(true);
-				fury[1][1].setVisible(false);
-			}
-			if(!goongUsable1[2])
-			{
-				furyEndBtn[1][2].setVisible(true);
-				fury[1][2].setVisible(false);
-			}
-			repaint();
 		}
 	}
 	class AFImageThread extends Thread //공격필살기 이미지 쓰레드
 	{
 		public void run(){
 			GameLayout.aFNoticeX-=1190; //게임설명 가져오기
-			repaint();
 			try
 			{	
 				Thread.sleep(1500); //2초 후
 			}catch(Exception ex){}
 			GameLayout.aFNoticeX+=1190; //게임설명은 없어지고
 			imageVisibleFalse(); //배경을 제외한 모든 오브젝트가 사라진 뒤
-			repaint();
 			while(GameLayout.aFImageX>=0)
 			{
 				try
 				{
 					GameLayout.aFImageX-=3; //스킬이미지가 날아옴
 					Thread.sleep(1);
-					repaint();
 				}catch(Exception ex){}
 			}
 			try
@@ -1529,24 +1531,8 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 			}catch(Exception ex){}
 			GameLayout.aFImageX=1200; //게임이미지 없애기
 			imageVisibleTrue();
-			if(!goongUsable1[0])
-			{
-				furyEndBtn[1][0].setVisible(true);
-				fury[1][0].setVisible(false);
-			}
-			if(!goongUsable1[1])
-			{
-				furyEndBtn[1][1].setVisible(true);
-				fury[1][1].setVisible(false);
-			}
-			if(!goongUsable1[2])
-			{
-				furyEndBtn[1][2].setVisible(true);
-				fury[1][2].setVisible(false);
-			}
 			laTactic.setText("전술명령x"+String.valueOf(GameProcess.skillChance1));
 			laCommand.setText("지휘권x"+String.valueOf(GameProcess.bingoCheckChance1));
-			repaint();
 		}
 	}
 	class DFImageThread extends Thread //방어필살기 이미지 쓰레드
@@ -1554,14 +1540,12 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 		public void run(){
 			GameLayout.dFNoticeX+=1190; //게임설명은 없어지고
 			imageVisibleFalse(); //배경을 제외한 모든 오브젝트가 사라진 뒤
-			repaint();
 			while(GameLayout.dFImageX>=0)
 			{
 				try
 				{
 					GameLayout.dFImageX-=3; //스킬이미지가 날아옴
 					Thread.sleep(1);
-					repaint();
 				}catch(Exception ex){}
 			}
 			try
@@ -1570,22 +1554,6 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 			}catch(Exception ex){}
 			GameLayout.dFImageX=1200; //게임이미지 없애기
 			imageVisibleTrue();
-			if(!goongUsable1[0])
-			{
-				furyEndBtn[1][0].setVisible(true);
-				fury[1][0].setVisible(false);
-			}
-			if(!goongUsable1[1])
-			{
-				furyEndBtn[1][1].setVisible(true);
-				fury[1][1].setVisible(false);
-			}
-			if(!goongUsable1[2])
-			{
-				furyEndBtn[1][2].setVisible(true);
-				fury[1][2].setVisible(false);
-			}
-			repaint();
 		}
 	}
 	class SFImageThread extends Thread //전략필살기 이미지 쓰레드
@@ -1593,14 +1561,12 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 		public void run(){
 			GameLayout.sFNoticeX+=1190; //게임설명은 없어지고
 			imageVisibleFalse(); //배경을 제외한 모든 오브젝트가 사라진 뒤
-			repaint();
 			while(GameLayout.sFImageX>=0)
 			{
 				try
 				{
 					GameLayout.sFImageX-=3; //스킬이미지가 날아옴
 					Thread.sleep(1);
-					repaint();
 				}catch(Exception ex){}
 			}
 			try
@@ -1609,25 +1575,9 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 			}catch(Exception ex){}
 			GameLayout.sFImageX=1200; //게임이미지 없애기
 			imageVisibleTrue();
-			if(!goongUsable1[0])
-			{
-				furyEndBtn[1][0].setVisible(true);
-				fury[1][0].setVisible(false);
-			}
-			if(!goongUsable1[1])
-			{
-				furyEndBtn[1][1].setVisible(true);
-				fury[1][1].setVisible(false);
-			}
-			if(!goongUsable1[2])
-			{
-				furyEndBtn[1][2].setVisible(true);
-				fury[1][2].setVisible(false);
-			}
-			repaint();
 		}
 	}
-	public class TimeLimit extends Thread
+	public static class TimeLimit extends Thread
 	{	
 		int cnt=0; 
 		int[] rgb=new int[3]; 
@@ -1650,7 +1600,6 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 					  rgb[0]=colorInt; 
 					  rgb[1]=255;
 					  IFNoticeVisible();
-					  repaint();
 				  }
 				  Thread.sleep(200); 
 				  colorInt=(int)(Math.ceil(2.55*(percent))); 
@@ -1678,7 +1627,20 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 				e.getMessage(); 
 			} 
 		} 
-	} 
+	}
+	class paintThread extends Thread //시간제한이 지나면 스킬설명을 없애기 위해 repaint()해주는 쓰레드
+	{
+		public void run() 
+		{
+			try
+			{
+				while(true)
+				{
+					repaint();
+				}
+			}catch(Exception e){}
+		}
+	}
 	class endThread extends Thread //전략필살기 이미지 쓰레드
 	{
 		public void run(){
@@ -1693,7 +1655,6 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 					else
 						GameLayout.boomX-=10;
 					i++;
-					repaint();
 					Thread.sleep(100);
 				}catch(Exception ex){}
 			}
@@ -1702,7 +1663,6 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 				GameLayout.wonX-=1200;
 			else if(GameProcess.playerWon==false)
 				GameLayout.loseX-=1200;
-			repaint();
 			gameEnd.setVisible(true);
 		}
 	}
