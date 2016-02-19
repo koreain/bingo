@@ -7,7 +7,6 @@ import java.util.Vector;
 import java.net.*;
 import java.io.*;
 import com.sist.client.GameLayout.TimeLimit;
-import com.sist.client.GameLayout.endThread;
 import com.sist.common.Function;
 import com.sist.server.Server;
 import com.sun.security.ntlm.Client;
@@ -29,7 +28,7 @@ implements ActionListener, Runnable
 	Socket s;
     BufferedReader in;
     OutputStream out;
- // 개인 정보
+    // 개인 정보
     String myId,myRoom;
 	ClientMainForm()
 	{
@@ -48,6 +47,7 @@ implements ActionListener, Runnable
 		login.b2.addActionListener(this);
 		login.b3.addActionListener(this);//회원가입
 		
+		wr.tf.addActionListener(this);
 		wr.b2.addActionListener(this); //test(게임방법)
 		wr.b3.addActionListener(this); //게임정보 
 		wr.b4.addActionListener(this); //나가기
@@ -169,6 +169,17 @@ implements ActionListener, Runnable
 			SignUp su = new SignUp();
 			su.setVisible(true);
 		}
+		else if(e.getSource()==wr.tf) //대기실 채팅
+		{
+			String msg=wr.tf.getText().trim();
+			if(msg.length()<1)
+				return;
+			try
+			{
+				out.write((Function.WAITCHAT+"|"+msg+"\n").getBytes());
+			}catch(Exception ex){}
+			wr.tf.setText("");
+		}
 		else if(e.getSource()==wr.b2) //1:1게임을 누르면 진영선택창
 		{
 			card.show(getContentPane(), "ChoiceNation");
@@ -273,7 +284,6 @@ implements ActionListener, Runnable
 	            			st.nextToken(),   //sex (Server에서 보낸 값)
 	            			st.nextToken()   //pos (Server에서 보낸 값)
 	            	};
-
 	            	wr.model2.addRow(data);
 	            }
 	            break;
@@ -283,6 +293,12 @@ implements ActionListener, Runnable
 	            	card.show(getContentPane(), "WR");
 	            }
 	            break;
+	            case Function.WAITCHAT:
+				{
+					wr.ta.append(st.nextToken()+"\n");
+					wr.bar.setValue(wr.bar.getMaximum());
+				}
+				break;
 	            case Function.SAMELOGIN:
 	            {
 	            	JOptionPane.showMessageDialog(login, "이미 접속중입니다.");

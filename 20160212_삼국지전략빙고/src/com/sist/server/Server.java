@@ -11,7 +11,7 @@ public class Server implements Runnable{
    // 접속자 정보를 저장 
    Vector<Client> waitVc=new Vector<Client>();
    // 방정보를 저장 
-   //
+   Vector<Room>  roomVc=new Vector<Room>();
    public Server()
    {
       try
@@ -120,6 +120,13 @@ public class Server implements Runnable{
                          }
                       }
                       // 개설된 방 정보
+					  for(Room room:roomVc)
+					  {
+						  messageTo(Function.MAKEROOM+"|"
+    							  +room.roomName+"|"+
+    							  room.roomState+"|"+
+    							  room.current+"/"+room.inwon);
+					  }
                    }
                    break;
                    case Function.WAITCHAT:
@@ -143,8 +150,23 @@ public class Server implements Runnable{
                        }
                    }
                    break;
+                   case Function.MAKEROOM:
+                   {
+                	   Room room=new Room(st.nextToken(),
+                			   st.nextToken(),st.nextToken());
+                	   
+                	   messageAll(Function.MAKEROOM+"|"
+                			   +room.roomName+"|"+
+                			   room.roomState+"|"+
+                			   room.current+"/"+room.inwon);
+                	   messageTo(Function.MYROOMIN+"|");
+                	   room.roomBang=id;
+                	   pos=room.roomName;
+                	   room.userVc.addElement(this);
+                	   roomVc.addElement(room);
+                   }
+                   break;
                 }
-                
              }
           }catch(Exception ex){}
        }

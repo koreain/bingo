@@ -22,13 +22,15 @@ import java.awt.Desktop;
 public class WaitRoom extends JPanel implements ActionListener,MouseListener { 
 	JTable table1, table2; // 껍데기. 
 	DefaultTableModel model1, model2; // 껍데기 안의 내용 
-	JTextPane pane; 
-	JTextField tf; 
-	JComboBox box; 
+	JTextPane pane;
+	JTextArea ta;
+	JTextField tf;
+	JComboBox box;
 	JButton b1, b2, b3, b4; //대기실 버튼(방만들기, 게임방법, 게임정보, 나가기
 	MakeRoom mr = new MakeRoom(); 
 	TableColumn column1, column2; 
 	JLabel la1, la2, la3; //광고
+	JScrollBar bar;
 	private Cursor cur = new Cursor(Cursor.HAND_CURSOR); 
 	
 	WaitRoom() { 
@@ -54,8 +56,9 @@ public class WaitRoom extends JPanel implements ActionListener,MouseListener {
 	
 		pane = new JTextPane(); 
 		pane.setEditable(false); 
-		JScrollPane js3 = new JScrollPane(pane); 
-	
+		ta=new JTextArea();
+		JScrollPane js3 = new JScrollPane(ta); 
+		bar=js3.getVerticalScrollBar();
 		tf = new JTextField(20); 
 		box = new JComboBox(); 
 		box.addItem("black"); 
@@ -91,7 +94,7 @@ public class WaitRoom extends JPanel implements ActionListener,MouseListener {
 	    tf.setBounds(10, 875, 295, 30); //채팅창입력창 
 	    box.setBounds(310, 875, 100, 30); //글자색깔 
 	    p.setBounds(1080, 635, 100, 270); //버튼 
-	
+
 		add(js1); 
 		add(js2); 
 		add(js3); 
@@ -102,7 +105,6 @@ public class WaitRoom extends JPanel implements ActionListener,MouseListener {
 		add(la2);  
 		add(la3);  
 
-		tf.addActionListener(this); 
 		mr.b1.addActionListener(this); 
 		mr.b2.addActionListener(this); 
 		b1.addActionListener(this); 
@@ -212,16 +214,6 @@ public class WaitRoom extends JPanel implements ActionListener,MouseListener {
 	@Override 
 	public void actionPerformed(ActionEvent e) { 
 		// TODO Auto-generated method stub 
-		String name = "김진현";
-		String data = name + ">> " + tf.getText();
-		if (e.getSource() == tf) {
-			if (data.length() < name.length()+4)
-				return;
-			initStyle();
-			String color = box.getSelectedItem().toString();
-			append(data, color);
-			tf.setText("");
-		}
 		if (e.getSource() == b1) {
 			mr.setLocationRelativeTo(null);
 			mr.setVisible(true);

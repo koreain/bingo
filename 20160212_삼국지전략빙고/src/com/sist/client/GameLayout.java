@@ -947,233 +947,41 @@ public class GameLayout extends JPanel implements ActionListener, KeyListener{
 			&&bAttCheck2==false&&bDefCheck2==false&&bTrickCheck2==false
 			&&bDefFCheck1==false&&bDefFCheck2==false&&bTrickFCheck1==false&&bTrickFCheck2==false)
 		{
-			if(ChoiceNation.chosenNation1==0&&ChoiceNation.chosenNation2==0)//진영선택 : 위vs위
-			{
-				for(int i=0; i<3; i++)
-				{
-					for(int j=0; j<25; j++)
+			for(int k=0;k<3;k++){
+				for(int l=0;l<3;l++){
+					//각자 선택한 위촉오에 따라 버튼 이미지아이콘 바꿔주기
+					ImageIcon nationIcon1 = null, nationIcon2 = null;
+					if(k==0)nationIcon1=bcIcon0;if(k==1)nationIcon1=bcIcon1;if(k==2)nationIcon1=bcIcon2;
+					if(l==0)nationIcon2=bcIcon0;if(l==1)nationIcon2=bcIcon1;if(l==2)nationIcon2=bcIcon2;
+					if(ChoiceNation.chosenNation1==k&&ChoiceNation.chosenNation2==l)//진영선택이 되면
 					{
-						//bingo[][]가 체크 안된것만 체크 가능,본인 차례일 때 체크 가능
-						if(e.getSource()==a1[i][j]&&GameProcess.bingo1[i][j]==false&&GameProcess.playerTurn==true&&panCheck2[i][j]==false)
+						for(int i=0; i<3; i++)
 						{
-							GameProcess.bingoCheck(i,j,GameProcess.p1Board,GameProcess.p2Board
-									,GameProcess.bingo1,GameProcess.bingo2,a1,a2
-									,bcIcon0,bcIcon0);
-							GameProcess.bingoCheckChance1--;
-							laCommand.setText("지휘권x"+String.valueOf(GameProcess.bingoCheckChance1));
-							laSetting(laCommand,laAtt,laDef,laTrick);
-							if(bingoEnd)
-								bingoEndProcess();
-						}
-						else if(e.getSource()==a2[i][j]&&GameProcess.bingo2[i][j]==false&&GameProcess.playerTurn==false&panCheck1[i][j]==false)
-						{
-							GameProcess.bingoCheck(i,j,GameProcess.p2Board,GameProcess.p1Board
-									,GameProcess.bingo2,GameProcess.bingo1,a2,a1
-									,bcIcon0,bcIcon0);
+							for(int j=0; j<25; j++)
+							{
+								//bingo[][]가 체크 안된것만 체크 가능,본인 차례일 때 체크 가능
+								if(e.getSource()==a1[i][j]&&GameProcess.bingo1[i][j]==false&&GameProcess.playerTurn==true&&panCheck2[i][j]==false)
+								{
+									GameProcess.bingoCheck(i,j,GameProcess.p1Board,GameProcess.p2Board
+											,GameProcess.bingo1,GameProcess.bingo2,a1,a2
+											,nationIcon1,nationIcon2);
+									GameProcess.bingoCheckChance1--;
+									laCommand.setText("지휘권x"+String.valueOf(GameProcess.bingoCheckChance1));
+									laSetting(laCommand,laAtt,laDef,laTrick);
+									if(bingoEnd)
+										bingoEndProcess();
+								}
+								else if(e.getSource()==a2[i][j]&&GameProcess.bingo2[i][j]==false&&GameProcess.playerTurn==false&panCheck1[i][j]==false)
+								{
+									GameProcess.bingoCheck(i,j,GameProcess.p2Board,GameProcess.p1Board
+											,GameProcess.bingo2,GameProcess.bingo1,a2,a1
+											,nationIcon2,nationIcon1);
+								}
+							}
 						}
 					}
 				}
 			}
-			else if(ChoiceNation.chosenNation1==0&&ChoiceNation.chosenNation2==1)//진영선택 : 위vs촉
-			{
-				for(int i=0; i<3; i++)
-				{
-					for(int j=0; j<25; j++)
-					{
-						if(e.getSource()==a1[i][j]&&GameProcess.bingo1[i][j]==false&&GameProcess.playerTurn==true&panCheck2[i][j]==false)
-						{
-							GameProcess.bingoCheck(i,j,GameProcess.p1Board,GameProcess.p2Board
-									,GameProcess.bingo1,GameProcess.bingo2,a1,a2
-									,bcIcon0,bcIcon1);
-							GameProcess.bingoCheckChance1--;
-							laSetting(laCommand,laAtt,laDef,laTrick);
-							if(bingoEnd)
-								bingoEndProcess();
-						}
-						else if(e.getSource()==a2[i][j]&&GameProcess.bingo2[i][j]==false&&GameProcess.playerTurn==false&panCheck1[i][j]==false)
-						{
-							GameProcess.bingoCheck(i,j,GameProcess.p2Board,GameProcess.p1Board
-									,GameProcess.bingo2,GameProcess.bingo1,a2,a1
-									,bcIcon1,bcIcon0);
-						}
-					}
-				}
-			}
-			else if(ChoiceNation.chosenNation1==0&&ChoiceNation.chosenNation2==2)//진영선택 : 위vs오
-			{
-				for(int i=0; i<3; i++)
-				{
-					for(int j=0; j<25; j++)
-						{
-							if(e.getSource()==a1[i][j]&&GameProcess.bingo1[i][j]==false&&GameProcess.playerTurn==true&panCheck2[i][j]==false)
-							{
-								GameProcess.bingoCheck(i,j,GameProcess.p1Board,GameProcess.p2Board
-										,GameProcess.bingo1,GameProcess.bingo2,a1,a2
-										,bcIcon0,bcIcon2);
-								GameProcess.bingoCheckChance1--;
-								laSetting(laCommand,laAtt,laDef,laTrick);
-								if(bingoEnd)
-									bingoEndProcess();
-							}
-							else if(e.getSource()==a2[i][j]&&GameProcess.bingo2[i][j]==false&&GameProcess.playerTurn==false&panCheck1[i][j]==false)
-							{
-								GameProcess.bingoCheck(i,j,GameProcess.p2Board,GameProcess.p1Board
-										,GameProcess.bingo2,GameProcess.bingo1,a2,a1
-										,bcIcon2,bcIcon0);
-							}
-						}
-					}
-				}
-				else if(ChoiceNation.chosenNation1==1&&ChoiceNation.chosenNation2==0)//진영선택 : 촉vs위
-				{
-					for(int i=0; i<3; i++)
-					{
-						for(int j=0; j<25; j++)
-						{
-							if(e.getSource()==a1[i][j]&&GameProcess.bingo1[i][j]==false&&GameProcess.playerTurn==true&panCheck2[i][j]==false)
-							{
-								GameProcess.bingoCheck(i,j,GameProcess.p1Board,GameProcess.p2Board
-										,GameProcess.bingo1,GameProcess.bingo2,a1,a2
-										,bcIcon1,bcIcon0);
-								GameProcess.bingoCheckChance1--;
-								laSetting(laCommand,laAtt,laDef,laTrick);
-								if(bingoEnd)
-									bingoEndProcess();
-							}
-							else if(e.getSource()==a2[i][j]&&GameProcess.bingo2[i][j]==false&&GameProcess.playerTurn==false&panCheck1[i][j]==false)
-							{
-								GameProcess.bingoCheck(i,j,GameProcess.p2Board,GameProcess.p1Board
-										,GameProcess.bingo2,GameProcess.bingo1,a2,a1
-										,bcIcon0,bcIcon1);
-							}
-						}
-					}
-				}
-				else if(ChoiceNation.chosenNation1==1&&ChoiceNation.chosenNation2==1)//진영선택 : 촉vs촉
-				{
-					for(int i=0; i<3; i++)
-					{
-						for(int j=0; j<25; j++)
-						{
-							if(e.getSource()==a1[i][j]&&GameProcess.bingo1[i][j]==false&&GameProcess.playerTurn==true&panCheck2[i][j]==false)
-							{
-								GameProcess.bingoCheck(i,j,GameProcess.p1Board,GameProcess.p2Board
-										,GameProcess.bingo1,GameProcess.bingo2,a1,a2
-										,bcIcon1,bcIcon1);
-								GameProcess.bingoCheckChance1--;
-								laSetting(laCommand,laAtt,laDef,laTrick);
-								if(bingoEnd)
-									bingoEndProcess();
-							}
-							else if(e.getSource()==a2[i][j]&&GameProcess.bingo2[i][j]==false&&GameProcess.playerTurn==false&panCheck1[i][j]==false)
-							{
-								GameProcess.bingoCheck(i,j,GameProcess.p2Board,GameProcess.p1Board
-										,GameProcess.bingo2,GameProcess.bingo1,a2,a1
-										,bcIcon1,bcIcon1);
-							}
-						}
-					}
-				}
-				else if(ChoiceNation.chosenNation1==1&&ChoiceNation.chosenNation2==2)//진영선택 : 촉vs오
-				{
-					for(int i=0; i<3; i++)
-					{
-						for(int j=0; j<25; j++)
-						{
-							if(e.getSource()==a1[i][j]&&GameProcess.bingo1[i][j]==false&&GameProcess.playerTurn==true&panCheck2[i][j]==false)
-							{
-								GameProcess.bingoCheck(i,j,GameProcess.p1Board,GameProcess.p2Board
-										,GameProcess.bingo1,GameProcess.bingo2,a1,a2
-										,bcIcon1,bcIcon2);
-								GameProcess.bingoCheckChance1--;
-								laSetting(laCommand,laAtt,laDef,laTrick);
-								if(bingoEnd)
-									bingoEndProcess();
-							}
-							else if(e.getSource()==a2[i][j]&&GameProcess.bingo2[i][j]==false&&GameProcess.playerTurn==false&panCheck1[i][j]==false)
-							{
-								GameProcess.bingoCheck(i,j,GameProcess.p2Board,GameProcess.p1Board
-										,GameProcess.bingo2,GameProcess.bingo1,a2,a1
-										,bcIcon2,bcIcon1);
-							}
-						}
-					}
-				}
-				else if(ChoiceNation.chosenNation1==2&&ChoiceNation.chosenNation2==0)//진영선택 : 오vs위
-				{
-					for(int i=0; i<3; i++)
-					{
-						for(int j=0; j<25; j++)
-						{
-							if(e.getSource()==a1[i][j]&&GameProcess.bingo1[i][j]==false&&GameProcess.playerTurn==true&panCheck2[i][j]==false)
-							{
-								GameProcess.bingoCheck(i,j,GameProcess.p1Board,GameProcess.p2Board
-										,GameProcess.bingo1,GameProcess.bingo2,a1,a2
-										,bcIcon2,bcIcon0);
-								GameProcess.bingoCheckChance1--;
-								laSetting(laCommand,laAtt,laDef,laTrick);
-								if(bingoEnd)
-									bingoEndProcess();
-							}
-							else if(e.getSource()==a2[i][j]&&GameProcess.bingo2[i][j]==false&&GameProcess.playerTurn==false&panCheck1[i][j]==false)
-							{
-								GameProcess.bingoCheck(i,j,GameProcess.p2Board,GameProcess.p1Board
-										,GameProcess.bingo2,GameProcess.bingo1,a2,a1
-										,bcIcon0,bcIcon2);
-							}
-						}
-					}
-				}
-				else if(ChoiceNation.chosenNation1==2&&ChoiceNation.chosenNation2==1)//진영선택 : 오vs촉
-				{
-					for(int i=0; i<3; i++)
-					{
-						for(int j=0; j<25; j++)
-						{
-							if(e.getSource()==a1[i][j]&&GameProcess.bingo1[i][j]==false&&GameProcess.playerTurn==true&panCheck2[i][j]==false)
-							{
-								GameProcess.bingoCheck(i,j,GameProcess.p1Board,GameProcess.p2Board
-										,GameProcess.bingo1,GameProcess.bingo2,a1,a2
-										,bcIcon2,bcIcon1);
-								GameProcess.bingoCheckChance1--;
-								laSetting(laCommand,laAtt,laDef,laTrick);
-								if(bingoEnd)
-									bingoEndProcess();
-							}
-							else if(e.getSource()==a2[i][j]&&GameProcess.bingo1[i][j]==false&&GameProcess.playerTurn==false&panCheck1[i][j]==false)
-							{
-								GameProcess.bingoCheck(i,j,GameProcess.p2Board,GameProcess.p1Board
-										,GameProcess.bingo2,GameProcess.bingo1,a2,a1
-										,bcIcon1,bcIcon2);
-							}
-						}
-					}
-				}
-				else if(ChoiceNation.chosenNation1==2&&ChoiceNation.chosenNation2==2)//진영선택 : 오vs오
-				{
-					for(int i=0; i<3; i++)
-					{
-						for(int j=0; j<25; j++)
-						{
-							if(e.getSource()==a1[i][j]&&GameProcess.bingo1[i][j]==false&&GameProcess.playerTurn==true&panCheck2[i][j]==false)
-							{
-								GameProcess.bingoCheck(i,j,GameProcess.p1Board,GameProcess.p2Board
-										,GameProcess.bingo1,GameProcess.bingo2,a1,a2
-										,bcIcon2,bcIcon2);
-								GameProcess.bingoCheckChance1--;
-								laSetting(laCommand,laAtt,laDef,laTrick);
-								if(bingoEnd)
-									bingoEndProcess();
-							}
-							else if(e.getSource()==a2[i][j]&&GameProcess.bingo1[i][j]==false&&GameProcess.playerTurn==false&panCheck1[i][j]==false)
-							{
-								GameProcess.bingoCheck(i,j,GameProcess.p2Board,GameProcess.p1Board
-										,GameProcess.bingo2,GameProcess.bingo1,a2,a1
-										,bcIcon2,bcIcon2);
-							}
-						}
-					}
-				}
 		}
 			
 		////////////스킬버튼 누르기
