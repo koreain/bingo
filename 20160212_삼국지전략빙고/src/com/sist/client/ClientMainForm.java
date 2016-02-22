@@ -152,7 +152,6 @@ implements ActionListener, Runnable, MouseListener
 							login.pf.requestFocus(); 
 						} 
 					} 
-					 
 				} 
 				if(!idOk) 
 				{ 
@@ -161,7 +160,6 @@ implements ActionListener, Runnable, MouseListener
 					login.pf.setText(""); 
 					login.tf.requestFocus(); 
 				} 
-	
 				if(loginOk) 
 				{ 
 //					UserDTO sendData=userInfo;//넘겨줄 유저정보 재정의 
@@ -176,7 +174,6 @@ implements ActionListener, Runnable, MouseListener
 		            System.out.println(myAvatar);
 //					card.show(getContentPane(), "WR"); 
 				} 
-				
 		}
 		else if(e.getSource()==login.b2) //취소를 누르면 프로그램 종료
 		{
@@ -290,12 +287,20 @@ implements ActionListener, Runnable, MouseListener
 			}
 			GameLayout.endBtn.addActionListener(this);//빙고마무리버튼
 			GameLayout.gameEnd.addActionListener(this);//인게임 나가기 버튼
+			for(int i=0; i<2; i++)
+			{
+				for(int j=0; j<3; j++)
+				{
+					GameLayout.fury[i][j].setVisible(true);
+				}
+			}
 		}
 		else if(e.getSource()==GameLayout.exit) //항복 버튼
 		{
 			int exitValue=JOptionPane.showConfirmDialog(this, "항복하시겠습니까?", "항복", JOptionPane.YES_NO_OPTION);
 			if(exitValue==JOptionPane.YES_OPTION) //예를 누르면 게임 끝내기 쓰레드
 			{
+				t1.interrupt();
 				GameLayout.IFNoticeVisible();
 				GameLayout.imageVisibleFalse();
 				GameProcess.playerWon=false;
@@ -312,13 +317,7 @@ implements ActionListener, Runnable, MouseListener
 		}
 		else if(e.getSource()==GameLayout.gameEnd) //나가기
 		{
-			for(int i=0; i<2; i++)
-			{
-				for(int j=0; j<3; j++)
-				{
-					GameLayout.fury[i][j].setVisible(true);
-				}
-			}
+			GameLayout.imageVisibleTrue();
 			if(GameProcess.playerWon==true) //승패 이미지 없애기
 				GameLayout.wonX+=1200;
 			else if(GameProcess.playerWon==false)
@@ -331,7 +330,6 @@ implements ActionListener, Runnable, MouseListener
 			GameProcess.gameReset();
 			game=new GameLayout();
 			add(game,"GAME");
-			GameLayout.imageVisibleTrue();
 		}
 		else if(e.getSource()==wr.tf) //대기실 채팅내용
 		{
@@ -803,4 +801,5 @@ implements ActionListener, Runnable, MouseListener
 		// TODO Auto-generated method stub
 		
 	}
+	
 }

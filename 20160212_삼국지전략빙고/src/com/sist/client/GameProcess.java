@@ -391,6 +391,14 @@ public class GameProcess{
 		GameProcess.skillChance2=1;
 		GameProcess.bingoCheckChance1=1;
 		GameProcess.bingoCheckChance2=1;
+		for(int i=0; i<2; i++)
+		{
+			for(int j=0; j<3; j++)
+			{
+				GameLayout.fury[i][j].setVisible(true);
+			}
+		}
+		GameProcess.playerTurn=true;
    }   
    
 }
