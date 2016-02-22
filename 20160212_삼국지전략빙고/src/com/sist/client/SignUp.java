@@ -215,19 +215,19 @@ public class SignUp extends JDialog implements ActionListener, FocusListener, It
          
          if(!sexCheck){ 
          	if(rb1.isSelected()){ 
-         		user_avatar = "img\\m1.jpg"; 
+         		user_avatar = "m1.jpg"; 
          	}else if(rb2.isSelected()){ 
-         		user_avatar = "img\\m2.jpg"; 
+         		user_avatar = "m2.jpg"; 
          	}else if(rb3.isSelected()){ 
-         		user_avatar = "img\\m3.jpg"; 
+         		user_avatar = "m3.jpg"; 
          	} 
          }else{ 
          	if(rb1.isSelected()){ 
-         		user_avatar = "img\\w1.jpg"; 
+         		user_avatar = "w1.jpg"; 
          	}else if(rb2.isSelected()){ 
-         		user_avatar = "img\\w2.jpg"; 
+         		user_avatar = "w2.jpg"; 
          	}else if(rb3.isSelected()){ 
-         		user_avatar = "img\\w3.jpg"; 
+         		user_avatar = "w3.jpg"; 
          	} 
          } 
          dto.setUser_id(user_id); 
@@ -273,7 +273,7 @@ public class SignUp extends JDialog implements ActionListener, FocusListener, It
  		}else if(e.getSource()==btn_OK){ 
  			if(tf_id.getText().equals("")){ 
  				JOptionPane.showMessageDialog(null, "아이디를 입력하세요"); 
- 				tf_id.requestFocus(); 
+ 				tf_id.requestFocus();
  			}else if(String.valueOf(pf.getPassword()).equals("")){ 
  				JOptionPane.showMessageDialog(null, "비밀번호를 입력하세요"); 
  				pf.requestFocus(); 
@@ -332,7 +332,7 @@ public class SignUp extends JDialog implements ActionListener, FocusListener, It
  	} 
  
 
- 	@Override 
+ 	@Override
  	public void itemStateChanged(ItemEvent e) { 
  		// TODO Auto-generated method stub 
  		if(e.getSource()==rbMan){ 

@@ -7,14 +7,13 @@ JLabel la1, la2, la3;
 JTextField tf; 
 	JPasswordField pf; 
 	JRadioButton open, noopen; 
-	JButton b1, b2; 
-	ChatRoom ch=new ChatRoom(); 
+	JButton b1, b2;
 	private Cursor cur = new Cursor(Cursor.HAND_CURSOR); 
 
-	public MakeRoom() { 
-		setModal(true); 
+	public MakeRoom() {
+		setModal(true);
 		setResizable(false); 
-		 
+		
 		la1 = new JLabel("방이름"); 
 		la2 = new JLabel("상태"); 
 		la3 = new JLabel("비밀번호"); 
@@ -30,7 +29,7 @@ JTextField tf;
 		la3.setVisible(false);// la3은 안보임 
 		pf.setVisible(false); 
 
-		b1 = new JButton("방만들기"); 
+		b1 = new JButton("확인"); 
 		b2 = new JButton("취소"); 
 		JPanel p = new JPanel(); 
 		p.add(b1); 
@@ -60,14 +59,16 @@ JTextField tf;
 		add("Center",p); // 
 
 		setSize(230, 220); 
-		// setVisible(true); 
-		// setDefaultCloseOperation(EXIT_ON_CLOSE); 
 		open.addActionListener(this); 
-		noopen.addActionListener(this); 
-		b1.addActionListener(this); 
-		b2.addActionListener(this); 
+		noopen.addActionListener(this);
+		setLocationRelativeTo(null); 
 	} 
-
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+        new MakeRoom();
+	}
+	
+	
 	@Override 
 	public void actionPerformed(ActionEvent e) { 
 		// TODO Auto-generated method stub 
@@ -80,14 +81,6 @@ JTextField tf;
 			pf.setVisible(true); 
 			la3.setVisible(true);
 			pf.requestFocus(); 
-		} else if(e.getSource()==b1) { 
-			setVisible(false); 
-			la3.setVisible(false); 
-			pf.setText(""); 
-			tf.setText(""); 
-			open.setSelected(true);
-			pf.setVisible(false);
-			ch.setVisible(true);
 		}
 	}
 }

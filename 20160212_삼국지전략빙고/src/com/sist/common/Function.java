@@ -4,7 +4,7 @@ public class Function {
    public static final int LOGIN=100;
    public static final int MYLOG=110; //로그인 => 대기실 화면으로 바꿔줄때
    public static final int SAMELOGIN=120; //같은 아이디/비번 로그인시 차단..
-   
+   public static final int POSCHANGE=150; 
    // 방
    public static final int MAKEROOM=200;
    public static final int MYROOMIN=210; //방 들어가는 사람
@@ -12,6 +12,7 @@ public class Function {
    public static final int ROOMOUT=230;//
    public static final int MYROOMOUT=240;//
    public static final int WAITUPDATE=250;//대기실 정보갱신
+   public static final int BANGCHANGE=260;
    
    //방안
    public static final int KANG=300;

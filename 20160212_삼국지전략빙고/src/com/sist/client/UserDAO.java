@@ -8,35 +8,56 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class UserDAO {
-   private static final String DRIVER = "oracle.jdbc.driver.OracleDriver";
+   private Connection conn;
+   private PreparedStatement ps;
+   private static UserDAO dao;
    private static final String URL = "jdbc:oracle:thin:@localhost:1521:ORCL";
-   private static final String USER = "scott"; // DB ID
-   private static final String PASS = "tiger"; // DB ID
    
    ArrayList<UserDTO> arDTO = new ArrayList<>();
    // UserDTO를 여러개 담을 객체 : 테이블 내용 / select 전체 내용
    
-   // DB 연결 메소드
-   public Connection getConn(){
-      Connection conn = null;
+   
+   public UserDAO(){
       try{
-         Class.forName(DRIVER);
-         conn = DriverManager.getConnection(URL, USER, PASS);
-      }catch(Exception e){
-         e.printStackTrace();
+         Class.forName("oracle.jdbc.driver.OracleDriver");
+      }catch(Exception ex){
+         System.out.println(ex.getMessage());
       }
-      return conn;
+   }
+   // DB 연결 메소드
+   public static UserDAO newInstance(){
+      if(dao==null)
+         dao = new UserDAO();
+      return dao;
+   }
+   
+   public void getConnection(){
+      try{
+         conn = DriverManager.getConnection(URL, "scott", "tiger");
+         // conn scott/tiger
+      }catch(Exception ex){
+         
+      }
+   }
+   
+   public void disConnection(){
+      try{
+         if(ps!=null) ps.close();
+         // ps에 ==> InputStream, OutputStream
+         if(conn!=null) conn.close();
+         // socket.close();
+         // exit
+      }catch(Exception ex){}
    }
    
    public List<UserDTO> getList(){
-      Connection conn = null; // 연결
       PreparedStatement ps = null; // 명령
       ResultSet rs = null; // 결과
       
       ArrayList<UserDTO> list = new ArrayList<>();
       try{
          String sql = "SELECT * FROM USER_INFO"; // 쿼리
-         conn = getConn();
+         getConnection();
          ps = conn.prepareStatement(sql); // 
          rs = ps.executeQuery();
          while(rs.next()){
@@ -54,9 +75,10 @@ public class UserDAO {
       }catch(Exception e){
       }finally{
          try{
-            if(rs!=null) rs.close();
-            if(ps!=null) ps.close();
-            if(conn!=null) conn.close();
+            disConnection();
+            if(rs!=null){
+               rs.close();
+            }
          }catch(Exception ex){
             
          }
@@ -67,11 +89,10 @@ public class UserDAO {
    // 한사람의 회원 정보를 얻는 메소드
    public UserDTO getUserDTO(String user_id){
       UserDTO dto = new UserDTO();
-      Connection conn = null; // 연결
       PreparedStatement ps = null; // 명령
       ResultSet rs = null; // 결과
       try{
-         conn = getConn();
+         getConnection();
          String sql = "select * from user_info where user_id=?";
          ps = conn.prepareStatement(sql);
          ps.setString(1, user_id);
@@ -90,9 +111,10 @@ public class UserDAO {
          System.out.println(e+"getUserDTO에서 에러");
       }finally{
          try{
-            if(rs!=null) rs.close();
-            if(ps!=null) ps.close();
-            if(conn!=null) conn.close();
+            disConnection();
+            if(rs!=null){
+               rs.close();
+            }
          }catch(Exception ex){
             
          }
@@ -103,10 +125,9 @@ public class UserDAO {
    // 회원 등록
    public boolean insertUser(UserDTO dto){
       boolean check = false;
-      Connection conn = null;
       PreparedStatement ps = null;
       try{
-         conn = getConn();
+         getConnection();
          String sql = "insert into user_info(user_id,user_pw,user_name,user_nickname,user_sex,"
                      + "user_win,user_lose,user_avatar) values(?,?,?,?,?,?,?,?)";
          ps = conn.prepareStatement(sql);
@@ -129,12 +150,27 @@ public class UserDAO {
          System.out.println(e+"insertUser에서 에러");
       }finally{
          try{
-            if(ps!=null) ps.close();
-            if(conn!=null) conn.close();
+            disConnection();
          }catch(Exception ex){
             
          }
       }
       return check;
+   }
+   
+   public void userUpdate(String user_id, int user_win, int user_lose){
+      try{
+         getConnection();
+         String sql = "UPDATE user_info SET user_win=?,user_lose=? where user_id=?";
+         ps = conn.prepareStatement(sql);
+         ps.setInt(1, user_win);
+         ps.setInt(2, user_lose);
+         ps.setString(3, user_id);
+         ps.executeUpdate(); // ==> 데이터 수정은 Update();
+      }catch(Exception ex){
+         System.out.println(ex.getMessage());
+      }finally{
+         disConnection();
+      }
    }
 }
