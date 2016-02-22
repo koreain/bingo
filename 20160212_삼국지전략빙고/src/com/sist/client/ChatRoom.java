@@ -57,7 +57,7 @@ public ChatRoom() {
    box.addItem("cyan"); 
    box.addItem("pink"); 
    b1 = new JButton("¡ÿ   ∫Ò"); 
-   b2 = new JButton("√    ¥Î"); 
+   b2 = new JButton("Ω√  ¿€"); 
    b3 = new JButton("≥™∞°±‚"); 
    b1.setFont(new Font("∏º¿∫ ∞ÌµÒ", Font.BOLD, 20)); 
    b2.setFont(new Font("∏º¿∫ ∞ÌµÒ", Font.BOLD, 20)); 
@@ -86,8 +86,8 @@ public ChatRoom() {
 
 
    setLayout(null); 
-   pan[0].setBounds(10, 15, 180, 150); 
-   pan[1].setBounds(205, 15, 180, 150); 
+   pan[0].setBounds(20, 15, 157, 150); 
+   pan[1].setBounds(215, 15, 157, 150); 
    add(pan[0]); 
    add(pan[1]); 
    idtf[0].setBounds(10, 170, 180, 30); 

@@ -4,7 +4,8 @@ public class Function {
    public static final int LOGIN=100;
    public static final int MYLOG=110; //로그인 => 대기실 화면으로 바꿔줄때
    public static final int SAMELOGIN=120; //같은 아이디/비번 로그인시 차단..
-   public static final int POSCHANGE=150; 
+   public static final int POSCHANGE=150;
+   
    // 방
    public static final int MAKEROOM=200;
    public static final int MYROOMIN=210; //방 들어가는 사람
@@ -40,6 +41,32 @@ public class Function {
    public static final int GAMERESULT=650;
    public static final int GAMEEND=660;
    public static final int MYGAMEEND=670;
+   
+   //인게임
+   public static final int MYTURN=700;
+   public static final int YOURTURN=710;
+   
+   public static final int CHOICENATION=720;
+   
+   public static final int MYBINGOCHECK=730;
+   public static final int YOURBINGOCHECK=740;
+   
+   public static final int MYATTSKILL=750;
+   public static final int MYDEFSKILL=760;
+   public static final int MYTRICKSKILL=770;
+   public static final int MYATTFURY=780;
+   public static final int MYDEFFURY=790;
+   public static final int MYTRICKFURY=800;
+   
+   public static final int YOURATTSKILL=750;
+   public static final int YOURDEFSKILL=760;
+   public static final int YOURTRICKSKILL=770;
+   public static final int YOURATTFURY=780;
+   public static final int YOURDEFFURY=790;
+   public static final int YOURTRICKFURY=800;
+   
+   public static final int MYBINGOEND=810;
+   public static final int YOURBINGOEND=820;
    
    //종료
    public static final int CHATEND=900;

@@ -50,6 +50,8 @@ implements ActionListener, Runnable, MouseListener
 		login.b1.addActionListener(this);//카드레이아웃이 될 버튼들 추가
 		login.b2.addActionListener(this);
 		login.b3.addActionListener(this);//회원가입
+		login.tf.addActionListener(this);
+		login.pf.addActionListener(this);
 		
 		wr.b1.addActionListener(this);
 		wr.b2.addActionListener(this);
@@ -120,7 +122,7 @@ implements ActionListener, Runnable, MouseListener
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		if(e.getSource()==login.b1) //로그인을 누르면 대기실로 이동
+		if(e.getSource()==login.b1||e.getSource()==login.tf||e.getSource()==login.pf) //로그인을 누르면 대기실로 이동
 		{   System.out.println("testlogin");
 			boolean loginOk=false; 
 			boolean idOk=false; 
@@ -128,31 +130,31 @@ implements ActionListener, Runnable, MouseListener
 			String pw=String.valueOf(login.pf.getPassword()); 
 			UserDAO user=new UserDAO(); 
 			UserDTO userInfo=new UserDTO(); // id로 접근한 한사람의 정보  
-			userInfo=user.getUserDTO(id); 
+			userInfo=user.getUserDTO(id);
 			String[] arrayId=new String[user.getList().size()]; 
 			for(int i=0; i<user.getList().size();i++) 
-			{ 
-				arrayId[i]=user.getList().get(i).getUser_id(); 
-			} 
+			{
+				arrayId[i]=user.getList().get(i).getUser_id();
+			}
 			for(int i=0; i<arrayId.length;i++) 
-			{ 
+			{
 				if(arrayId[i].equals(id)) 
-				{ 
-					idOk=true; 
+				{
+					idOk=true;
 				 
 					if(userInfo.getUser_pw().equals(pw)) 
-					{ 
+					{
 						loginOk=true; 
-					} 
+					}
 					else if(!userInfo.getUser_pw().equals(pw)) 
-					{ 
-						loginOk=false; 
+					{
+						loginOk=false;
 						JOptionPane.showMessageDialog(login,"비밀번호를 확인해 주세요"); 
-						login.pf.setText(""); 
-							login.pf.requestFocus(); 
-						} 
-					} 
-				} 
+						login.pf.setText("");
+							login.pf.requestFocus();
+						}
+					}
+				}
 				if(!idOk) 
 				{ 
 					JOptionPane.showMessageDialog(login,"아이디가 존재하지 않습니다."); 
@@ -215,11 +217,10 @@ implements ActionListener, Runnable, MouseListener
 		}
 		else if(e.getSource()==mr.b2)
 		{
-			System.out.println("test_mr.b2");
+			mr.setVisible(false);
 		}
 		else if(e.getSource()==mr.b1)
 		{
-			System.out.println("test_mr.b1");
 			String rn=mr.tf.getText().trim();
 			if(rn.length()<1)
 			{
@@ -228,7 +229,6 @@ implements ActionListener, Runnable, MouseListener
 				mr.tf.requestFocus();
 				return;
 			}
-			System.out.println("test2");
 			String temp="";
 /*			for(int i=0;i<wr.model1.getRowCount();i++)
 			{
@@ -243,7 +243,6 @@ implements ActionListener, Runnable, MouseListener
 				}
 			}*/
 			String state="",pwd="";
-			System.out.println("test3");
 			if(mr.open.isSelected())
 			{
 				state="공개";
@@ -256,10 +255,6 @@ implements ActionListener, Runnable, MouseListener
 			}
 			int inwon=2;
 			// 서버로 전송 
-				System.out.println(
-						   "방이름:"+rn+"\n"+
-						   "방상태:"+state+"\n"+
-						   "비번:"+pwd);
 			try
 			{
 				out.write((Function.MAKEROOM+"|"

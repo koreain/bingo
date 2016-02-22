@@ -115,4 +115,18 @@ public class ChoiceNation extends JPanel implements ActionListener{
 		// TODO Auto-generated method stub
 		
 	}
+	
+	public static class ChocieNationTimeLimit extends Thread
+	{
+		public void run() {
+			try
+			{
+				
+				while(true)
+				{
+					
+				}
+			}catch(Exception ex){}
+		}
+	}
 }
