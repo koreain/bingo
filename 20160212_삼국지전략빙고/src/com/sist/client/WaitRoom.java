@@ -138,6 +138,7 @@ public class WaitRoom extends JPanel implements ActionListener,MouseListener {
       pb.setBorderPainted(false);
       pb.setBackground(Color.white);
       pb.setStringPainted(true);
+      pb.setBorderPainted(true);
       laId = new JLabel("FreshQ 님");
       laScore = new JLabel("전적 27승 15패");
       laChode = new JLabel("초대 거부");

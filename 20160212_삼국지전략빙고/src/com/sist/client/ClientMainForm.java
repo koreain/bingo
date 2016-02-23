@@ -6,12 +6,16 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 import java.net.*;
 import java.io.*;
+
+import com.sist.client.ChoiceNation.ChoiceNationTimeLimit;
 import com.sist.client.GameLayout.TimeLimit;
 import com.sist.client.GameLayout.endThread;
 import com.sist.common.Function;
 import com.sist.server.Server;
+import com.sun.org.apache.xpath.internal.functions.FuncUnparsedEntityURI;
 import com.sun.security.ntlm.Client;
 import sun.awt.WindowClosingListener;
+import sun.net.www.protocol.file.FileURLConnection;
 public class ClientMainForm extends JFrame
 implements ActionListener, Runnable, MouseListener
 {
@@ -25,7 +29,8 @@ implements ActionListener, Runnable, MouseListener
 	ChatRoom cr=new ChatRoom();
 	
 	ImageIcon mainIcon;//타이틀창 아이콘
-	static Thread t1=new TimeLimit();//시간제한바 스레드 
+	static Thread t1=new TimeLimit();//시간제한바 스레드
+	//static Thread t0=new ChoiceNationTimeLimit();//
 	Thread paintthread=game.new paintThread();
 	Socket s;
     BufferedReader in;
@@ -68,7 +73,9 @@ implements ActionListener, Runnable, MouseListener
 		mr.b1.addActionListener(this); //방만들기 창의 방만들기 버튼
 		mr.b2.addActionListener(this); //방만들기 창의 방만들기 취소 버튼
 		
-		cr.b3.addActionListener(this);
+		cr.b1.addActionListener(this); //채팅룸 게임 준비
+		cr.b2.addActionListener(this); //채팅룸 게임 시작
+		cr.b3.addActionListener(this); //채팅룸 나가기
 		cr.tf.addActionListener(this);
 		
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -101,7 +108,7 @@ implements ActionListener, Runnable, MouseListener
 	{
 		try
 		{
-			s=new Socket("localhost", 3333); //211.238.142.39 localhost
+			s=new Socket("211.238.142.40", 33333); //211.238.142.39 localhost
 			// s => server
 			in=new BufferedReader(
 					new InputStreamReader(
@@ -233,18 +240,6 @@ implements ActionListener, Runnable, MouseListener
 			}
 			System.out.println("test2");
 			String temp="";
-/*			for(int i=0;i<wr.model1.getRowCount();i++)
-			{
-				temp=wr.model1.getValueAt(i, 0).toString();
-				if(rn.equals(temp))
-				{
-					JOptionPane.showMessageDialog(this,
-							"이미 존재하는 방입니다\n다른 이름을 입력하세요");
-					mr.tf.setText("");
-					mr.tf.requestFocus();
-					return;
-				}
-			}*/
 			String state="",pwd="";
 			System.out.println("test3");
 			if(mr.open.isSelected())
@@ -366,33 +361,62 @@ implements ActionListener, Runnable, MouseListener
 			}
 			cr.tf.setText("");
 		}
-		else if(e.getSource()==cr.tf) //chatroom 채팅내용
-		{
-//			String msg=cr.tf.getText().trim();
-//			  wr.initStyle();
-//			  String color = wr.box.getSelectedItem().toString();
-//				if(msg.length()<1)
-//					return;
-//				try
-//				{
-//					out.write((Function.WAITCHAT+"|"
-//									+msg+"|"
-//									+color+"\n").getBytes());
-//				}catch(Exception ex){
-//					System.out.println("wr.tf오류"+ex.getMessage());
-//				}
-//				wr.tf.setText("");
-		}
 		else if(e.getSource()==cr.b3)
 		{
 			try 
 			{
 				out.write((Function.ROOMOUT+"|"
 						+myRoom+"|"//방번호
-						+myId+"\n").getBytes());//본인아이디	
+						+myId+"\n").getBytes());//본인아이디
 			} catch (Exception e2) {
 				// TODO: handle exception
 				System.out.println("cr.b3오류"+e2.getMessage());
+			}
+		}
+		else if(e.getSource()==cr.b1) 
+		{
+			if(cr.b1.getText().equals("준비취소"))
+			{
+				cr.b1.setText("준   비");
+				try 
+				{
+					out.write((Function.GAMENO+"|"
+								+myRoom+"|"
+								+myId+"|"
+								+"\n").getBytes());
+				} catch (Exception e2) {
+					// TODO: handle exception
+					System.out.println("cr.b1 준비취소 오류: "+e2.getMessage());
+				}
+			}
+			else
+			{
+				cr.b1.setText("준비취소");
+				try 
+				{
+					out.write((Function.GAMEYES+"|"
+							+myRoom+"|"
+							+myId+"|"
+							+"\n").getBytes());
+				} catch (Exception e2) {
+					// TODO: handle exception
+					System.out.println("cr.b1 준비 오류: "+e2.getMessage());
+				}
+
+				
+			}
+			
+			
+		}
+		if(e.getSource()==cr.b2)
+		{
+			try 
+			{
+				out.write((Function.GAMESTART+"|"
+							+myRoom+"\n").getBytes());
+				System.out.println("시작하고싶어 우리방은2:"+myRoom);
+			} catch (Exception e2) {
+				// TODO: handle exception
 			}
 		}
 	}
@@ -424,25 +448,25 @@ implements ActionListener, Runnable, MouseListener
 	            }
 	            break;
 	            case Function.MYLOG:
-	               {
-	                  String id=st.nextToken();
-	                  int win=Integer.parseInt(st.nextToken());
-	                  int lose=Integer.parseInt(st.nextToken());
-	                  String ava=st.nextToken();
-	                  wr.laId.setText(id+" 님");
-	                  wr.laScore.setText("전적 "+win+"승 "+lose+"패");
-	                  if((win+lose)==0){
-	                     wr.pb.setValue(0);
-	                     
-	                  }else{
-	                     double rate = (double)win/(win+lose)*100;
-	                     wr.pb.setValue((int)Math.ceil(rate));
-	                  }
-	                  
-	                  wr.avaBtn.setIcon(new ImageIcon("img\\"+ava));
-	                  card.show(getContentPane(), "WR");
-	               }
-	               break;
+                {
+                  String id=st.nextToken();
+                  int win=Integer.parseInt(st.nextToken());
+                  int lose=Integer.parseInt(st.nextToken());
+                  String ava=st.nextToken();
+                  wr.laId.setText(id+" 님");
+                  wr.laScore.setText("전적 "+win+"승 "+lose+"패");
+                  if((win+lose)==0){
+                     wr.pb.setValue(0);
+                     
+                  }else{
+                     double rate = (double)win/(win+lose)*100;
+                     wr.pb.setValue((int)Math.ceil(rate));
+                  }
+                  
+                  wr.avaBtn.setIcon(new ImageIcon("img\\"+ava));
+                  card.show(getContentPane(), "WR");
+                }
+                break;
 	            case Function.SAMELOGIN:
 	            {
 	            	JOptionPane.showMessageDialog(login, "이미 접속중입니다.");
@@ -489,6 +513,7 @@ implements ActionListener, Runnable, MouseListener
 					String avata=st.nextToken(); //아바타
 					String rName=st.nextToken(); //방제목
 					String rb=st.nextToken(); //방장아아디
+					System.out.println("방장아이디:"+rb);
 					int win=Integer.parseInt(st.nextToken());
 					int lose=Integer.parseInt(st.nextToken());
 					myRoom=Integer.parseInt(st.nextToken());
@@ -506,7 +531,6 @@ implements ActionListener, Runnable, MouseListener
 							"avata: "+avata+
 							"rb: "+rb);
 					cr.setTitle(rName);
-					cr.setVisible(true);
 					String[] data={id,name,winRate+"%"};
 					cr.model.addRow(data);
 					for(int i=0;i<2;i++)
@@ -519,7 +543,7 @@ implements ActionListener, Runnable, MouseListener
 							cr.pan[i].add("Center",
 									new JLabel(new ImageIcon("img\\"+avata)));
 							cr.idtf[i].setText(name);
-							if(id.equals(rb))
+							if(id.equals(rb))//내가 방장
 							{
 								cr.idtf[i].setForeground(Color.red);
 							}
@@ -527,18 +551,19 @@ implements ActionListener, Runnable, MouseListener
 							break;
 						}
 					}
-					
-					if(id.equals(rb))
+					if(myId.equals(rb))//방장인경우
 					{
-						cr.b1.setEnabled(true);
-						cr.b2.setEnabled(true);
+						cr.b1.setEnabled(false); //준비
+						cr.b2.setEnabled(false); //시작
+//						cr.idtf[0].setForeground(Color.red);
 					}
-					else
+					else//걍 입장인원
 					{
-						cr.b1.setEnabled(false);
-						cr.b2.setEnabled(false);
+						cr.b1.setEnabled(true); //준비
+						cr.b2.setEnabled(false);//시작
+//						cr.idtf[1].setForeground(Color.red);
 					}
-
+					cr.setVisible(true);
 				}
 				break;
 				case Function.ROOMIN:
@@ -550,6 +575,7 @@ implements ActionListener, Runnable, MouseListener
 					String avata=st.nextToken(); //아바타
 					String rName=st.nextToken(); //방제목
 					String rb=st.nextToken(); //방장아아디
+					System.out.println("방장아이디:"+rb);
 					int win=Integer.parseInt(st.nextToken());
 					int lose=Integer.parseInt(st.nextToken());
 					double Rate=(double)win/(win+lose);
@@ -566,7 +592,6 @@ implements ActionListener, Runnable, MouseListener
 							"avata: "+avata+
 							"rb: "+rb);
 					cr.setTitle(rName);
-					cr.setVisible(true);
 					String[] data={id,name,winRate+"%"};
 					cr.model.addRow(data);
 					for(int i=0;i<2;i++)
@@ -579,7 +604,7 @@ implements ActionListener, Runnable, MouseListener
 							cr.pan[i].add("Center",
 									new JLabel(new ImageIcon("img\\"+avata)));
 							cr.idtf[i].setText(name);
-							if(id.equals(rb))
+							if(id.equals(rb))//내가 방장
 							{
 								cr.idtf[i].setForeground(Color.red);
 							}
@@ -587,6 +612,15 @@ implements ActionListener, Runnable, MouseListener
 							break;
 						}
 					}
+//					if(myId.equals(rb))//내가 방장
+//					{
+//						cr.idtf[0].setForeground(Color.red);
+//					}
+//					else//내가 게스트
+//					{
+//						cr.idtf[0].setForeground(Color.BLACK);
+//					}
+					cr.setVisible(true);
 				}
 				break;
                 case Function.WAITCHAT:
@@ -650,42 +684,24 @@ implements ActionListener, Runnable, MouseListener
 					}
 				}
 				break;
-				case Function.BANGCHANGE:
-				{
-					String bj=st.nextToken();
+				case Function.BANGCHANGE://채팅룸에 남은 인원에 대해서 처리 (기존 방장 or 바뀐방장)
+				{	System.out.println("클라이언트 CASE문 BANGCHAGE: 방장이 나가서 방장이 바뀔경우 호출한다");
+					String bj=st.nextToken();//현재 바뀐방장 (나의 아이디가 되겠지..)
 					String name=st.nextToken();
 					int size=Integer.parseInt(st.nextToken());
-					for(int i=0; i<size;i++)
-					{
-						String n=cr.idtf[i].getText();
-						if(n.equals(name))
-						{
-							cr.idtf[i].setForeground(Color.red);
-						}
-						else
-						{
-							cr.idtf[i].setForeground(Color.BLACK);
-						}
-					}
-					if(bj.equals(myId))
-					{
-						cr.b1.setEnabled(true);
-						cr.b2.setEnabled(true);
-					}
-					else
-					{
-						cr.b1.setEnabled(false);
-						cr.b2.setEnabled(false);
-					}
+                    cr.idtf[0].setForeground(Color.red);
+                    cr.idtf[1].setForeground(Color.BLACK);
+                    cr.b1.setEnabled(false);
+					cr.b2.setEnabled(false);
 				}
 				break;
 				case Function.ROOMOUT: //cr의 아바타창과 유저정보 삭제
 				{
 					String id=st.nextToken();
 					String name=st.nextToken();
-					int size=Integer.valueOf(st.nextToken());
-					//아바타 보이는 화면 처리
-					for(int i=0;i<size;i++)
+					String clientName=st.nextToken();
+					//아바타 보이는 화면 처리cch
+					for(int i=0;i<2;i++)
 					{
 						String temp=cr.idtf[i].getText();
 						if(temp.equals(name))
@@ -695,7 +711,7 @@ implements ActionListener, Runnable, MouseListener
     						cr.pan[i].removeAll();
     						cr.pan[i].setLayout(new BorderLayout());
     						cr.pan[i].add("Center",new JLabel(
-    								new ImageIcon("c:\\image\\def.png")));
+    								new ImageIcon("img\\def.png")));
     						cr.pan[i].validate();
     						break;
 						}
@@ -708,21 +724,29 @@ implements ActionListener, Runnable, MouseListener
 							cr.model.removeRow(i);
 						}
 					}
+					cr.idtf[0].setBackground(Color.WHITE);
+					cr.idtf[0].setText(clientName);
+					cr.b3.setEnabled(true);
+					cr.b1.setText("준   비");
 				}
 				break;
-				case Function.MYROOMOUT:
+				case Function.MYROOMOUT://?!?!?!?
 				{
 					int size=Integer.parseInt(st.nextToken());
 					//아바타 창 초기화
 					for(int i=0;i<size;i++)
 					{		cr.sw[i]=false;
     						cr.idtf[i].setText("");
+    						cr.idtf[i].setBackground(Color.WHITE);
+    						
     						cr.pan[i].removeAll();
     						cr.pan[i].setLayout(new BorderLayout());
     						cr.pan[i].add("Center",new JLabel(
-    								new ImageIcon("c:\\image\\def.png")));
+    								new ImageIcon("img\\def.png")));
     						cr.pan[i].validate();
     				}
+					cr.idtf[1].setForeground(Color.red);
+					cr.idtf[0].setForeground(Color.black);
 					cr.pane.setText("");
 					cr.tf.setText("");
 					for(int i=cr.model.getRowCount()-1;i>=0;i--)
@@ -746,6 +770,58 @@ implements ActionListener, Runnable, MouseListener
 							break;
 						}
 					}
+				}
+				break;
+	            case Function.GAMEYES://무조건 게스트만 존재
+	            {	System.out.println("client case문 GAMEYES 시작");
+	            	String yesId=st.nextToken(); //준비를 누른 놈의 아이디 (이전 방장아이디)
+	            	System.out.println("준비를 누른 놈의 아이디 (이전 방장아이디):"+yesId);
+	            	String bjId=st.nextToken(); //방장아이디
+	            	System.out.println("현재 방장아이디:"+bjId);
+	            	if(myId.equals(yesId))//내가 게스트라면
+	            	{
+	    				cr.idtf[0].setBackground(Color.green);
+	    				cr.idtf[0].setText("준비완료");
+	    				cr.b3.setEnabled(false);
+	            	}
+	            	else//내가 방장이라면
+	            	{
+	    				cr.idtf[1].setBackground(Color.green);
+	    				cr.idtf[1].setText("준비완료");
+	    				cr.b2.setEnabled(true);
+	    				cr.b3.setEnabled(true);
+	            	}
+	            }
+	            break;
+	            case Function.GAMENO://무조건 게스트만 존재
+	            {	System.out.println("client case문 GAMENO 시작");
+	            	String noId=st.nextToken(); //준비취소를 누른 놈의 아이디(게스트 아이디)
+	            	System.out.println("준비취소를 누른 놈의 아이디:"+noId);
+	            	String noName=st.nextToken(); //준비취소를 누른 놈의 대화명 (게스트 대화명)
+	            	System.out.println("준비취소를 누른 놈의 대화명:"+noName);
+	            	String bjId=st.nextToken(); //방장 아이디
+	            	System.out.println("현재방장아이디:"+bjId);
+	            	if(myId.equals(noId))//내가 게스트임
+	            	{
+	            		//System.out.println("myId.equals(bjId):"+myId.equals(noId));
+	    				cr.idtf[0].setBackground(Color.WHITE);
+	    				cr.idtf[0].setText(noName);
+	    				cr.b3.setEnabled(true); //나가기 버튼 활성화
+	            	}
+	            	else//내가 방장임
+	            	{
+	    				cr.idtf[1].setBackground(Color.WHITE);
+	    				cr.idtf[1].setText(noName);
+	    				cr.b2.setEnabled(false);
+	            	}
+	            	
+	            }
+	            break;
+				case Function.GAMESTART: 
+				{
+					cr.setVisible(false);
+					card.show(getContentPane(), "ChoiceNation");
+					cn.new ChoiceNationTimeLimit().start();
 				}
 				break;
 	          }
