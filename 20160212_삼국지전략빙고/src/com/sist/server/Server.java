@@ -449,19 +449,41 @@ public class Server implements Runnable{
                     break;
                     case Function.GAMESTART:
                     {
-                       int rNum=Integer.parseInt(st.nextToken());
-                       System.out.println("서버 GAMESTART 방받았어:"+rNum);
-                       for(Room room:roomVc)
-                       {
-                          if(room.roomNum==rNum)
-                          {   System.out.println("서버 GAMESTART 방번호비교:클라이언트에서 받은방번호"+rNum);
-                             System.out.println("서버 GAMESTART 방번호비교:서버에 저장된 방번호"+room.roomNum);
-                             for(Client client:room.userVc)
-                             {
-                                client.messageTo(Function.GAMESTART+"|");
-                             }
-                          }
-                       }
+                    	int playTurn1=0;
+                    	int playTurn2=0;
+                    	int su;
+                    	su=(int)Math.random()*2;
+                    	if(su%2==0)
+                    		playTurn1=1;
+                    	else
+                    		playTurn2=1;
+                    	System.out.println("playTurn1:"+playTurn1);
+                    	System.out.println("playTurn2:"+playTurn2);
+                    	int rNum=Integer.parseInt(st.nextToken());
+                    	System.out.println("서버 GAMESTART 방받았어:"+rNum);
+                    	for(Room room:roomVc)
+                    	{
+                    		if(room.roomNum==rNum)
+                    		{	System.out.println("서버 GAMESTART 방번호비교:클라이언트에서 받은방번호"+rNum);
+                    			System.out.println("서버 GAMESTART 방번호비교:서버에 저장된 방번호"+room.roomNum);
+                    			for(Client client:room.userVc)
+                    			{
+                    				System.out.println("room.userVc.elementAt(0).id:"+room.userVc.elementAt(0).id);
+                					System.out.println("통신요청 id:"+id);
+                					
+                    				if(room.userVc.elementAt(0).id.equals(id))
+                    				{
+                    					client.messageTo(Function.GAMESTART+"|"
+                    										+playTurn1+"|");
+                    				}
+                    				else
+                    				{
+                    					client.messageTo(Function.GAMESTART+"|"
+        										+playTurn2+"|");
+                    				}
+                    			}
+                    		}
+                    	}
                     }
                     break;
                     case Function.CHOICENATION:

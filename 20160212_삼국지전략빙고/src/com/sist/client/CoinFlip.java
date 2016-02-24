@@ -53,6 +53,7 @@ public class CoinFlip extends JDialog{
 					type=0;
 				else
 					type=1;
+				System.out.println("나의 선후는 : " +type);
 				repaint();
 				Thread.sleep(2000);
 				setVisible(false);

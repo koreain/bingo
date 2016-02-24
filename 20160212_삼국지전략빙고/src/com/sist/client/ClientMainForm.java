@@ -81,6 +81,9 @@ implements ActionListener, Runnable, MouseListener
 		cr.b3.addActionListener(this);
 		cr.tf.addActionListener(this);
 		
+		GameLayout.endBtn.addActionListener(this);//빙고마무리버튼
+		GameLayout.gameEnd.addActionListener(this);//인게임 나가기 버튼
+		
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false); //윈도우창 고정
 		
@@ -141,7 +144,7 @@ implements ActionListener, Runnable, MouseListener
 	{
 		try
 		{
-			s=new Socket("211.238.142.39", 33333); //211.238.142.39 localhost
+			s=new Socket("211.238.142.40", 33333); //211.238.142.39 localhost
 			// s => server
 			in=new BufferedReader(
 					new InputStreamReader(
@@ -369,8 +372,6 @@ implements ActionListener, Runnable, MouseListener
 	               // TODO: handle exception
 	               System.out.println("cr.b1 준비취소 오류: "+e2.getMessage());
 	            }
-	            GameLayout.endBtn.addActionListener(this);//빙고마무리버튼
-    			GameLayout.gameEnd.addActionListener(this);//인게임 나가기 버튼
 	         }
 	         else
 	         {
@@ -405,8 +406,6 @@ implements ActionListener, Runnable, MouseListener
 			{
 				out.write((Function.GAMESTART+"|"+myRoom+"\n").getBytes());
 			}catch(Exception ex){}
-			GameLayout.endBtn.addActionListener(this);//빙고마무리버튼
-			GameLayout.gameEnd.addActionListener(this);//인게임 나가기 버튼
 		}
 ///////////////////인게임
 		else if(e.getSource()==cn.nation0||e.getSource()==cn.nation1
@@ -429,7 +428,7 @@ implements ActionListener, Runnable, MouseListener
 			cn.jangsu();
 			try
 			{
-				out.write((Function.CHOICENATION+"|"+myRoom+"|"+myId+ChoiceNation.chosenNation1+"\n").getBytes());
+				out.write((Function.CHOICENATION+"|"+myRoom+"|"+ChoiceNation.chosenNation1+"\n").getBytes());
 			}catch(Exception ex){}
 		}
 /////////////////////////////////////////////////////////////////////////////////////////  
@@ -745,6 +744,7 @@ implements ActionListener, Runnable, MouseListener
 			GameProcess.gameReset();
 			game=new GameLayout();
 			add(game,"GAME");
+			cr.setVisible(true);
 		}
 	}
 	@Override
@@ -1144,47 +1144,40 @@ implements ActionListener, Runnable, MouseListener
 	                  
 	               }
 	               break;
-	            case Function.GAMESTART: 
-	            {
-	            	GameProcess.playerTurnMethod();//게임 시작 버튼을 누르는 순간 순서는 정해진다
-	            	cr.setVisible(false);
-	            	card.show(getContentPane(), "ChoiceNation");
-	            	new ChoiceNationTimeLimit().start();
-	            	if(ChoiceNation.cntime==0)
-	            	{
-	            		CoinFlip cf=new CoinFlip();
-	        			CoinFlip.coinEnd=true;
-	        			cf.setVisible(true);
-	        			if(CoinFlip.coinEnd==false) 
-	        			{ 
-	        				card.show(getContentPane(), "GAME");
-	        				t1=new TimeLimit();
-	        				t1.start();
-	        				paintthread=game.new paintThread();
-	        				paintthread.start();
-	        				game.requestFocus();
-	        			}
-	        			ChoiceNation.cntime=7;
-	            	}
-	            }
-	            break;
-	            case Function.CHOICENATION:
-	            {
-	            	String yesId=st.nextToken();
-	            	int cnation=Integer.parseInt(st.nextToken());
-	            	if(myId.equals(yesId))
-	            	{
-	            	}
-	            	else//내가 아니면
-	            	{
-	            		if(cnation==0)
-	            			cn.bu2.setIcon(new ImageIcon("img\\빙고체크-위"));
-	            		else if(cnation==1)
-	            			cn.bu2.setIcon(new ImageIcon("img\\빙고체크-촉"));
-	            		else
-	            			cn.bu2.setIcon(new ImageIcon("img\\빙고체크-오"));
-	            	}
-	            }
+	               case Function.GAMESTART: 
+	               {   
+	                  //playTurn 0:선, 1:후
+	                  int playTurn=Integer.parseInt(st.nextToken());
+	                  if(playTurn==0)
+	                     GameProcess.playerTurn=true;
+	                  else
+	                     GameProcess.playerTurn=false;
+	                  cr.setVisible(false);
+	                  card.show(getContentPane(), "ChoiceNation");
+	                  new ChoiceNationTimeLimit().start();
+	               }
+	               break;
+	               case Function.CHOICENATION:
+	               {
+	                  String yesId=st.nextToken();
+	                  int chosenNation=Integer.parseInt(st.nextToken());
+	                  if(myId.equals(yesId))
+	                  {
+	                     
+	                  }
+	                  else//내가 아니면
+	                  {
+	                     ChoiceNation.chosenNation2=chosenNation;
+	                     if(ChoiceNation.chosenNation2==0)
+	                    	 cn.bu2.setIcon(new ImageIcon("img\\빙고체크-위.png"));
+	                     else if(ChoiceNation.chosenNation2==1)
+	                    	 cn.bu2.setIcon(new ImageIcon("img\\빙고체크-촉.png"));
+	                     else
+	                    	 cn.bu2.setIcon(new ImageIcon("img\\빙고체크-오.png"));
+	                  }
+	                  cn.jangsu();
+	               }
+	               break;
 	               }
 	               
 	         }
@@ -1262,6 +1255,10 @@ implements ActionListener, Runnable, MouseListener
 	            		else
 	            			cn.bu1.setIcon(new ImageIcon("img\\빙고체크-오.png"));
 	            	}
+	            	try
+        			{
+        				out.write((Function.CHOICENATION+"|"+myRoom+"|"+ChoiceNation.chosenNation1+"\n").getBytes());
+        			}catch(Exception ex){}
 	            	cn.jangsu();
 	            	CoinFlip cf=new CoinFlip();
         			CoinFlip.coinEnd=true;
@@ -1276,10 +1273,13 @@ implements ActionListener, Runnable, MouseListener
         				game.requestFocus();
         			}
         			ChoiceNation.cntime=7;
-        			try
-        			{
-        				out.write((Function.CHOICENATION+"|"+myRoom+"|"+ChoiceNation.chosenNation1+"\n").getBytes());
-        			}catch(Exception ex){}
+        			cn.choiceComplete=false;
+        			if(ChoiceNation.chosenNation2==0)
+                   	 cn.bu2.setIcon(new ImageIcon("img\\빙고체크-위.png"));
+                    else if(ChoiceNation.chosenNation2==1)
+                   	 cn.bu2.setIcon(new ImageIcon("img\\빙고체크-촉.png"));
+                    else
+                   	 cn.bu2.setIcon(new ImageIcon("img\\빙고체크-오.png"));
 	            }
 			} catch (Exception ex) {
 			}

@@ -36,14 +36,7 @@ public class GameProcess{
 	static int randTurnNumber=0;
 	
 	static boolean playerWon=false;
-	static void playerTurnMethod() //플레이어턴을 정하는 난수 발생
-	{
-		randTurnNumber=(int)(Math.random()*2);
-		if(randTurnNumber==0)
-			playerTurn=true;
-		else
-			playerTurn=false;//false
-	}
+	
 	static void rand()//중복되지 않는 랜덤 숫자배열 두개 만들기
 	{      
 		int su=0; //난수 발생시 저장할 변수
@@ -107,20 +100,6 @@ public class GameProcess{
         	 }
          }
       }
-   }
-
-   static void coinFlip() //동전던지기
-   {
-      int coin=(int)(Math.random()*2);
-      if(coin==0)
-         playerTurn=true;
-      else
-         playerTurn=false;
-      
-      //if(playerTurn==true)
-         //이미지=
-      //else
-         //이미지=
    }
 
    //빙고체크
