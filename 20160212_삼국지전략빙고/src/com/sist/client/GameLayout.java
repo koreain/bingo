@@ -205,8 +205,7 @@ public class GameLayout extends JPanel implements KeyListener {
 	// 빙고버튼셋팅2 (내부 활용 메소드는 상단에 정의된 RanButton();빙고버튼셋팅1)
 	public static void Rand() {
 		// 1에서 75까지의 랜덤변수 담기 ==> GameProcess 클래스의 numArr1[75], numArr2[75]에 담긴다.
-		GameProcess.rand(); // GameProcess 클래스 안쪽으로 들어가서~ 랜덤메소드 호출
-
+		GameProcess.insertBingoNumber();
 		for (int i = 0; i < 75; i++) {
 			if (i < 25) {
 				// pp1(나의 공격판 패널), p1(너의 공격판 패널)
@@ -226,9 +225,9 @@ public class GameLayout extends JPanel implements KeyListener {
 		youBtnDef = new JButton(defIcon); // 너의 방어스킬 버튼
 		youBtnTrick = new JButton(trickIcon); // 너의 전략스킬 버튼
 		youBtnAvatar = new JButton(youAvatarIcon); // 너의 아바타
-		youLaAtt = new JLabel("x0"); // 너의 공격아이템 개수 라벨
-		youLaDef = new JLabel("x0"); // 너의 방어아이템 개수 라벨
-		youLaTrick = new JLabel("x0"); // 너의 전략아이템 개수 라벨
+		youLaAtt = new JLabel("x" + String.valueOf(GameProcess.numOfBingo2[0] + GameProcess.usingAttackSkill2)); // 너의 공격아이템 개수 라벨
+		youLaDef = new JLabel("x" + String.valueOf(GameProcess.numOfBingo2[1] + GameProcess.usingDefenseSkill2)); // 너의 방어아이템 개수 라벨
+		youLaTrick = new JLabel("x" + String.valueOf(GameProcess.numOfBingo2[2] + GameProcess.usingStrategySkill2)); // 너의 전략아이템 개수 라벨
 		youLaTactic = new JLabel("전술명령x" + GameProcess.skillChance2); // 너의
 																		// 스킬사용가능
 																		// 횟수 라벨
@@ -811,9 +810,6 @@ public class GameLayout extends JPanel implements KeyListener {
 
 		gameEnd.setBounds(485, 540, 230, 84);
 
-		// 번호 섞기
-		Rand();
-
 		p.setOpaque(false);
 		p1.setOpaque(false);
 		p2.setOpaque(false);
@@ -1017,10 +1013,18 @@ public class GameLayout extends JPanel implements KeyListener {
 		}
 	}
 
+	class AFNoticeThread extends Thread
+	{
+		public void run(){
+			GameLayout.aFNoticeX -= 1190; // 게임설명 가져오기
+			try {
+				Thread.sleep(1500); // 1.5초 후
+			} catch (Exception ex) {}
+		}
+	}
 	class AFImageThread extends Thread // 공격필살기 이미지 쓰레드
 	{
 		public void run() {
-			GameLayout.aFNoticeX -= 1190; // 게임설명 가져오기
 			try {
 				Thread.sleep(1500); // 1.5초 후
 			} catch (Exception ex) {}
@@ -1101,7 +1105,7 @@ public class GameLayout extends JPanel implements KeyListener {
 	public static class TimeLimit extends Thread {
 		int cnt = 0;
 		int[] rgb = new int[3];
-		int percent = 0; // 시간제한바를 채우는 퍼센트 (20초:100퍼센트 즉, 0.2초: 1퍼센트)
+		static int percent = 0; // 시간제한바를 채우는 퍼센트 (20초:100퍼센트 즉, 0.2초: 1퍼센트)
 		double residueTime = 20; // 남은시간표시 (초기값:20초)
 
 		public void run() {

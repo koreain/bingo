@@ -6,17 +6,8 @@ import java.util.*;
 import java.net.*;
 import java.io.*;
 import com.sist.client.GameLayout.TimeLimit;
-import com.sist.client.GameLayout.endThread;
 import com.sist.common.*;
 import com.sist.server.*;
-import com.sun.security.ntlm.Client;
-import sun.awt.WindowClosingListener;
-import com.sist.client.GameLayout.AFImageThread;  
-import com.sist.client.GameLayout.AImageThread;  
-import com.sist.client.GameLayout.DFImageThread;  
-import com.sist.client.GameLayout.DImageThread;  
-import com.sist.client.GameLayout.SFImageThread;  
-import com.sist.client.GameLayout.SImageThread;  
 
 public class ClientMainForm extends JFrame
 implements ActionListener, Runnable, MouseListener
@@ -72,6 +63,7 @@ implements ActionListener, Runnable, MouseListener
 		cn.nation2.addActionListener(this);
 		
 		GameLayout.exit.addActionListener(this); //항복 버튼 
+		GameLayout.endBtn.addActionListener(this);//빙고마무리버튼
 		
 		mr.b1.addActionListener(this); //방만들기 창의 방만들기 버튼
 		mr.b2.addActionListener(this); //방만들기 창의 방만들기 취소 버튼
@@ -80,9 +72,6 @@ implements ActionListener, Runnable, MouseListener
 		cr.b2.addActionListener(this);
 		cr.b3.addActionListener(this);
 		cr.tf.addActionListener(this);
-		
-		GameLayout.endBtn.addActionListener(this);//빙고마무리버튼
-		GameLayout.gameEnd.addActionListener(this);//인게임 나가기 버튼
 		
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false); //윈도우창 고정
@@ -101,18 +90,12 @@ implements ActionListener, Runnable, MouseListener
 			}
         });
 		
-	/////////// GameLayout action 모음 ///////////////  
+		/////////// GameLayout action 모음 ///////////////  
 		for(int i=0;i<6;i++){  
 			GameLayout.jypgChoice[i].addActionListener(this); // 이벤트 대기  
 		}  
 	  
 		// 나와 너의 빙고판 안의 모든 버튼 actionListener 추가 메소드  
-		for (int i = 0; i < 3; i++) {  
-			for (int j = 0; j < 25; j++) {  
-				GameLayout.a1[i][j].addActionListener(this);  
-				GameLayout.a2[i][j].addActionListener(this);  
-			}  
-		}  
 		GameLayout.defPGchoice2.addActionListener(this);  
 		GameLayout.defPGchoice1.addActionListener(this);
 		for(int i=0;i<2;i++){  
@@ -340,23 +323,6 @@ implements ActionListener, Runnable, MouseListener
 			}
 			cr.tf.setText("");
 		}
-		else if(e.getSource()==cr.tf) //chatroom 채팅내용
-		{
-//			String msg=cr.tf.getText().trim();
-//			  wr.initStyle();
-//			  String color = wr.box.getSelectedItem().toString();
-//				if(msg.length()<1)
-//					return;
-//				try
-//				{
-//					out.write((Function.WAITCHAT+"|"
-//									+msg+"|"
-//									+color+"\n").getBytes());
-//				}catch(Exception ex){
-//					System.out.println("wr.tf오류"+ex.getMessage());
-//				}
-//				wr.tf.setText("");
-		}
 	      else if(e.getSource()==cr.b1) 
 	      {
 	         if(cr.b1.getText().equals("준비취소"))
@@ -444,25 +410,25 @@ implements ActionListener, Runnable, MouseListener
 					if(l==0)nationIcon2=GameLayout.bcIcon0;if(l==1)nationIcon2=GameLayout.bcIcon1;if(l==2)nationIcon2=GameLayout.bcIcon2;  
 					if (ChoiceNation.chosenNation1 == k && ChoiceNation.chosenNation2 == l)// 진영선택이  
 																							// 되면  
-					{  
+					{
 						for (int i = 0; i < 3; i++) {  
 							for (int j = 0; j < 25; j++) {  
 								// bingo[][]가 체크 안된것만 체크 가능,본인 차례일 때 체크 가능  
 								if (e.getSource() == GameLayout.a1[i][j] && GameProcess.bingo1[i][j] == false  
 										&& GameProcess.playerTurn == true && GameLayout.panCheck2[i][j] == false  
-										 && GameProcess.bingoCheckChance1>0) {  
+										 && GameProcess.bingoCheckChance1>0) {
 									GameProcess.bingoCheck(i, j, GameProcess.p1Board, GameProcess.p2Board,  
 											GameProcess.bingo1, GameProcess.bingo2, GameLayout.a1, GameLayout.a2, nationIcon1, nationIcon2);  
 									GameProcess.bingoCheckChance1--;  
 									GameLayout.laCommand.setText("지휘권x" + String.valueOf(GameProcess.bingoCheckChance1));  
 									game.laSetting(GameLayout.laCommand, GameLayout.laAtt, GameLayout.laDef, GameLayout.laTrick);  
 									if (GameLayout.bingoEnd)  
-										game.bingoEndProcess();  
-								} else if (e.getSource() == GameLayout.a2[i][j] && GameProcess.bingo2[i][j] == false  
-										&& GameProcess.playerTurn == false & GameLayout.panCheck1[i][j] == false) {  
-									GameProcess.bingoCheck(i, j, GameProcess.p2Board, GameProcess.p1Board,  
-											GameProcess.bingo2, GameProcess.bingo1, GameLayout.a2, GameLayout.a1, nationIcon2, nationIcon1);  
-								}  
+										game.bingoEndProcess();
+									try
+									{
+										out.write((Function.BINGOCHECK+"|"+myRoom+"|"+i+"|"+j+"\n").getBytes());
+									}catch(Exception ex){}
+								}
 							}  
 						}  
 					}  
@@ -503,6 +469,7 @@ implements ActionListener, Runnable, MouseListener
 				GameLayout.sNoticeX -= 1190;  
 			} else if (e.getSource() == GameLayout.fury[1][0]) // 공격필살기 버튼  
 			{  
+				game.new AFNoticeThread().start();
 				game.new AFImageThread().start();  
 				GameProcess.bingoCheckChance1++;// 공격기회+1,아이템사용기회+1  
 				GameProcess.skillChance1++;  
@@ -544,31 +511,6 @@ implements ActionListener, Runnable, MouseListener
 			}  
 		}  
   
-		// 플레이어2  
-		if (GameProcess.playerTurn == false && GameLayout.bAttCheck1 == false && GameLayout.bDefCheck1 == false && GameLayout.bTrickCheck1 == false  
-				&& GameLayout.bAttCheck2 == false && GameLayout.bDefCheck2 == false && GameLayout.bTrickCheck2 == false && GameLayout.bDefFCheck1 == false  
-				&& GameLayout.bDefFCheck2 == false && GameLayout.bTrickFCheck1 == false && GameLayout.bTrickFCheck2 == false) {  
-			if (e.getSource() == GameLayout.youBtnAtt)// 플레이어2 공격 스킬 버튼  
-			{  
-  
-			} else if (e.getSource() == GameLayout.youBtnDef)// 방어스킬  
-			{  
-  
-			} else if (e.getSource() == GameLayout.youBtnTrick)// 책략스킬  
-			{  
-  
-			} else if (e.getSource() == GameLayout.fury[0][0]) // 플레이어2 공격필살기 버튼  
-			{  
-  
-			} else if (e.getSource() == GameLayout.fury[0][1]) // 방어필살기 버튼  
-			{  
-  
-			} else if (e.getSource() == GameLayout.fury[0][2]) // 책략필살기 버튼  
-			{  
-  
-			}  
-		}  
-  
 		// 공격,방어,책략스킬 사용  
 		for (int i = 0; i < 3; i++) {  
 			for (int j = 0; j < 25; j++) {  
@@ -581,27 +523,35 @@ implements ActionListener, Runnable, MouseListener
 					GameLayout.bAttCheck1 = false;  
 					GameProcess.skillChance1--;  
 					GameLayout.laTactic.setText("전술명령x" + String.valueOf(GameProcess.skillChance1));  
-					GameLayout.panCheck1[i][j] = true; // 공격한 곳 확인.  
-				} else if (e.getSource() == GameLayout.a2[i][j] && GameLayout.bDefCheck1 && GameLayout.panCheck1[i][j]) {// 방어스킬  
+					GameLayout.panCheck1[i][j] = true; // 공격한 곳 확인.
+					try
+					{
+						out.write((Function.ATTSKILL+"|"+myRoom+"|"+i+j+"\n").getBytes());
+					}catch(Exception ex){}
+				} else if (e.getSource() == GameLayout.a1[i][j] && GameLayout.bDefCheck1 && GameLayout.panCheck2[i][j]) {// 방어스킬  
 					game.new DImageThread().start();  
 					GameProcess.usingDefenseSkill1--;  
 					GameLayout.useDef--;  
 					GameLayout.laDef.setText("x" + String.valueOf(GameProcess.numOfBingo1[1] + GameProcess.usingDefenseSkill1));  
-					if (GameProcess.bingo2[i][j] == false) {  
-						GameLayout.a2[i][j].setIcon(new ImageIcon("img\\" + (GameProcess.p2Board[i][j]) + ".png"));  
-					} else if (GameProcess.bingo2[i][j]) {  
-						if (ChoiceNation.chosenNation2 == 0)  
-							GameLayout.a2[i][j].setIcon(new ImageIcon("img\\빙고체크-위.png"));  
-						else if (ChoiceNation.chosenNation2 == 1)  
-							GameLayout.a2[i][j].setIcon(new ImageIcon("img\\빙고체크-촉.png"));  
-						else if (ChoiceNation.chosenNation2 == 2)  
-							GameLayout.a2[i][j].setIcon(new ImageIcon("img\\빙고체크-오.png"));  
+					if (GameProcess.bingo1[i][j] == false) {  
+						GameLayout.a1[i][j].setIcon(new ImageIcon("img\\" + (GameProcess.p1Board[i][j]) + ".png"));  
+					} else if (GameProcess.bingo1[i][j]) {  
+						if (ChoiceNation.chosenNation1 == 0)  
+							GameLayout.a1[i][j].setIcon(new ImageIcon("img\\빙고체크-위.png"));  
+						else if (ChoiceNation.chosenNation1 == 1)  
+							GameLayout.a1[i][j].setIcon(new ImageIcon("img\\빙고체크-촉.png"));  
+						else if (ChoiceNation.chosenNation1 == 2)  
+							GameLayout.a1[i][j].setIcon(new ImageIcon("img\\빙고체크-오.png"));  
 					}  
   
 					GameLayout.bDefCheck1 = false;  
 					GameProcess.skillChance1--;  
 					GameLayout.laTactic.setText("전술명령x" + String.valueOf(GameProcess.skillChance1));  
-					GameLayout.panCheck1[i][j] = false;  
+					GameLayout.panCheck2[i][j] = false;
+					try
+					{
+						out.write((Function.DEFSKILL+"|"+myRoom+"|"+i+j+"\n").getBytes());
+					}catch(Exception ex){}
 				} else if (e.getSource() == GameLayout.a2[i][j] && GameLayout.bTrickCheck1 && !GameProcess.bingo2[i][j] && !GameLayout.panCheck1[i][j]) {  
 					game.new SImageThread().start();  
 					GameLayout.a2[i][j].setIcon(new ImageIcon("img\\" + GameProcess.numArr2[25 * i + j] + ".png"));  
@@ -610,7 +560,11 @@ implements ActionListener, Runnable, MouseListener
 					GameLayout.laTrick.setText("x" + String.valueOf(GameProcess.numOfBingo1[2] + GameProcess.usingStrategySkill1));  
 					GameProcess.skillChance1--;  
 					GameLayout.laTactic.setText("전술명령x" + String.valueOf(GameProcess.skillChance1));  
-					GameLayout.bTrickCheck1 = false;  
+					GameLayout.bTrickCheck1 = false;
+					try
+					{
+						out.write((Function.TRICKSKILL+"|"+myRoom+"|"+i+j+"\n").getBytes());
+					}catch(Exception ex){}
 				}  
 			}  
 		}  
@@ -618,15 +572,15 @@ implements ActionListener, Runnable, MouseListener
 		if (e.getSource() == GameLayout.defPGchoice2 && GameLayout.bDefFCheck1 == true) {  
 			game.new DFImageThread().start();  
   
-			GameProcess.usingAttackSkill1 -= GameProcess.numOfBingo1[0];  
-			GameProcess.usingDefenseSkill1 -= GameProcess.numOfBingo1[1];  
-			GameProcess.usingStrategySkill1 -= GameProcess.numOfBingo1[2];  
-			GameProcess.usingAttackSkill1 -= GameLayout.useAtt;  
-			GameProcess.usingDefenseSkill1 -= GameLayout.useDef;  
+			GameProcess.usingAttackSkill2 -= GameProcess.numOfBingo1[0];  
+			GameProcess.usingDefenseSkill2 -= GameProcess.numOfBingo1[1];  
+			GameProcess.usingStrategySkill2 -= GameProcess.numOfBingo1[2];  
+			GameProcess.usingAttackSkill2 -= GameLayout.useAtt;  
+			GameProcess.usingDefenseSkill2 -= GameLayout.useDef;  
   
-			GameLayout.laAtt.setText("x" + String.valueOf(GameProcess.numOfBingo1[0] + GameProcess.usingAttackSkill1));  
-			GameLayout.laDef.setText("x" + String.valueOf(GameProcess.numOfBingo1[1] + GameProcess.usingDefenseSkill1));  
-			GameLayout.laTrick.setText("x" + String.valueOf(GameProcess.numOfBingo1[2] + GameProcess.usingStrategySkill1));  
+			GameLayout.laAtt.setText("x" + String.valueOf(GameProcess.numOfBingo2[0] + GameProcess.usingAttackSkill2));  
+			GameLayout.laDef.setText("x" + String.valueOf(GameProcess.numOfBingo2[1] + GameProcess.usingDefenseSkill2));  
+			GameLayout.laTrick.setText("x" + String.valueOf(GameProcess.numOfBingo2[2] + GameProcess.usingStrategySkill2));  
   
 			GameProcess.skillChance1--;  
 			GameLayout.laTactic.setText("전술명령x" + String.valueOf(GameProcess.skillChance1));  
@@ -634,11 +588,15 @@ implements ActionListener, Runnable, MouseListener
 			GameLayout.goongUsable1[1] = false;  
 			GameLayout.fury[1][1].setEnabled(false);  
 			GameLayout.fury[1][1].setVisible(false);  
-			GameLayout.gauge[1][1].setBackground(Color.DARK_GRAY);  
-			GameLayout.gauge[1][1].setString("궁극기소진");  
-			GameLayout.defPan2.setVisible(false);  
+			GameLayout.gauge[1][1].setBackground(Color.DARK_GRAY);
+			GameLayout.gauge[1][1].setString("궁극기소진");
+			GameLayout.defPan2.setVisible(false);
 			GameLayout.furyEndBtn[1][1].setVisible(true);  
-			GameLayout.bDefFCheck1 = false;  
+			GameLayout.bDefFCheck1 = false;
+			try
+			{
+//				out.write((Function.DEFFURY+"|"+myRoom+"|"+i+j+"\n").getBytes());
+			}catch(Exception ex){}
 		}  
 		// 책략필살기 클릭 후, 상대 판 진영파괴 버튼 클릭  
 		for (int i = 0; i < 3; i++) {  
@@ -705,7 +663,11 @@ implements ActionListener, Runnable, MouseListener
 			GameProcess.skillChance1=1;  
 			GameProcess.bingoCheckChance1=1;  
 			GameLayout.laTactic.setText("전술명령x" + String.valueOf(GameProcess.skillChance1));  
-			GameLayout.laCommand.setText("지휘권x" + String.valueOf(GameProcess.bingoCheckChance1));  
+			GameLayout.laCommand.setText("지휘권x" + String.valueOf(GameProcess.bingoCheckChance1));
+			try
+			{
+				out.write((Function.GAMETURN+"|"+myRoom+"\n").getBytes());
+			}catch(Exception ex){}
 		}  
 		game.requestFocus();  
 		
@@ -714,6 +676,7 @@ implements ActionListener, Runnable, MouseListener
 			int exitValue=JOptionPane.showConfirmDialog(this, "항복하시겠습니까?", "항복", JOptionPane.YES_NO_OPTION);
 			if(exitValue==JOptionPane.YES_OPTION) //예를 누르면 게임 끝내기 쓰레드
 			{
+				GameLayout.gameEnd.addActionListener(this);//인게임 나가기 버튼
 				t1.interrupt();
 				GameLayout.IFNoticeVisible();
 				GameLayout.imageVisibleFalse();
@@ -723,6 +686,7 @@ implements ActionListener, Runnable, MouseListener
 		}
 		else if(e.getSource()==GameLayout.endBtn)//빙고 마무리
 		{
+			GameLayout.gameEnd.addActionListener(this);//인게임 나가기 버튼
 			GameLayout.endBtn.setVisible(false);
 			GameLayout.endBackX+=975;
 			GameProcess.playerWon=true;
@@ -754,7 +718,15 @@ implements ActionListener, Runnable, MouseListener
 	      {
 	         while(true)
 	         {
-	            // 클라이언트 => 요청값을 받는다
+	        	 if(GameLayout.TimeLimit.percent==100)
+	        	 {
+	        		 try {
+	        			 out.write((Function.GAMETURN+"|"+myRoom+"\n").getBytes());	
+	        		 } catch (Exception e) {
+	        			 // TODO: handle exception
+	        		 }
+	        	 }
+	        	 // 클라이언트 => 요청값을 받는다
 	            String msg=in.readLine();
 	               StringTokenizer st=
 	                  new StringTokenizer(msg, "|");
@@ -770,7 +742,6 @@ implements ActionListener, Runnable, MouseListener
 	                        st.nextToken(),   //sex (Server에서 보낸 값)
 	                        st.nextToken()   //pos (Server에서 보낸 값)
 	                  };
-
 	                  wr.model2.addRow(data);
 	               }
 	               break;
@@ -1144,29 +1115,69 @@ implements ActionListener, Runnable, MouseListener
 	                  
 	               }
 	               break;
-	               case Function.GAMESTART: 
-	               {   
-	                  //playTurn 0:선, 1:후
-	                  int playTurn=Integer.parseInt(st.nextToken());
-	                  if(playTurn==0)
-	                     GameProcess.playerTurn=true;
-	                  else
-	                     GameProcess.playerTurn=false;
-	                  cr.setVisible(false);
-	                  card.show(getContentPane(), "ChoiceNation");
-	                  new ChoiceNationTimeLimit().start();
-	               }
-	               break;
+	                  case Function.GAMESTART: 
+	                  {   
+	                     //playTurn 0:선, 1:후
+	                    String choiceId=st.nextToken();
+	                    int playTurn=0;
+	                    int playTurn1=Integer.parseInt(st.nextToken());
+	                    int playTurn2=Integer.parseInt(st.nextToken());
+	                     if(myId.equals(choiceId))
+	                    {
+	                        playTurn=playTurn1;
+	                        if(playTurn==0)
+	                            GameProcess.playerTurn=true;
+	                         else
+	                            GameProcess.playerTurn=false;
+	                    }
+	                     else
+	                     {
+	                        playTurn=playTurn2;
+	                        if(playTurn==0)
+	                            GameProcess.playerTurn=true;
+	                         else
+	                            GameProcess.playerTurn=false;
+	                     }
+	                     cr.setVisible(false);
+	                     card.show(getContentPane(), "ChoiceNation");
+	                     new ChoiceNationTimeLimit().start();
+	                  }
+	                  break;
+	                  case Function.NUMBATCH:
+	                  {
+	                     String rId=st.nextToken();
+	                     int seq=Integer.parseInt(st.nextToken());
+	                     if(myId.equals(rId))//내가 방장이면
+	                     {
+	                        GameProcess.numArr1[seq]=Integer.parseInt(st.nextToken());
+	                        GameProcess.numArr2[seq]=Integer.parseInt(st.nextToken());
+	                     }
+	                     else//내가 게스트면
+	                     {
+	                        GameProcess.numArr2[seq]=Integer.parseInt(st.nextToken());
+	                        GameProcess.numArr1[seq]=Integer.parseInt(st.nextToken());
+	                     }   
+	                  }
+	                  break;
+	                  case Function.GAMELAYOUT://!!!!lay
+	                  {
+	                	  GameLayout.Rand();
+	                	  for (int i = 0; i < 3; i++) 
+	                	  {  
+	                		  for (int j = 0; j < 25; j++) 
+	                		  {  
+	                			  GameLayout.a1[i][j].addActionListener(this);  
+	                			  GameLayout.a2[i][j].addActionListener(this);  
+	                		  }  
+	                	  } 
+	                  }
+	                  break;
 	               case Function.CHOICENATION:
 	               {
 	                  String yesId=st.nextToken();
 	                  int chosenNation=Integer.parseInt(st.nextToken());
-	                  if(myId.equals(yesId))
-	                  {
-	                     
-	                  }
-	                  else//내가 아니면
-	                  {
+	                  if(!myId.equals(yesId))
+	                  {//내가 아니면
 	                     ChoiceNation.chosenNation2=chosenNation;
 	                     if(ChoiceNation.chosenNation2==0)
 	                    	 cn.bu2.setIcon(new ImageIcon("img\\빙고체크-위.png"));
@@ -1176,6 +1187,67 @@ implements ActionListener, Runnable, MouseListener
 	                    	 cn.bu2.setIcon(new ImageIcon("img\\빙고체크-오.png"));
 	                  }
 	                  cn.jangsu();
+	               }
+	               break;
+	               case Function.GAMETURN:
+	               {
+	            	   GameLayout.TimeLimit.percent=0;
+	            	   String turnId=st.nextToken();
+	            	   if(turnId.equals(myId))
+	            		   GameProcess.playerTurn=false;
+	            	   else
+	            		   GameProcess.playerTurn=true;
+	               }
+	               break;
+	               case Function.BINGOCHECK:
+	               {
+	            	   int panNumber=Integer.parseInt(st.nextToken());
+	            	   int bingoCheckNumber=Integer.parseInt(st.nextToken());
+	            	   ImageIcon nationIcon1 = null, nationIcon2 = null;
+	            	   if(ChoiceNation.chosenNation1==0)nationIcon1=GameLayout.bcIcon0;
+	            	   if(ChoiceNation.chosenNation1==1)nationIcon1=GameLayout.bcIcon1;
+	            	   if(ChoiceNation.chosenNation1==2)nationIcon1=GameLayout.bcIcon2;
+	            	   if(ChoiceNation.chosenNation2==0)nationIcon2=GameLayout.bcIcon0;
+	            	   if(ChoiceNation.chosenNation2==1)nationIcon2=GameLayout.bcIcon1;
+	            	   if(ChoiceNation.chosenNation2==2)nationIcon2=GameLayout.bcIcon2;
+						GameProcess.bingoCheck(panNumber, bingoCheckNumber, GameProcess.p1Board, GameProcess.p2Board,  
+								GameProcess.bingo1, GameProcess.bingo2, GameLayout.a1, GameLayout.a2, nationIcon1, nationIcon2);  
+						GameLayout.laCommand.setText("지휘권x" + String.valueOf(GameProcess.bingoCheckChance2));
+						if(GameLayout.panCheck2[panNumber][bingoCheckNumber]==true)//락걸린건 안바뀜
+							GameLayout.a1[panNumber][bingoCheckNumber].setIcon(new ImageIcon("img\\빙고체크-락.png"));
+						game.laSetting(GameLayout.laCommand, GameLayout.laAtt, GameLayout.laDef, GameLayout.laTrick);  
+						if (GameLayout.bingoEnd)
+							game.bingoEndProcess();
+	               }
+	               break;
+	               case Function.ATTSKILL:
+	               {
+	            	   
+	               }
+	               break;
+	               case Function.DEFSKILL:
+	               {
+	            	   
+	               }
+	               break;
+	               case Function.TRICKSKILL:
+	               {
+	            	   
+	               }
+	               break;
+	               case Function.ATTFURY:
+	               {
+	            	   
+	               }
+	               break;
+	               case Function.DEFFURY:
+	               {
+	            	   
+	               }
+	               break;
+	               case Function.TRICKFURY:
+	               {
+	            	   
 	               }
 	               break;
 	               }
@@ -1234,10 +1306,11 @@ implements ActionListener, Runnable, MouseListener
 		// TODO Auto-generated method stub
 		
 	}
-	public class ChoiceNationTimeLimit extends Thread implements ActionListener{
+	public class ChoiceNationTimeLimit extends Thread{
 		public void run() {
 			int a = (int) (Math.random() * 3);
 			try {
+				
 				while (ChoiceNation.cntime>0) {
 					ChoiceNation.cntime--;
 					ChoiceNation.la6.setText(String.valueOf(ChoiceNation.cntime));
@@ -1283,11 +1356,6 @@ implements ActionListener, Runnable, MouseListener
 	            }
 			} catch (Exception ex) {
 			}
-		}
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			
 		}
 	}
 }

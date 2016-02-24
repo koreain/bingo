@@ -34,11 +34,11 @@ public class Function {
    public static final int GAMEYES=620;
    public static final int GAMEREADY=630;
    public static final int GAMESTART=640;
+   public static final int NUMBATCH=650;
    
-   public static final int GAMESEND=680;
+   public static final int GAMELAYOUT=680;
    public static final int GAMETURN=690;
    
-   public static final int GAMERESULT=650;
    public static final int GAMEEND=660;
    public static final int MYGAMEEND=670;
    
@@ -49,22 +49,14 @@ public class Function {
    
    public static final int CHOICENATION=720;
    
-   public static final int MYBINGOCHECK=730;
-   public static final int YOURBINGOCHECK=740;
+   public static final int BINGOCHECK=730;
    
-   public static final int MYATTSKILL=750;
-   public static final int MYDEFSKILL=760;
-   public static final int MYTRICKSKILL=770;
-   public static final int MYATTFURY=780;
-   public static final int MYDEFFURY=790;
-   public static final int MYTRICKFURY=800;
-   
-   public static final int YOURATTSKILL=810;
-   public static final int YOURDEFSKILL=820;
-   public static final int YOURTRICKSKILL=830;
-   public static final int YOURATTFURY=840;
-   public static final int YOURDEFFURY=850;
-   public static final int YOURTRICKFURY=860;
+   public static final int ATTSKILL=750;
+   public static final int DEFSKILL=760;
+   public static final int TRICKSKILL=770;
+   public static final int ATTFURY=780;
+   public static final int DEFFURY=790;
+   public static final int TRICKFURY=800;
    
    public static final int MYBINGOEND=870;
    public static final int YOURBINGOEND=880;
