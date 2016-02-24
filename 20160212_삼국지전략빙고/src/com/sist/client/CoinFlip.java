@@ -40,7 +40,8 @@ public class CoinFlip extends JDialog{
 		public void run(){
 			try{
 				int i=0;
-				while(i<10){
+				while(i<10)
+				{
 					if(i%2==0)
 						type=0;
 					else
@@ -53,7 +54,7 @@ public class CoinFlip extends JDialog{
 					type=0;
 				else
 					type=1;
-				System.out.println("나의 선후는 : " +type);
+				System.out.println("나의 선후는:"+type);
 				repaint();
 				Thread.sleep(2000);
 				setVisible(false);

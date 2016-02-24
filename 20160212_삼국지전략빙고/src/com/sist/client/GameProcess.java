@@ -36,7 +36,6 @@ public class GameProcess{
 	static int randTurnNumber=0;
 	
 	static boolean playerWon=false;
-	
 
    static void insertBingoNumber()//플레이어 순서에 따라 판에 숫자 배치
    {
@@ -44,8 +43,8 @@ public class GameProcess{
       {
          for(int j=0; j<25; j++)
          {
-        	 p1Board[i][j]=numArr1[(i*25)+j];
-        	 p2Board[i][j]=numArr2[(i*25)+j];
+        		 p1Board[i][j]=numArr1[(i*25)+j];
+        		 p2Board[i][j]=numArr2[(i*25)+j];
          }
       }
    }
@@ -320,7 +319,6 @@ public class GameProcess{
 			}
 		}
 		GameProcess.playerTurn=true;
-		GameLayout.TimeLimit.percent=0;
    }   
    
 }

@@ -96,6 +96,12 @@ implements ActionListener, Runnable, MouseListener
 		}  
 	  
 		// 나와 너의 빙고판 안의 모든 버튼 actionListener 추가 메소드  
+/*		for (int i = 0; i < 3; i++) {  
+			for (int j = 0; j < 25; j++) {  
+				GameLayout.a1[i][j].addActionListener(this);  
+				GameLayout.a2[i][j].addActionListener(this);  
+			}  
+		} */ 
 		GameLayout.defPGchoice2.addActionListener(this);  
 		GameLayout.defPGchoice1.addActionListener(this);
 		for(int i=0;i<2;i++){  
@@ -416,17 +422,14 @@ implements ActionListener, Runnable, MouseListener
 								// bingo[][]가 체크 안된것만 체크 가능,본인 차례일 때 체크 가능  
 								if (e.getSource() == GameLayout.a1[i][j] && GameProcess.bingo1[i][j] == false  
 										&& GameProcess.playerTurn == true && GameLayout.panCheck2[i][j] == false  
-										 && GameProcess.bingoCheckChance1>0) {
-									GameProcess.bingoCheck(i, j, GameProcess.p1Board, GameProcess.p2Board,  
-											GameProcess.bingo1, GameProcess.bingo2, GameLayout.a1, GameLayout.a2, nationIcon1, nationIcon2);  
-									GameProcess.bingoCheckChance1--;  
-									GameLayout.laCommand.setText("지휘권x" + String.valueOf(GameProcess.bingoCheckChance1));  
-									game.laSetting(GameLayout.laCommand, GameLayout.laAtt, GameLayout.laDef, GameLayout.laTrick);  
+										 && GameProcess.bingoCheckChance1>0) 
+								{
+  
 									if (GameLayout.bingoEnd)  
 										game.bingoEndProcess();
 									try
 									{
-										out.write((Function.BINGOCHECK+"|"+myRoom+"|"+i+"|"+j+"\n").getBytes());
+										out.write((Function.BINGOCHECK+"|"+myRoom+"|"+myId+"|"+i+"|"+j+"\n").getBytes());
 									}catch(Exception ex){}
 								}
 							}  
@@ -665,9 +668,9 @@ implements ActionListener, Runnable, MouseListener
 			GameLayout.laTactic.setText("전술명령x" + String.valueOf(GameProcess.skillChance1));  
 			GameLayout.laCommand.setText("지휘권x" + String.valueOf(GameProcess.bingoCheckChance1));
 			try
-			{
-				out.write((Function.GAMETURN+"|"+myRoom+"\n").getBytes());
-			}catch(Exception ex){}
+	         {
+	            out.write((Function.GAMETURN+"|"+myRoom+"\n").getBytes());
+	         }catch(Exception ex){}
 		}  
 		game.requestFocus();  
 		
@@ -719,14 +722,14 @@ implements ActionListener, Runnable, MouseListener
 	         while(true)
 	         {
 	        	 if(GameLayout.TimeLimit.percent==100)
-	        	 {
-	        		 try {
-	        			 out.write((Function.GAMETURN+"|"+myRoom+"\n").getBytes());	
-	        		 } catch (Exception e) {
-	        			 // TODO: handle exception
-	        		 }
-	        	 }
-	        	 // 클라이언트 => 요청값을 받는다
+	               {
+	                  try {
+	                     out.write((Function.GAMETURN+"|"+myRoom+"\n").getBytes());   
+	                  } catch (Exception e) {
+	                     // TODO: handle exception
+	                  }
+	               }
+	            // 클라이언트 => 요청값을 받는다
 	            String msg=in.readLine();
 	               StringTokenizer st=
 	                  new StringTokenizer(msg, "|");
@@ -742,6 +745,7 @@ implements ActionListener, Runnable, MouseListener
 	                        st.nextToken(),   //sex (Server에서 보낸 값)
 	                        st.nextToken()   //pos (Server에서 보낸 값)
 	                  };
+
 	                  wr.model2.addRow(data);
 	               }
 	               break;
@@ -910,14 +914,7 @@ implements ActionListener, Runnable, MouseListener
 	                     break;
 	                  }
 	               }
-//	               if(myId.equals(rb))//내가 방장
-//	               {
-//	                  cr.idtf[0].setForeground(Color.red);
-//	               }
-//	               else//내가 게스트
-//	               {
-//	                  cr.idtf[0].setForeground(Color.BLACK);
-//	               }
+
 	               cr.setVisible(true);
 	            }
 	            break;
@@ -942,13 +939,6 @@ implements ActionListener, Runnable, MouseListener
 	                break;
 	            case Function.WAITUPDATE:
 	            {
-	               /*
-	                *  +room.roomName+"|"
-	                               +room.current+"|"
-	                               +room.inwon+"|"
-	                               +id+"|"
-	                               +pos
-	                */
 	               int rNum=Integer.parseInt(st.nextToken()); //방번호
 	               String rc=st.nextToken(); //현재인원
 	               System.out.println("클라이언트 WAITUPDATE 케이스 현재인원:"+rc);
@@ -1156,51 +1146,79 @@ implements ActionListener, Runnable, MouseListener
 	                     {
 	                        GameProcess.numArr2[seq]=Integer.parseInt(st.nextToken());
 	                        GameProcess.numArr1[seq]=Integer.parseInt(st.nextToken());
-	                     }   
+	                     }  
 	                  }
 	                  break;
 	                  case Function.GAMELAYOUT://!!!!lay
 	                  {
 	                	  GameLayout.Rand();
-	                	  for (int i = 0; i < 3; i++) 
-	                	  {  
-	                		  for (int j = 0; j < 25; j++) 
-	                		  {  
-	                			  GameLayout.a1[i][j].addActionListener(this);  
-	                			  GameLayout.a2[i][j].addActionListener(this);  
-	                		  }  
-	                	  } 
+	              		for (int i = 0; i < 3; i++) 
+	              		{  
+	            			for (int j = 0; j < 25; j++) 
+	            			{  
+	            				GameLayout.a1[i][j].addActionListener(this);  
+	            				GameLayout.a2[i][j].addActionListener(this);  
+	            			}  
+	            		} 
+	                  }
+	                  break;
+	                  case Function.GAMETURN:
+	                  {	 
+	                	 GameLayout.TimeLimit.percent=0;
+	                     String turnId=st.nextToken();
+	                     if(turnId.equals(myId)||GameProcess.playerTurn)
+	                        GameProcess.playerTurn=false;
+	                     else if(turnId.equals(myId)||!GameProcess.playerTurn)
+	                        GameProcess.playerTurn=true;
 	                  }
 	                  break;
 	               case Function.CHOICENATION:
-	               {
-	                  String yesId=st.nextToken();
-	                  int chosenNation=Integer.parseInt(st.nextToken());
-	                  if(!myId.equals(yesId))
-	                  {//내가 아니면
-	                     ChoiceNation.chosenNation2=chosenNation;
-	                     if(ChoiceNation.chosenNation2==0)
-	                    	 cn.bu2.setIcon(new ImageIcon("img\\빙고체크-위.png"));
-	                     else if(ChoiceNation.chosenNation2==1)
-	                    	 cn.bu2.setIcon(new ImageIcon("img\\빙고체크-촉.png"));
-	                     else
-	                    	 cn.bu2.setIcon(new ImageIcon("img\\빙고체크-오.png"));
+	                  {
+	                     String id=st.nextToken();
+	                     String name=st.nextToken();
+	                     String avata=st.nextToken();
+	                     int win = Integer.parseInt(st.nextToken());
+	                     int lose = Integer.parseInt(st.nextToken());
+	                     int chosenNation=Integer.parseInt(st.nextToken());
+	                    
+	                     if(myId.equals(id))
+	                     {
+	                        GameLayout.laNickname.setText(name);
+	                        GameLayout.btnAvatar.setIcon(new ImageIcon("img\\"+avata));
+	                        GameLayout.laScore.setText("전적 "+win+"승 "+lose+"패");
+	                         if((win+lose)==0){
+	                            GameLayout.pbScore.setValue(0);
+	                       }else{
+	                          double rate = (double)win/(win+lose)*100;
+	                          GameLayout.pbScore.setValue((int)Math.ceil(rate));
+	                       }
+	                     }
+	                     else//내가 아니면
+	                     {
+	                        ChoiceNation.chosenNation2=chosenNation;
+	                        if(ChoiceNation.chosenNation2==0)
+	                           cn.bu2.setIcon(new ImageIcon("img\\빙고체크-위.png"));
+	                        else if(ChoiceNation.chosenNation2==1)
+	                           cn.bu2.setIcon(new ImageIcon("img\\빙고체크-촉.png"));
+	                        else
+	                           cn.bu2.setIcon(new ImageIcon("img\\빙고체크-오.png"));
+	                        
+	                        GameLayout.youLaNickname.setText(name);
+	                        GameLayout.youBtnAvatar.setIcon(new ImageIcon("img\\"+avata));
+	                        GameLayout.youLaScore.setText("전적 "+win+"승 "+lose+"패");
+	                        if((win+lose)==0){
+	                            GameLayout.youPbScore.setValue(0);
+	                       }else{
+	                          double rate = (double)win/(win+lose)*100;
+	                          GameLayout.youPbScore.setValue((int)Math.ceil(rate));
+	                       }
+	                     }
+	                     cn.jangsu();
 	                  }
-	                  cn.jangsu();
-	               }
-	               break;
-	               case Function.GAMETURN:
-	               {
-	            	   GameLayout.TimeLimit.percent=0;
-	            	   String turnId=st.nextToken();
-	            	   if(turnId.equals(myId))
-	            		   GameProcess.playerTurn=false;
-	            	   else
-	            		   GameProcess.playerTurn=true;
-	               }
-	               break;
+	                  break;
 	               case Function.BINGOCHECK:
 	               {
+	            	   String rId=st.nextToken();
 	            	   int panNumber=Integer.parseInt(st.nextToken());
 	            	   int bingoCheckNumber=Integer.parseInt(st.nextToken());
 	            	   ImageIcon nationIcon1 = null, nationIcon2 = null;
@@ -1210,11 +1228,29 @@ implements ActionListener, Runnable, MouseListener
 	            	   if(ChoiceNation.chosenNation2==0)nationIcon2=GameLayout.bcIcon0;
 	            	   if(ChoiceNation.chosenNation2==1)nationIcon2=GameLayout.bcIcon1;
 	            	   if(ChoiceNation.chosenNation2==2)nationIcon2=GameLayout.bcIcon2;
-						GameProcess.bingoCheck(panNumber, bingoCheckNumber, GameProcess.p1Board, GameProcess.p2Board,  
-								GameProcess.bingo1, GameProcess.bingo2, GameLayout.a1, GameLayout.a2, nationIcon1, nationIcon2);  
-						GameLayout.laCommand.setText("지휘권x" + String.valueOf(GameProcess.bingoCheckChance2));
-						if(GameLayout.panCheck2[panNumber][bingoCheckNumber]==true)//락걸린건 안바뀜
-							GameLayout.a1[panNumber][bingoCheckNumber].setIcon(new ImageIcon("img\\빙고체크-락.png"));
+	            	   if(myId.equals(rId))
+	            	   {
+	            		   GameProcess.bingoCheck(panNumber, bingoCheckNumber, 
+	            				   				  GameProcess.p1Board, GameProcess.p2Board,  
+	            				   				  GameProcess.bingo1, GameProcess.bingo2, 
+	            				   				  GameLayout.a1, GameLayout.a2, 
+	            				   				  nationIcon1, nationIcon2);  
+							GameLayout.laCommand.setText("지휘권x" + String.valueOf(GameProcess.bingoCheckChance1));
+//							if(GameLayout.panCheck2[panNumber][bingoCheckNumber]==true)//락걸린건 안바뀜
+//								GameLayout.a1[panNumber][bingoCheckNumber].setIcon(new ImageIcon("img\\빙고체크-락.png"));  
+	            	   }
+	            	   else
+	            	   {
+	            		   GameProcess.bingoCheck(panNumber, bingoCheckNumber, 
+ 				   				  GameProcess.p2Board, GameProcess.p1Board,  
+ 				   				  GameProcess.bingo2, GameProcess.bingo1, 
+ 				   				  GameLayout.a2, GameLayout.a1, 
+ 				   				  nationIcon2, nationIcon1); 
+	            		   GameLayout.youLaCommand.setText("지휘권x" + String.valueOf(GameProcess.bingoCheckChance2));
+							if(GameLayout.panCheck2[panNumber][bingoCheckNumber]==true)//락걸린건 안바뀜
+								GameLayout.a1[panNumber][bingoCheckNumber].setIcon(new ImageIcon("img\\빙고체크-락.png"));
+	            	   }
+						
 						game.laSetting(GameLayout.laCommand, GameLayout.laAtt, GameLayout.laDef, GameLayout.laTrick);  
 						if (GameLayout.bingoEnd)
 							game.bingoEndProcess();
@@ -1338,6 +1374,7 @@ implements ActionListener, Runnable, MouseListener
         			cf.setVisible(true);
         			if(CoinFlip.coinEnd==false)
         			{ 
+
         				card.show(getContentPane(), "GAME");
         				t1=new TimeLimit();
         				t1.start();
