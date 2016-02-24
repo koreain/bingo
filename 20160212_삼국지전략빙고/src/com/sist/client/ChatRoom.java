@@ -20,7 +20,7 @@ import com.sist.server.Server;
 public class ChatRoom extends JFrame{//jdialog 
    JPanel[] pan = new JPanel[2]; 
    MakeRoom mr; 
-   JTextField[] idtf = new JTextField[2]; 
+   JTextField[] idtf = new JTextField[2];
    JTextPane pane; 
    JScrollBar bar;
    JTextField tf; 
@@ -44,7 +44,8 @@ public ChatRoom() {
    idtf[1].setEditable(false);
    idtf[0].setHorizontalAlignment(JLabel.CENTER);
    idtf[1].setHorizontalAlignment(JLabel.CENTER);
-
+   idtf[0].setFont(new Font("바탕",Font.BOLD,14));
+   idtf[1].setFont(new Font("바탕",Font.BOLD,14));
    pane = new JTextPane(); 
    pane.setEditable(false); 
    JScrollPane js1 = new JScrollPane(pane);
@@ -57,7 +58,7 @@ public ChatRoom() {
    box.addItem("cyan"); 
    box.addItem("pink"); 
    b1 = new JButton("준   비"); 
-   b2 = new JButton("시  작"); 
+   b2 = new JButton("시   작"); 
    b3 = new JButton("나가기"); 
    b1.setFont(new Font("맑은 고딕", Font.BOLD, 20)); 
    b2.setFont(new Font("맑은 고딕", Font.BOLD, 20)); 
@@ -65,7 +66,7 @@ public ChatRoom() {
    b1.setCursor(cur); 
    b2.setCursor(cur); 
    b3.setCursor(cur); 
-
+   b2.setEnabled(false);
 
    String[] col = {"ID", "대화명", "승률"}; 
    String[][] row = new String[0][3]; 
@@ -85,7 +86,7 @@ public ChatRoom() {
    // 배치 
 
 
-   setLayout(null); 
+   setLayout(null);
    pan[0].setBounds(20, 15, 157, 150); 
    pan[1].setBounds(215, 15, 157, 150); 
    add(pan[0]); 
@@ -93,8 +94,7 @@ public ChatRoom() {
    idtf[0].setBounds(10, 170, 180, 30); 
    idtf[1].setBounds(205, 170, 180, 30); 
    add(idtf[0]); 
-   add(idtf[1]); 
-
+   add(idtf[1]);
 
    js1.setBounds(10, 215, 375, 120); 
    tf.setBounds(10, 340, 270, 30); 
@@ -151,82 +151,3 @@ public void append(String msg, String color) {
    }
 } 
 } 
-
-
-
-
-/*package com.sist.client;
-import java.awt.*;
-import javax.swing.*;
-import java.awt.event.*;
-import javax.swing.table.*;
-public class ChatRoom extends JFrame{
-    JPanel[] pan=new JPanel[2];
-    // 클래스의 배열 선언 ==> null
-    JTextField[] idtf=new JTextField[2];
-    boolean[] sw=new boolean[2];
-    JTextArea ta;
-    JTextField tf;
-    JComboBox box;
-    JTable table;
-    DefaultTableModel model;
-    JButton b1,b2,b3;
-    // 포함 클래스 ==> 익명의 클래스(재정의)
-    public ChatRoom()
-    {
-       for(int i=0;i<2;i++)
-       {
-          pan[i]=new JPanel();
-          pan[i].setBackground(Color.black);
-          idtf[i]=new JTextField();
-          idtf[i].setEditable(false);
-          idtf[i].setHorizontalAlignment(JLabel.CENTER);
-       }
-       ta=new JTextArea();
-       ta.setEnabled(false);
-       JScrollPane js1=new JScrollPane(ta);
-       tf=new JTextField();
-       box=new JComboBox();
-       b1=new JButton("강퇴");
-       b2=new JButton("초대");
-       b3=new JButton("나가기");
-       
-       String[] col={"ID","대화명","성별"};
-       String[][] row=new String[0][3];
-       model=new DefaultTableModel(row, col);
-       table=new JTable(model);
-       JScrollPane js2=new JScrollPane(table);
-       
-       // 배치
-       setLayout(null);
-       for(int i=0;i<2;i++)
-       {
-             pan[i].setBounds(10+(i*190), 15, 180, 150);
-             add(pan[i]);
-             idtf[i].setBounds(10+(i*190), 170, 180, 30);
-             add(idtf[i]);
-       }
-       js1.setBounds(10, 400, 560, 120);
-       tf.setBounds(10,525,455, 30);
-       box.setBounds(470, 525, 100, 30);
-       js2.setBounds(580, 15, 190,350);
-       JPanel p=new JPanel();
-       p.setLayout(new GridLayout(3, 1,5,5));
-       p.add(b1);p.add(b2);p.add(b3);
-       p.setBounds(580, 370, 190, 185);
-       add(js1);
-       add(tf);
-       add(box);
-       add(js2);
-       add(p);
-       setSize(620, 420); 
-      //setVisible(false);
-       setLocationRelativeTo(null); 
-      //setModal(true); 
-       setResizable(false); 
-       
-    }
-   
-
-}
-*/

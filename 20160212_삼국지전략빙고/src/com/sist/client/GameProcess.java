@@ -33,17 +33,16 @@ public class GameProcess{
 	
 	static int[] gaugeScore={0,33,66,100};//게이지바
 	
-	static int coinA=0;
-	static int coinB=0;
+	static int randTurnNumber=0;
 	
 	static boolean playerWon=false;
-	static void coinRand() //플레이어턴을 정하는 난수 발생
+	static void playerTurnMethod() //플레이어턴을 정하는 난수 발생
 	{
-		coinB=(int)(Math.random()*10)+10;
-		if(coinA%2==0)
+		randTurnNumber=(int)(Math.random()*2);
+		if(randTurnNumber==0)
 			playerTurn=true;
 		else
-			playerTurn=true;//false
+			playerTurn=false;//false
 	}
 	static void rand()//중복되지 않는 랜덤 숫자배열 두개 만들기
 	{      
@@ -87,32 +86,29 @@ public class GameProcess{
 			numArr2[i]=su;
 			
 		}
-		insertBingoNumber1();//판에 숫자 배치
-		insertBingoNumber2();
+		insertBingoNumber();//판에 숫자 배치
 	}
 
-   static void insertBingoNumber1()//플레이어1 판에 숫자 배치
+   static void insertBingoNumber()//플레이어 순서에 따라 판에 숫자 배치
    {
       for(int i=0; i<3; i++)
       {
          for(int j=0; j<25; j++)
          {
-            p1Board[i][j]=numArr1[(i*25)+j];
+        	 if(playerTurn)
+        	 {
+        		 p1Board[i][j]=numArr1[(i*25)+j];
+        		 p2Board[i][j]=numArr2[(i*25)+j];
+        	 }
+        	 else
+        	 {
+        		 p1Board[i][j]=numArr2[(i*25)+j];
+        		 p2Board[i][j]=numArr1[(i*25)+j];
+        	 }
          }
       }
    }
 
-   static void insertBingoNumber2()//플레이어2 판에 숫자 배치
-   {
-      for(int i=0; i<3; i++)
-      {
-         for(int j=0; j<25; j++)
-         {
-            p2Board[i][j]=numArr2[(i*25)+j];
-         }
-      }
-   }
-   
    static void coinFlip() //동전던지기
    {
       int coin=(int)(Math.random()*2);
@@ -385,8 +381,6 @@ public class GameProcess{
 		GameProcess.bingoCheckChance2=1;
 		GameProcess.skillChance1=1;
 		GameProcess.skillChance2=1;
-		GameProcess.coinA=0;
-		GameProcess.coinB=0;
 		GameProcess.skillChance1=1;
 		GameProcess.skillChance2=1;
 		GameProcess.bingoCheckChance1=1;

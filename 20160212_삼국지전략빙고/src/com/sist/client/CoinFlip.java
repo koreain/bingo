@@ -38,20 +38,25 @@ public class CoinFlip extends JDialog{
 	}
 	class CoinThread extends Thread{
 		public void run(){
-			GameProcess.coinRand();//플레이어 턴 난수를 받는다
 			try{
-				while(GameProcess.coinA<GameProcess.coinB){
-					if(GameProcess.coinA%2==0)
+				int i=0;
+				while(i<10){
+					if(i%2==0)
 						type=0;
 					else
 						type=1;
-					GameProcess.coinA++;
+					i++;
 					Thread.sleep(200);
 					repaint();
 				}
-				Thread.sleep(3000);
+				if(GameProcess.playerTurn)
+					type=0;
+				else
+					type=1;
+				repaint();
+				Thread.sleep(2000);
 				setVisible(false);
-				coinEnd=false; 
+				coinEnd=false;
 			}catch(Exception ex){}
 		}
 	}
