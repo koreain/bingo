@@ -1,15 +1,10 @@
 package com.sist.client;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import javax.swing.*;
-import javax.swing.border.*;
-import sun.net.www.content.image.jpeg;
-import com.sist.client.GameLayout.TimeLimit;
 
 public class GameLayout extends JPanel implements KeyListener {
 	/* >>>>>>>>>>>>>>>>>>>>>>>>>>변수선언<<<<<<<<<<<<<<<<<<<<<<<<<<< */
@@ -84,6 +79,13 @@ public class GameLayout extends JPanel implements KeyListener {
 	static JLabel youLaTrick;
 	static JLabel youLaNickname;
 	static JLabel youLaTactic, youLaCommand;
+	
+	static JLabel laScore;
+    static JProgressBar pbScore;
+    static JLabel laRate;
+    static JLabel youLaScore;
+    static JProgressBar youPbScore;
+    static JLabel youLaRate;
 
 	// 플레이어 1,2 장기판별 게이지
 	static JProgressBar[][] gauge = new JProgressBar[2][3];
@@ -205,8 +207,8 @@ public class GameLayout extends JPanel implements KeyListener {
 	// 빙고버튼셋팅2 (내부 활용 메소드는 상단에 정의된 RanButton();빙고버튼셋팅1)
 	public static void Rand() {
 		// 1에서 75까지의 랜덤변수 담기 ==> GameProcess 클래스의 numArr1[75], numArr2[75]에 담긴다.
-		GameProcess.rand(); // GameProcess 클래스 안쪽으로 들어가서~ 랜덤메소드 호출
-
+		//GameProcess.rand(); // GameProcess 클래스 안쪽으로 들어가서~ 랜덤메소드 호출
+		GameProcess.insertBingoNumber();//!!
 		for (int i = 0; i < 75; i++) {
 			if (i < 25) {
 				// pp1(나의 공격판 패널), p1(너의 공격판 패널)
@@ -219,174 +221,210 @@ public class GameLayout extends JPanel implements KeyListener {
 			}
 		}
 	}
-
 	// 너의 상태창 셋팅 메소드
-	public void youStateWindow() {
-		youBtnAtt = new JButton(attIcon); // 너의 공격스킬 버튼
-		youBtnDef = new JButton(defIcon); // 너의 방어스킬 버튼
-		youBtnTrick = new JButton(trickIcon); // 너의 전략스킬 버튼
-		youBtnAvatar = new JButton(youAvatarIcon); // 너의 아바타
-		youLaAtt = new JLabel("x0"); // 너의 공격아이템 개수 라벨
-		youLaDef = new JLabel("x0"); // 너의 방어아이템 개수 라벨
-		youLaTrick = new JLabel("x0"); // 너의 전략아이템 개수 라벨
-		youLaTactic = new JLabel("전술명령x" + GameProcess.skillChance2); // 너의
-																		// 스킬사용가능
-																		// 횟수 라벨
-		youLaCommand = new JLabel("지휘권x" + GameProcess.bingoCheckChance2); // 너의
-																			// 빙고체크가능
-																			// 횟수
-																			// 라벨
-		youLaNickname = new JLabel("your아이디"); // 너의 아이디
-		youLaNickname.setFont(new Font("궁서체", Font.PLAIN, 35));
+	   public void youStateWindow() {
+	      youBtnAtt = new JButton(attIcon); // 너의 공격스킬 버튼
+	      youBtnDef = new JButton(defIcon); // 너의 방어스킬 버튼
+	      youBtnTrick = new JButton(trickIcon); // 너의 전략스킬 버튼
+	      youBtnAvatar = new JButton(youAvatarIcon); // 너의 아바타
+	      youLaAtt = new JLabel("x0"); // 너의 공격아이템 개수 라벨
+	      youLaDef = new JLabel("x0"); // 너의 방어아이템 개수 라벨
+	      youLaTrick = new JLabel("x0"); // 너의 전략아이템 개수 라벨
+	      youLaTactic = new JLabel("전술명령x" + GameProcess.skillChance2); // 너의
+	                                                      // 스킬사용가능
+	                                                      // 횟수 라벨
+	      youLaCommand = new JLabel("지휘권x" + GameProcess.bingoCheckChance2); // 너의
+	                                                         // 빙고체크가능
+	                                                         // 횟수
+	                                                         // 라벨
+	      youLaNickname = new JLabel("your아이디"); // 너의 아이디
+	      youLaNickname.setFont(new Font("궁서체", Font.BOLD, 35));
+	      youLaScore = new JLabel("전적 105승 25패");
+	      youPbScore = new JProgressBar();
+	      youPbScore = new JProgressBar(0, 100);
+	      youPbScore.setForeground(Color.cyan);
+	      youPbScore.setBorderPainted(false);
+	      youPbScore.setBackground(Color.white);
+	      youPbScore.setStringPainted(true);
+	      youLaRate = new JLabel("승률");
+	      youLaRate.setFont(new Font("궁서체", Font.BOLD, 20));
+	      // 너의 아이디 라벨을 패널에 추가
+	      JPanel p = new JPanel();
+	      p.add(youLaNickname);
+	      p.setBounds(930, 30, 240, 58);
+	      p.setOpaque(false);
 
-		// 너의 아이디 라벨을 패널에 추가
-		JPanel p = new JPanel();
-		p.add(youLaNickname);
-		p.setBounds(920, 50, 240, 58);
-		p.setOpaque(false);
+	      // 너의 상태창 구성요소 배치
+	      bingoTurnIcon2.setBounds(905, 30, 55, 55);// 빙고턴
+	      bingoTurnIcon2.setVisible(false);
+	      imageSetting(bingoTurnIcon2);
+	      // 공격
+	      youBtnAtt.setBounds(903, 104, 60, 60); // 공격스킬버튼
+	      youLaAtt.setBounds(963, 109, 100, 60); // 공격아이템 개수 라벨
+	      youLaAtt.setFont(new Font("궁서체", Font.BOLD, 35));
+	      // 방어
+	      youBtnDef.setBounds(903, 164, 60, 60); // 방어스킬버튼
+	      youLaDef.setBounds(963, 169, 100, 60); // 방어아이템 개수 라벨
+	      youLaDef.setFont(new Font("궁서체", Font.BOLD, 35));
+	      // 전략
+	      youBtnTrick.setBounds(903, 224, 60, 60); // 전략스킬버튼
+	      youLaTrick.setBounds(963, 229, 100, 60); // 전략아이템 개수 라벨
+	      youLaTrick.setFont(new Font("궁서체", Font.BOLD, 35));
+	      // 스킬사용가능 횟수 라벨
+	      youLaTactic.setBounds(903, 307, 120, 40);
+	      youLaTactic.setFont(new Font("궁서체", Font.BOLD, 20));
+	      
+	      // 전적
+	      youLaScore.setBounds(1030, 307, 180, 40);
+	      youLaScore.setFont(new Font("궁서체", Font.BOLD, 20));
+	      // 승률
+	      youLaRate.setBounds(1030, 347, 50, 40);
+	      youPbScore.setBounds(1075, 352, 90, 25);
+	      // 빙고체크가능 횟수 라벨
+	      youLaCommand.setBounds(903, 347, 120, 40);
+	      youLaCommand.setFont(new Font("궁서체", Font.BOLD, 20));
+	      // 아바타
+	      youBtnAvatar.setBounds(1024, 102, 157, 190);
+	      youBtnAvatar.setPreferredSize(new Dimension(youAvatarIcon.getIconWidth(), youAvatarIcon.getIconHeight()));
+	      imageSetting(youBtnAvatar);
 
-		// 너의 상태창 구성요소 배치
-		bingoTurnIcon2.setBounds(905, 30, 55, 55);// 빙고턴
-		bingoTurnIcon2.setVisible(false);
-		imageSetting(bingoTurnIcon2);
-		// 공격
-		youBtnAtt.setBounds(903, 104, 60, 60); // 공격스킬버튼
-		youLaAtt.setBounds(963, 109, 100, 60); // 공격아이템 개수 라벨
-		youLaAtt.setFont(new Font("궁서체", Font.BOLD, 35));
-		// 방어
-		youBtnDef.setBounds(903, 164, 60, 60); // 방어스킬버튼
-		youLaDef.setBounds(963, 169, 100, 60); // 방어아이템 개수 라벨
-		youLaDef.setFont(new Font("궁서체", Font.BOLD, 35));
-		// 전략
-		youBtnTrick.setBounds(903, 224, 60, 60); // 전략스킬버튼
-		youLaTrick.setBounds(963, 229, 100, 60); // 전략아이템 개수 라벨
-		youLaTrick.setFont(new Font("궁서체", Font.BOLD, 35));
-		// 스킬사용가능 횟수 라벨
-		youLaTactic.setBounds(903, 307, 160, 40);
-		youLaTactic.setFont(new Font("궁서체", Font.BOLD, 20));
-		// 빙고체크가능 횟수 라벨
-		youLaCommand.setBounds(903, 347, 160, 40);
-		youLaCommand.setFont(new Font("궁서체", Font.BOLD, 20));
-		// 아바타
-		youBtnAvatar.setBounds(1024, 102, 157, 190);
-		youBtnAvatar.setPreferredSize(new Dimension(youAvatarIcon.getIconWidth(), youAvatarIcon.getIconHeight()));
-		imageSetting(youBtnAvatar);
+	      // 스킬버튼 이미지 사이즈 조정
 
-		// 스킬버튼 이미지 사이즈 조정
+	      // 공격
+	      youBtnAtt.setPreferredSize(new Dimension(attIcon.getIconWidth(), attIcon.getIconHeight()));
+	      imageSetting(youBtnAtt);
+	      // 방어
+	      youBtnDef.setPreferredSize(new Dimension(defIcon.getIconWidth(), defIcon.getIconHeight()));
+	      imageSetting(youBtnDef);
+	      // 전략
+	      youBtnTrick.setPreferredSize(new Dimension(trickIcon.getIconWidth(), trickIcon.getIconHeight()));
+	      imageSetting(youBtnTrick);
 
-		// 공격
-		youBtnAtt.setPreferredSize(new Dimension(attIcon.getIconWidth(), attIcon.getIconHeight()));
-		imageSetting(youBtnAtt);
-		// 방어
-		youBtnDef.setPreferredSize(new Dimension(defIcon.getIconWidth(), defIcon.getIconHeight()));
-		imageSetting(youBtnDef);
-		// 전략
-		youBtnTrick.setPreferredSize(new Dimension(trickIcon.getIconWidth(), trickIcon.getIconHeight()));
-		imageSetting(youBtnTrick);
+	      // 너의 상태창 구성요소 추가(아이디 제외)
+	      add(bingoTurnIcon2);
+	      add(youBtnAtt);
+	      add(youBtnDef);
+	      add(youBtnTrick);
+	      add(youBtnAvatar);
+	      add(youLaAtt);
+	      add(youLaDef);
+	      add(youLaTrick);
+	      add(youLaCommand);
+	      add(youLaTactic);
+	      add(youLaScore);
+	      add(youPbScore);
+	      add(youLaRate);
+	      add(p);
+	   }
 
-		// 너의 상태창 구성요소 추가(아이디 제외)
-		add(bingoTurnIcon2);
-		add(youBtnAtt);
-		add(youBtnDef);
-		add(youBtnTrick);
-		add(youBtnAvatar);
-		add(youLaAtt);
-		add(youLaDef);
-		add(youLaTrick);
-		add(youLaCommand);
-		add(youLaTactic);
-		add(p);
-	}
+	   // 나의 상태창 셋팅 메소드
+	   public void stateWindow() {
+	      btnAtt = new JButton(attIcon); // 나의 공격스킬 버튼
+	      btnDef = new JButton(defIcon); // 나의 방어스킬 버튼
+	      btnTrick = new JButton(trickIcon); // 나의 전략스킬 버튼
+	      btnAvatar = new JButton(avatarIcon); // 나의 아바타
+	      laAtt = new JLabel("x" + (String.valueOf((GameProcess.numOfBingo1[0] + GameProcess.usingAttackSkill1)))); // 나의
+	                                                                                       // 공격아이템
+	                                                                                       // 개수
+	                                                                                       // 라벨
+	      laDef = new JLabel("x" + (String.valueOf((GameProcess.numOfBingo1[1] + GameProcess.usingDefenseSkill1)))); // 나의
+	                                                                                       // 방어아이템
+	                                                                                       // 개수
+	                                                                                       // 라벨
+	      laTrick = new JLabel("x" + (String.valueOf((GameProcess.numOfBingo1[2] + GameProcess.usingStrategySkill1)))); // 나의
+	                                                                                          // 전략아이템
+	                                                                                          // 개수
+	                                                                                          // 라벨
+	      laTactic = new JLabel("전술명령x" + String.valueOf(GameProcess.skillChance1)); // 나의
+	                                                               // 스킬사용가능
+	                                                               // 횟수
+	                                                               // 라벨
+	      laCommand = new JLabel("지휘권x" + String.valueOf(GameProcess.bingoCheckChance1)); // 나의
+	                                                                  // 빙고체크가능
+	                                                                  // 횟수
+	                                                                  // 라벨
+	      laNickname = new JLabel("아이디"); // 나의 아이디
+	      laNickname.setFont(new Font("궁서체", Font.BOLD, 35));
+	      laScore = new JLabel("전적 17승25패");
+	      pbScore = new JProgressBar();
+	      pbScore = new JProgressBar(0, 100);
+	      pbScore.setForeground(Color.cyan);
+	      pbScore.setBorderPainted(false);
+	      pbScore.setBackground(Color.white);
+	      pbScore.setStringPainted(true);
+	      laRate = new JLabel("승률");
+	      laRate.setFont(new Font("궁서체", Font.BOLD, 20));
 
-	// 나의 상태창 셋팅 메소드
-	public void stateWindow() {
-		btnAtt = new JButton(attIcon); // 나의 공격스킬 버튼
-		btnDef = new JButton(defIcon); // 나의 방어스킬 버튼
-		btnTrick = new JButton(trickIcon); // 나의 전략스킬 버튼
-		btnAvatar = new JButton(avatarIcon); // 나의 아바타
-		laAtt = new JLabel("x" + (String.valueOf((GameProcess.numOfBingo1[0] + GameProcess.usingAttackSkill1)))); // 나의
-																													// 공격아이템
-																													// 개수
-																													// 라벨
-		laDef = new JLabel("x" + (String.valueOf((GameProcess.numOfBingo1[1] + GameProcess.usingDefenseSkill1)))); // 나의
-																													// 방어아이템
-																													// 개수
-																													// 라벨
-		laTrick = new JLabel("x" + (String.valueOf((GameProcess.numOfBingo1[2] + GameProcess.usingStrategySkill1)))); // 나의
-																														// 전략아이템
-																														// 개수
-																														// 라벨
-		laTactic = new JLabel("전술명령x" + String.valueOf(GameProcess.skillChance1)); // 나의
-																					// 스킬사용가능
-																					// 횟수
-																					// 라벨
-		laCommand = new JLabel("지휘권x" + String.valueOf(GameProcess.bingoCheckChance1)); // 나의
-																						// 빙고체크가능
-																						// 횟수
-																						// 라벨
-		laNickname = new JLabel("아이디"); // 나의 아이디
-		laNickname.setFont(new Font("궁서체", Font.PLAIN, 35));
+	      // 나의 아이디 라벨을 패널에 추가
+	      JPanel p = new JPanel();
+	      p.add(laNickname);
+	      p.setBounds(930, 539, 240, 58);
+	      p.setOpaque(false);
 
-		// 나의 아이디 라벨을 패널에 추가
-		JPanel p = new JPanel();
-		p.add(laNickname);
-		p.setBounds(920, 539, 240, 58);
-		p.setOpaque(false);
+	      // 나의 상태창 구성요소 배치
 
-		// 나의 상태창 구성요소 배치
+	      bingoTurnIcon1.setBounds(905, 535, 55, 55);// 빙고턴
+	      bingoTurnIcon1.setVisible(false);
+	      imageSetting(bingoTurnIcon1);
+	      // 공격
+	      btnAtt.setBounds(903, 613, 60, 60); // 공격스킬버튼
+	      laAtt.setBounds(963, 618, 100, 60); // 공격아이템 개수 라벨
+	      laAtt.setFont(new Font("궁서체", Font.BOLD, 35));
+	      // 방어
+	      btnDef.setBounds(903, 673, 60, 60); // 방어스킬버튼
+	      laDef.setBounds(963, 678, 100, 60); // 방어아이템 개수 라벨
+	      laDef.setFont(new Font("궁서체", Font.BOLD, 35));
+	      // 전략
+	      btnTrick.setBounds(903, 733, 60, 60); // 전략스킬버튼
+	      laTrick.setBounds(963, 738, 100, 60); // 전략아이템 개수 라벨
+	      laTrick.setFont(new Font("궁서체", Font.BOLD, 35));
+	      // 스킬사용가능 횟수 라벨
+	      laTactic.setBounds(903, 815, 120, 40);
+	      laTactic.setFont(new Font("궁서체", Font.BOLD, 20));
+	      // 빙고체크가능 횟수 라벨
+	      laCommand.setBounds(903, 855, 120, 40);
+	      laCommand.setFont(new Font("궁서체", Font.BOLD, 20));
 
-		bingoTurnIcon1.setBounds(905, 535, 55, 55);// 빙고턴
-		bingoTurnIcon1.setVisible(false);
-		imageSetting(bingoTurnIcon1);
-		// 공격
-		btnAtt.setBounds(903, 613, 60, 60); // 공격스킬버튼
-		laAtt.setBounds(963, 618, 100, 60); // 공격아이템 개수 라벨
-		laAtt.setFont(new Font("궁서체", Font.BOLD, 35));
-		// 방어
-		btnDef.setBounds(903, 673, 60, 60); // 방어스킬버튼
-		laDef.setBounds(963, 678, 100, 60); // 방어아이템 개수 라벨
-		laDef.setFont(new Font("궁서체", Font.BOLD, 35));
-		// 전략
-		btnTrick.setBounds(903, 733, 60, 60); // 전략스킬버튼
-		laTrick.setBounds(963, 738, 100, 60); // 전략아이템 개수 라벨
-		laTrick.setFont(new Font("궁서체", Font.BOLD, 35));
-		// 스킬사용가능 횟수 라벨
-		laTactic.setBounds(903, 815, 160, 40);
-		laTactic.setFont(new Font("궁서체", Font.BOLD, 20));
-		// 빙고체크가능 횟수 라벨
-		laCommand.setBounds(903, 855, 160, 40);
-		laCommand.setFont(new Font("궁서체", Font.BOLD, 20));
+	      // 전적
+	      laScore.setBounds(1030, 815, 180, 40);
+	      laScore.setFont(new Font("궁서체", Font.BOLD, 20));
+	      // 승률
+	      laRate.setBounds(1030, 855, 50, 40);
+	      pbScore.setBounds(1075, 860, 90, 25);
+	      
+	      // 아바타
+	      btnAvatar.setBounds(1024, 607, 157, 190);
+	      btnAvatar.setPreferredSize(new Dimension(avatarIcon.getIconWidth(), avatarIcon.getIconHeight()));
+	      imageSetting(btnAvatar);
 
-		// 아바타
-		btnAvatar.setBounds(1024, 607, 157, 190);
-		btnAvatar.setPreferredSize(new Dimension(avatarIcon.getIconWidth(), avatarIcon.getIconHeight()));
-		imageSetting(btnAvatar);
+	      // 스킬버튼 이미지 사이즈 조정
 
-		// 스킬버튼 이미지 사이즈 조정
+	      // 공격
+	      btnAtt.setPreferredSize(new Dimension(attIcon.getIconWidth(), attIcon.getIconHeight()));
+	      imageSetting(btnAtt);
+	      // 방어
+	      btnDef.setPreferredSize(new Dimension(defIcon.getIconWidth(), defIcon.getIconHeight()));
+	      imageSetting(btnDef);
+	      // 전략
+	      btnTrick.setPreferredSize(new Dimension(trickIcon.getIconWidth(), trickIcon.getIconHeight()));
+	      imageSetting(btnTrick);
 
-		// 공격
-		btnAtt.setPreferredSize(new Dimension(attIcon.getIconWidth(), attIcon.getIconHeight()));
-		imageSetting(btnAtt);
-		// 방어
-		btnDef.setPreferredSize(new Dimension(defIcon.getIconWidth(), defIcon.getIconHeight()));
-		imageSetting(btnDef);
-		// 전략
-		btnTrick.setPreferredSize(new Dimension(trickIcon.getIconWidth(), trickIcon.getIconHeight()));
-		imageSetting(btnTrick);
-
-		// 너의 상태창 구성요소 추가(아이디 제외)
-		add(bingoTurnIcon1);
-		add(btnAtt);
-		add(btnDef);
-		add(btnTrick);
-		add(btnAvatar);
-		add(laAtt);
-		add(laDef);
-		add(laTrick);
-		add(laTactic);
-		add(laCommand);
-		add(p);
-	}
+	      // 너의 상태창 구성요소 추가(아이디 제외)
+	      add(bingoTurnIcon1);
+	      add(btnAtt);
+	      add(btnDef);
+	      add(btnTrick);
+	      add(btnAvatar);
+	      add(laAtt);
+	      add(laDef);
+	      add(laTrick);
+	      add(laTactic);
+	      add(laCommand);
+	      add(laScore);
+	      add(laRate);
+	      add(pbScore);
+	      add(p);
+	   }
 
 	public void imageSetting(JButton btn) {
 		btn.setBorderPainted(false); // 버튼 경계선 제거
@@ -407,6 +445,12 @@ public class GameLayout extends JPanel implements KeyListener {
 		youBtnDef.setVisible(false);
 		youBtnTrick.setVisible(false);
 		youBtnAvatar.setVisible(false);
+		laScore.setVisible(false);
+		laRate.setVisible(false);
+		pbScore.setVisible(false);
+		youLaScore.setVisible(false);
+		youLaRate.setVisible(false);
+		youPbScore.setVisible(false);
 		laAtt.setVisible(false);
 		laDef.setVisible(false);
 		laTrick.setVisible(false);
@@ -454,6 +498,12 @@ public class GameLayout extends JPanel implements KeyListener {
 		youBtnDef.setVisible(true);
 		youBtnTrick.setVisible(true);
 		youBtnAvatar.setVisible(true);
+		laScore.setVisible(true);
+		laRate.setVisible(true);
+		pbScore.setVisible(true);
+		youLaScore.setVisible(true);
+		youLaRate.setVisible(true);
+		youPbScore.setVisible(true);
 		laAtt.setVisible(true);
 		laDef.setVisible(true);
 		laTrick.setVisible(true);
@@ -812,7 +862,7 @@ public class GameLayout extends JPanel implements KeyListener {
 		gameEnd.setBounds(485, 540, 230, 84);
 
 		// 번호 섞기
-		Rand();
+		//Rand();
 
 		p.setOpaque(false);
 		p1.setOpaque(false);
@@ -1017,42 +1067,50 @@ public class GameLayout extends JPanel implements KeyListener {
 		}
 	}
 
-	class AFImageThread extends Thread // 공격필살기 이미지 쓰레드
-	{
-		public void run() {
-			GameLayout.aFNoticeX -= 1190; // 게임설명 가져오기
-			try {
-				Thread.sleep(1500); // 1.5초 후
-			} catch (Exception ex) {}
-			GameLayout.aFNoticeX += 1190; // 게임설명은 없어지고
-			imageVisibleFalse(); // 배경을 제외한 모든 오브젝트가 사라진 뒤
-			while (GameLayout.aFImageX >= 0) {
-				try {
-					GameLayout.aFImageX -= 3; // 스킬이미지가 날아옴
-					Thread.sleep(1);
-					bingoTurnIcon1.setVisible(false); //턴 표시가 바뀌어도
-					bingoTurnIcon2.setVisible(false); //스킬 이미지가 돌아가는 동안은 안보임
-				} catch (Exception ex) {}
-			}
-			try {
-				Thread.sleep(1000); // 1초간 게임이미지 멈춰있기
-			} catch (Exception ex) {
-			}
-			GameLayout.aFImageX = 1200; // 게임이미지 없애기
-			imageVisibleTrue();
-			laTactic.setText("전술명령x" + String.valueOf(GameProcess.skillChance1));
-			laCommand.setText("지휘권x" + String.valueOf(GameProcess.bingoCheckChance1));
-			GameLayout.plusY -= 170;
-			while (GameLayout.plusY > 810) // 전술명령,지휘권 옆에 플러스표시
-			{
-				try {
-					GameLayout.plusY--;
-					Thread.sleep(50);
-				} catch (Exception ex) {}
-			}
-			GameLayout.plusY = 1000;
-		}
-	}
+	class AFNoticeThread extends Thread
+	   {
+	      public void run(){
+	         GameLayout.aFNoticeX -= 1190; // 게임설명 가져오기
+	         try {
+	            Thread.sleep(1500); // 1.5초 후
+	         } catch (Exception ex) {}
+	      }
+	   }
+	   class AFImageThread extends Thread // 공격필살기 이미지 쓰레드
+	   {
+	      public void run() {
+	         try {
+	            Thread.sleep(1500); // 1.5초 후
+	         } catch (Exception ex) {}
+	         GameLayout.aFNoticeX += 1190; // 게임설명은 없어지고
+	         imageVisibleFalse(); // 배경을 제외한 모든 오브젝트가 사라진 뒤
+	         while (GameLayout.aFImageX >= 0) {
+	            try {
+	               GameLayout.aFImageX -= 3; // 스킬이미지가 날아옴
+	               Thread.sleep(1);
+	               bingoTurnIcon1.setVisible(false); //턴 표시가 바뀌어도
+	               bingoTurnIcon2.setVisible(false); //스킬 이미지가 돌아가는 동안은 안보임
+	            } catch (Exception ex) {}
+	         }
+	         try {
+	            Thread.sleep(1000); // 1초간 게임이미지 멈춰있기
+	         } catch (Exception ex) {
+	         }
+	         GameLayout.aFImageX = 1200; // 게임이미지 없애기
+	         imageVisibleTrue();
+	         laTactic.setText("전술명령x" + String.valueOf(GameProcess.skillChance1));
+	         laCommand.setText("지휘권x" + String.valueOf(GameProcess.bingoCheckChance1));
+	         GameLayout.plusY -= 170;
+	         while (GameLayout.plusY > 810) // 전술명령,지휘권 옆에 플러스표시
+	         {
+	            try {
+	               GameLayout.plusY--;
+	               Thread.sleep(50);
+	            } catch (Exception ex) {}
+	         }
+	         GameLayout.plusY = 1000;
+	      }
+	   }
 
 	class DFImageThread extends Thread // 방어필살기 이미지 쓰레드
 	{
@@ -1098,10 +1156,10 @@ public class GameLayout extends JPanel implements KeyListener {
 		}
 	}
 
-	public static class TimeLimit extends Thread {
+	/*public static class TimeLimit extends Thread {
 		int cnt = 0;
 		int[] rgb = new int[3];
-		int percent = 0; // 시간제한바를 채우는 퍼센트 (20초:100퍼센트 즉, 0.2초: 1퍼센트)
+		static int percent = 0; // 시간제한바를 채우는 퍼센트 (20초:100퍼센트 즉, 0.2초: 1퍼센트)
 		double residueTime = 20; // 남은시간표시 (초기값:20초)
 
 		public void run() {
@@ -1173,7 +1231,7 @@ public class GameLayout extends JPanel implements KeyListener {
 				e.getMessage();
 			}
 		}
-	}
+	}*/
 
 	class paintThread extends Thread // 시간제한이 지나면 스킬설명을 없애기 위해 repaint()해주는 쓰레드
 	{
