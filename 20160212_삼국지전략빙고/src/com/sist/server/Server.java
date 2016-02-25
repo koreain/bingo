@@ -18,6 +18,7 @@ public class Server implements Runnable{
    Vector<Room> roomVc=new Vector<Room>();
    // 종료된 방번호 정보를 저장 및 반환
    Vector<Integer> rnumVc=new Vector<Integer>();
+   int jypgCnt=0;
    public Server()
    {
       try
@@ -470,6 +471,14 @@ public class Server implements Runnable{
                        {
                           if(room.roomNum==rNum)
                           {   
+                        	 for(int i=0; i<75; i++)
+                        	 {
+                        		 System.out.println((i+1)+"번째 플레이어1의 빙고값: "+room.numArr1[i]);
+                        	 }
+                        	 for(int i=0; i<75; i++)
+                        	 {
+                        		 System.out.println((i+1)+"번째 플레이어1의 빙고값: "+room.numArr2[i]);
+                        	 }
                              for(Client client:room.userVc)
                                {
                                 client.messageTo(Function.GAMESTART+"|"
@@ -493,23 +502,6 @@ public class Server implements Runnable{
                        }
                     }
                     break;
-//                    case Function.CHOICENATION:
-//                    {
-//                    	 int rn=Integer.parseInt(st.nextToken());
-//                    	 int cnation=Integer.parseInt(st.nextToken());
-//                         for(Room room:roomVc)
-//                         {
-//                            if(room.roomNum==rn)
-//                            {   
-//                            	for(Client client:room.userVc)
-//                            	{
-//                                  client.messageTo((Function.CHOICENATION+"|"
-//                                                 +id+"|"+cnation+"|"));
-//                            	}
-//                            }   
-//                         }
-//                    }
-//                    break;
                     case Function.CHOICENATION:
                     {
                         int rn=Integer.parseInt(st.nextToken());
@@ -569,6 +561,7 @@ public class Server implements Runnable{
                     case Function.ATTSKILL:
                     {
                        int rn=Integer.parseInt(st.nextToken());
+                       String sId=st.nextToken();
                        int panNumber=Integer.parseInt(st.nextToken());
                        int bingoCheckNumber=Integer.parseInt(st.nextToken());
                        for(Room room:roomVc)
@@ -577,7 +570,7 @@ public class Server implements Runnable{
                            {   
                               for(Client client:room.userVc)
                               {
-                                 client.messageTo((Function.ATTSKILL+"|"
+                                 client.messageTo((Function.ATTSKILL+"|"+sId+"|"
                                                 +panNumber+"|"+bingoCheckNumber+"|"));
                               }
                            }   
@@ -587,6 +580,7 @@ public class Server implements Runnable{
                     case Function.DEFSKILL:
                     {
                        int rn=Integer.parseInt(st.nextToken());
+                       String sId=st.nextToken();
                        int panNumber=Integer.parseInt(st.nextToken());
                        int bingoCheckNumber=Integer.parseInt(st.nextToken());
                        for(Room room:roomVc)
@@ -595,7 +589,7 @@ public class Server implements Runnable{
                            {   
                               for(Client client:room.userVc)
                               {
-                                 client.messageTo((Function.DEFSKILL+"|"
+                                 client.messageTo((Function.DEFSKILL+"|"+sId+"|"
                                                 +panNumber+"|"+bingoCheckNumber+"|"));
                               }
                            }   
@@ -605,6 +599,7 @@ public class Server implements Runnable{
                     case Function.TRICKSKILL:
                     {
                        int rn=Integer.parseInt(st.nextToken());
+                       String sId=st.nextToken();
                        int panNumber=Integer.parseInt(st.nextToken());
                        int bingoCheckNumber=Integer.parseInt(st.nextToken());
                        for(Room room:roomVc)
@@ -613,7 +608,7 @@ public class Server implements Runnable{
                            {   
                               for(Client client:room.userVc)
                               {
-                                 client.messageTo((Function.TRICKSKILL+"|"
+                                 client.messageTo((Function.TRICKSKILL+"|"+sId+"|"
                                                 +panNumber+"|"+bingoCheckNumber+"|"));
                               }
                            }   
@@ -638,12 +633,72 @@ public class Server implements Runnable{
                     break;
                     case Function.DEFFURY:
                     {
-                      
-                      }
+                    	int rn=Integer.parseInt(st.nextToken());
+                    	String furyId=st.nextToken();
+                    	for(Room room:roomVc)
+                        {
+                            if(room.roomNum==rn)
+                            {   
+                               for(Client client:room.userVc)
+                               {
+                                  client.messageTo((Function.DEFFURY+"|"+furyId+"|"));
+                               }
+                            }   
+                        }
+                    }
+                    break;
+                    case Function.JYPGRANNUM://진영파괴 랜덤변수 저장
+                    {		
+
+                    		int panCol=Integer.parseInt(st.nextToken());
+                    		int seq=Integer.parseInt(st.nextToken());
+                    		int p2Board=Integer.parseInt(st.nextToken());
+                    		String bingo2=st.nextToken();
+                    		System.out.println(bingo2);
+                    		int numArr2=Integer.parseInt(st.nextToken());
+                        	int rn=Integer.parseInt(st.nextToken());
+                        	String furyId=st.nextToken();
+                        	for(Room room:roomVc)
+                            {
+                                if(room.roomNum==rn)
+                                {   
+                                   for(Client client:room.userVc)
+                                   {
+                                		   System.out.println("서버 JYPGRANNUM 메세지 보내기 포문 몇번돌았을까?");
+                                		   client.messageTo(Function.JYPGRANNUM+"|"
+                                				   +panCol+"|"
+                                				   +seq+"|"
+                                				   +p2Board+"|"
+                                				   +bingo2+"|"
+                                				   +numArr2+"|"
+                                				   +furyId+"|");
+                                   }
+                                 }
+                             } 
+                    	
+                    }
                     break;
                     case Function.TRICKFURY:
                     {
-                      
+                    	jypgCnt++;
+                    	//1번째 요청때 jypgCnt 값은 1, .... 25번째 요청때  한번돌고, 다시 0으로 셋팅 // 다음에도 25번쨰에 만 한번 실행
+                    	if(jypgCnt==25)
+                    	{
+                    		int rn=Integer.parseInt(st.nextToken());
+                        	String furyId=st.nextToken();
+                        	for(Room room:roomVc)
+                            {
+                                if(room.roomNum==rn)
+                                {   
+                                   for(Client client:room.userVc)
+                                   {
+                                      client.messageTo(Function.TRICKFURY+"|"
+                                                     +furyId+"|");
+                                   }
+                                }   
+                            }
+                        	jypgCnt=0;
+                    	}
                     }
                     break;
                     case Function.BINGOEND:

@@ -119,62 +119,21 @@ public class GameProcess{
    }
    
    //진영파괴(JinYoung PaGoe)
-   static void jypg(int panRow, int panCol)
+   static void jypg(int panCol)
    {
 	   ImageIcon[] dft= {GameLayout.bcIcon0,GameLayout.bcIcon1,GameLayout.bcIcon2}; //위촉오 빙고이미지
 	   ImageIcon myBingo=dft[ChoiceNation.chosenNation1];    //내가 선택한 나라에 맞는 빙고체크 이미지 가져옴
 	   ImageIcon yourBingo=dft[ChoiceNation.chosenNation2];	 //상대가 선택한 나라에 맞는 빙고체크 이미지 가져옴
-	   if(panRow==1)//나의 판일경우 (panRow가 0:상대판, panRow가 1:내판)
-	   {
-		  for(int i=panCol*25; i<24+(panCol*25); i++) //panCol값이 0이면 공격판, 1이면 방어판, 2이면 전략판
-		  {
-			ImageIcon originNum=new ImageIcon("img\\"+GameProcess.numArr1[i]+".png"); //기존 숫자 이미지
-			int newArr=(int)(Math.random()*25+(panCol*25));
-			ImageIcon newImgNum=new ImageIcon("img\\"+GameProcess.numArr1[newArr]+".png"); //랜덤으로 변경된 숫자 이미지 
-			//정확히 설명하면 랜덤으로 뽑은 배열번호의 값에 해당하는 이미지를 저장하는 것
-			
-			//실제 빙고숫자값 교환
-			int temp=numArr1[i]; //임시적으로 기존 배열번호의 실제값을 temp변수에 저장
-			numArr1[i]=numArr1[newArr]; //랜덤으로 뽑은 배열번호의 실제값을 기존 배열번호에 저장하고
-			numArr1[newArr]=temp; //임시적으로 저장한 기존 배열번호의 실제값을 랜덤으로 뽑은 배열번호의 실제값으로 저장
-			p1Board[panCol][i-(25*panCol)]=numArr1[i]; //바뀌어진 기존 배열번호의 실제값을 p1Board(실제값이 빙고판 5by5 배열로 잡혀있는)의 기존배열위치에 저장해준다 >> 빙고점수 적용을 위해
-			p1Board[panCol][newArr-(25*panCol)]=numArr1[newArr]; //뽑힌 배열번호의 실제값을 p1Board(실제값이 빙고판 5by5 배열로 잡혀있는)의 뽑힌배열위치에 저장해준다 >> 빙고점수 적용을 위해 
-			
-			if(GameProcess.bingo1[panCol][i-(25*panCol)]==false&&				  //기존 배열번호의 버튼이 빙고체크 되지 않았고,
-			   GameProcess.bingo1[panCol][newArr-(25*panCol)]==false) 			  //새로운 배열번호의 버튼이 빙고체크 되지 않았으면..
-			{
-				GameLayout.a1[panCol][newArr-(25*panCol)].setIcon(originNum); 	  //새로운 배열번호 버튼의 이미지를 기존 배열번호 버튼의 이미지로 변경하고
-				GameLayout.a1[panCol][i-(25*panCol)].setIcon(newImgNum);		  //기존 배열번호 버튼의 이미지를 새로운 배열번호 버튼의 이미지로 변경해준다.
-			}
-			else if(GameProcess.bingo1[panCol][i-(25*panCol)]==true&&             //기존 배열번호의 버튼이 빙고체크 되었고,                
-				    GameProcess.bingo1[panCol][newArr-(25*panCol)]==false)        //새로운 배열번호의 버튼이 빙고체크가 되지 않았으면..              
-				{                                                                                                           
-					GameLayout.a1[panCol][newArr-(25*panCol)].setIcon(myBingo);   //새로운 배열번호 버튼의 이미지를 내가 선택한 나라에 맞는 빙고체크 이미지로 변경하고 
-					GameLayout.a1[panCol][i-(25*panCol)].setIcon(newImgNum);	  //기존 배열번호 버튼의 이미지를 새로운 배열번호 버튼의 이미지로 변경하고
-					GameProcess.bingo1[panCol][i-(25*panCol)]=false;              //기존 배열번호의 버튼을 빙고체크 "해제"해주고
-					GameProcess.bingo1[panCol][newArr-(25*panCol)]=true;		  //새로운 배열번호의 버튼을 빙고체크해준다.
-				}
-			else if(GameProcess.bingo1[panCol][i-(25*panCol)]==false&&            //기존 배열번호의 버튼이 빙고체크 되지 않았고,                
-				    GameProcess.bingo1[panCol][newArr-(25*panCol)]==true)         //새로운 배열번호의 버튼이 빙고체크 되었으면..               
-				{                                                                                                             
-					GameLayout.a1[panCol][newArr-(25*panCol)].setIcon(originNum); //새로운 배열번호 버튼의 이미지를 기존 배열번호 버튼의 이미지로 변경하고    
-					GameLayout.a1[panCol][i-(25*panCol)].setIcon(myBingo);		  //기존 배열번호 버튼의 이미지를 내가 선택한 나라에 맞는 빙고체크 이미지로 변경하고
-					GameProcess.bingo1[panCol][i-(25*panCol)]=true;				  //기존 배열번호의 버튼을 빙고체크해주고,
-					GameProcess.bingo1[panCol][newArr-(25*panCol)]=false;		  //새로운 배열번호의 버튼을 빙코체크 "해제" 해준다.
-				}
-		  }  
-	   }
-	   else //panRow==0; <위와 동일하나, 상대판의 경우이다> 숫자이미지가 필요없음...
-	   {
-			  for(int i=panCol*25; i<24+(panCol*25); i++)
+
+			  for(int i=panCol*25; i<25+(panCol*25); i++)
 			  {
 				ImageIcon noBingo=new ImageIcon("img\\빙고판-상대.png");
 				int newArr=(int)(Math.random()*25+(panCol*25));
-				int temp=numArr2[i];
-				numArr2[i]=numArr2[newArr];
-				numArr2[newArr]=temp;
-				p2Board[panCol][i-(25*panCol)]=numArr2[i];
-				p2Board[panCol][newArr-(25*panCol)]=numArr2[newArr];
+				int temp=GameProcess.numArr2[i];//상대방의 원래 i배열값을 temp에 담고
+				GameProcess.numArr2[i]=GameProcess.numArr2[newArr];// i배열번호에 i이외의 랜덤배열번호값을 저장
+				GameProcess.numArr2[newArr]=temp; //상대방의 원래 i 배열값을 랜덤배열번호값에 저장 즉, 교환 완료.
+				GameProcess.p2Board[panCol][i-(25*panCol)]=GameProcess.numArr2[i]; //원래 p2Board의 배열값에 새로변경된 numArr2값을 담고
+				GameProcess.p2Board[panCol][newArr-(25*panCol)]=GameProcess.numArr2[newArr];//새로운 p2Board 랜덤배열에 기존 numArr2값을 담는다 즉, 교환완료.
 				
 				if(GameProcess.bingo2[panCol][i-(25*panCol)]==false&&
 				   GameProcess.bingo2[panCol][newArr-(25*panCol)]==false)
@@ -182,13 +141,13 @@ public class GameProcess{
 					GameLayout.a2[panCol][newArr-(25*panCol)].setIcon(noBingo); 
 					GameLayout.a2[panCol][i-(25*panCol)].setIcon(noBingo);
 				}
-				else if(GameProcess.bingo2[panCol][i-(25*panCol)]==true&&
-					    GameProcess.bingo2[panCol][newArr-(25*panCol)]==false)
+				else if(GameProcess.bingo2[panCol][i-(25*panCol)]==true&&//기존에 위치에 빙고체크가 되어있고
+					    GameProcess.bingo2[panCol][newArr-(25*panCol)]==false)//새 위치에 빙고체크가 안된 상태라면
 					{
-						GameLayout.a2[panCol][newArr-(25*panCol)].setIcon(yourBingo); 
-						GameProcess.bingo2[panCol][i-(25*panCol)]=false;
-						GameLayout.a2[panCol][i-(25*panCol)].setIcon(noBingo);
-						GameProcess.bingo2[panCol][newArr-(25*panCol)]=true;
+						GameLayout.a2[panCol][newArr-(25*panCol)].setIcon(yourBingo);//상대방의 빙고체크표시를 새로운 위치에 해주고 
+						GameProcess.bingo2[panCol][i-(25*panCol)]=false;//기존 위치의 빙고체크를 해제해주고
+						GameLayout.a2[panCol][i-(25*panCol)].setIcon(noBingo);//빙고가 안되었다는 표시를 기존 위치에 해주고
+						GameProcess.bingo2[panCol][newArr-(25*panCol)]=true;//새로운 위치에 빙고체크를 해준다.
 					}
 				else if(GameProcess.bingo2[panCol][i-(25*panCol)]==false&&
 					    GameProcess.bingo2[panCol][newArr-(25*panCol)]==true)
@@ -199,10 +158,9 @@ public class GameProcess{
 						GameProcess.bingo2[panCol][newArr-(25*panCol)]=false;
 					}
 			  }  
-	   }
 	   lineCount();
    }
-   
+
    //완성된 라인 체크 알고리즘
    static int lineCountMethod(boolean[][] bingo, int pan)
    {

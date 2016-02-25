@@ -7,6 +7,7 @@ import java.awt.event.MouseListener;
 import javax.swing.*;
 
 public class GameLayout extends JPanel implements KeyListener {
+	Sound sd=new Sound();
 	/* >>>>>>>>>>>>>>>>>>>>>>>>>>변수선언<<<<<<<<<<<<<<<<<<<<<<<<<<< */
 	// 시간제한 타이머
 	static JProgressBar timer = new JProgressBar(); // 시간제한바
@@ -638,18 +639,6 @@ public class GameLayout extends JPanel implements KeyListener {
 				jypgChoice[i].setBounds(40 + 279 * (i % 3), 530, jypgLine.getIconWidth(), jypgLine.getIconHeight());
 			}
 		}
-		// 레이아웃으로 묶어서 배치
-		// FlowLayout jypg=new FlowLayout(FlowLayout.LEFT,0,0); //전략필살기 레이아웃
-		// (진영파괴)
-		// 너의 판에 배치
-		/*
-		 * jypgPan1.setLayout(jypg); jypgPan1.setBackground(null);
-		 * jypgPan1.setOpaque(false); jypgPan1.setBounds(32, 528, 895, 110);
-		 * add(jypgPan1); jypgPan1.setVisible(false); //나의 판에 배치
-		 * jypgPan2.setLayout(jypg); jypgPan2.setBackground(null);
-		 * jypgPan2.setOpaque(false); jypgPan2.setBounds(32, 23, 895, 110);
-		 * add(jypgPan2); jypgPan2.setVisible(false);
-		 */
 
 		/*
 		 * 방어필살기버튼 세팅 (진영기습 버튼 설정)
@@ -853,9 +842,6 @@ public class GameLayout extends JPanel implements KeyListener {
 
 		gameEnd.setBounds(485, 540, 230, 84);
 
-		// 번호 섞기
-		//Rand();
-
 		p.setOpaque(false);
 		p1.setOpaque(false);
 		p2.setOpaque(false);
@@ -931,11 +917,20 @@ public class GameLayout extends JPanel implements KeyListener {
 	}
 
 	// 지휘권 사용가능 횟수 및 잔여아이템 개수 표시 메소드 (빙고숫자 버튼 클릭에 따라)
-	public void laSetting(JLabel command, JLabel att, JLabel def, JLabel trick) {
-		command.setText("지휘권x" + String.valueOf(GameProcess.bingoCheckChance1));
-		att.setText("x" + String.valueOf(GameProcess.numOfBingo1[0] + GameProcess.usingAttackSkill1));
-		def.setText("x" + String.valueOf(GameProcess.numOfBingo1[1] + GameProcess.usingDefenseSkill1));
-		trick.setText("x" + String.valueOf(GameProcess.numOfBingo1[2] + GameProcess.usingStrategySkill1));
+	public void laSetting1() {
+		GameLayout.laCommand.setText("지휘권x" + String.valueOf(GameProcess.bingoCheckChance1));
+		GameLayout.laTactic.setText("전술명령x" + String.valueOf(GameProcess.skillChance1));
+		GameLayout.laAtt.setText("x" + String.valueOf(GameProcess.numOfBingo1[0] + GameProcess.usingAttackSkill1));
+		GameLayout.laDef.setText("x" + String.valueOf(GameProcess.numOfBingo1[1] + GameProcess.usingDefenseSkill1));
+		GameLayout.laTrick.setText("x" + String.valueOf(GameProcess.numOfBingo1[2] + GameProcess.usingStrategySkill1));
+		}
+	public void laSetting2() {
+		GameLayout.youLaCommand.setText("지휘권x" + String.valueOf(GameProcess.bingoCheckChance2));
+		GameLayout.youLaTactic.setText("전술명령x" + String.valueOf(GameProcess.skillChance2));
+		GameLayout.youLaAtt.setText("x" + String.valueOf(GameProcess.numOfBingo2[0] + GameProcess.usingAttackSkill2));
+		GameLayout.youLaDef.setText("x" + String.valueOf(GameProcess.numOfBingo2[1] + GameProcess.usingDefenseSkill2));
+		GameLayout.youLaTrick.setText("x" + String.valueOf(GameProcess.numOfBingo2[2] + GameProcess.usingStrategySkill2));
+	
 	}
 
 	public void bingoEndProcess() {
@@ -994,6 +989,7 @@ public class GameLayout extends JPanel implements KeyListener {
 	class AImageThread extends Thread // 공격스킬 이미지 쓰레드
 	{
 		public void run() {
+			sd.Sound(sd.attImg, false); 
 			GameLayout.aNoticeX += 1190; // 게임설명은 없어지고
 			imageVisibleFalse(); // 배경을 제외한 모든 오브젝트가 사라진 뒤
 			while (GameLayout.aImageX >= 0) {
@@ -1009,12 +1005,14 @@ public class GameLayout extends JPanel implements KeyListener {
 			} catch (Exception ex) {}
 			GameLayout.aImageX = 1200; // 게임이미지 없애기
 			imageVisibleTrue();
+			sd.Sound(sd.btnAtt, false); 
 		}
 	}
 
 	class DImageThread extends Thread // 방어스킬 이미지 쓰레드
 	{
 		public void run() {
+			sd.Sound(sd.defImg, false); 
 			GameLayout.dNoticeX += 1190; // 게임설명은 없어지고
 			imageVisibleFalse(); // 배경을 제외한 모든 오브젝트가 사라진 뒤
 			while (GameLayout.dImageX >= 0) {
@@ -1030,12 +1028,14 @@ public class GameLayout extends JPanel implements KeyListener {
 			} catch (Exception ex) {}
 			GameLayout.dImageX = 1200; // 게임이미지 없애기
 			imageVisibleTrue();
+			sd.Sound(sd.btnDef, false);
 		}
 	}
 
 	class SImageThread extends Thread // 전략스킬 이미지 쓰레드
 	{
 		public void run() {
+			sd.Sound(sd.trikImg, false); 
 			GameLayout.sNoticeX += 1190; // 게임설명은 없어지고
 			imageVisibleFalse(); // 배경을 제외한 모든 오브젝트가 사라진 뒤
 			while (GameLayout.sImageX >= 0) {
@@ -1051,26 +1051,20 @@ public class GameLayout extends JPanel implements KeyListener {
 			} catch (Exception ex) {}
 			GameLayout.sImageX = 1200; // 게임이미지 없애기
 			imageVisibleTrue();
+			sd.Sound(sd.btnTrik, false);
 		}
 	}
 
-	class AFNoticeThread extends Thread
-	   {
-	      public void run(){
-	         GameLayout.aFNoticeX -= 1190; // 게임설명 가져오기
-	         try {
-	            Thread.sleep(1500); // 1.5초 후
-	         } catch (Exception ex) {}
-	         GameLayout.aFNoticeX += 1190; // 게임설명은 없애기
-	      }
-	   }
 	   class AFImageThread extends Thread // 공격필살기 이미지 쓰레드
 	   {
 	      public void run() {
-	         try {
-	            Thread.sleep(1500); // 게임설명이 있는 1.5초 후
-	         } catch (Exception ex) {}
+	    	  GameLayout.aFNoticeX -= 1190; // 게임설명 가져오기
+		         try {
+		            Thread.sleep(1500); // 1.5초 후
+		         } catch (Exception ex) {}
+		         GameLayout.aFNoticeX += 1190; // 게임설명은 없애기
 	         imageVisibleFalse(); // 배경을 제외한 모든 오브젝트가 사라진 뒤
+	         sd.Sound(sd.attImg, false);
 	         while (GameLayout.aFImageX >= 0) {
 	            try {
 	               GameLayout.aFImageX -= 3; // 스킬이미지가 날아옴
@@ -1085,63 +1079,80 @@ public class GameLayout extends JPanel implements KeyListener {
 	         }
 	         GameLayout.aFImageX = 1200; // 게임이미지 없애기
 	         imageVisibleTrue();
-	         laTactic.setText("전술명령x" + String.valueOf(GameProcess.skillChance1));
-	         laCommand.setText("지휘권x" + String.valueOf(GameProcess.bingoCheckChance1));
-	         GameLayout.plusY -= 170;
-	         while (GameLayout.plusY > 810) // 전술명령,지휘권 옆에 플러스표시
+	         sd.Sound(sd.attCore, false); 
+	         if(GameProcess.playerTurn)
 	         {
-	            try {
-	               GameLayout.plusY--;
-	               Thread.sleep(50);
-	            } catch (Exception ex) {}
+		         GameLayout.plusY -= 170;
+		         while (GameLayout.plusY > 810) // 전술명령,지휘권 옆에 플러스표시
+		         {
+		            try {
+		               GameLayout.plusY--;
+		               Thread.sleep(50);
+		            } catch (Exception ex) {}
+		         }
+	         }
+	         else
+	         {
+	        	 GameLayout.plusY -= 679;
+		         while (GameLayout.plusY > 301) // 전술명령,지휘권 옆에 플러스표시
+		         {
+		            try {
+		               GameLayout.plusY--;
+		               Thread.sleep(50);
+		            } catch (Exception ex) {}
+		         }
 	         }
 	         GameLayout.plusY = 1000;
 	      }
 	   }
 
-	class DFImageThread extends Thread // 방어필살기 이미지 쓰레드
-	{
-		public void run() {
-			GameLayout.dFNoticeX += 1190; // 게임설명은 없어지고
-			imageVisibleFalse(); // 배경을 제외한 모든 오브젝트가 사라진 뒤
-			while (GameLayout.dFImageX >= 0) {
+		class DFImageThread extends Thread // 방어필살기 이미지 쓰레드
+		{
+			public void run() {
+				 sd.Sound(sd.defImg, false);
+				GameLayout.dFNoticeX += 1190; // 게임설명은 없어지고
+				imageVisibleFalse(); // 배경을 제외한 모든 오브젝트가 사라진 뒤
+				while (GameLayout.dFImageX >= 0) {
+					try {
+						GameLayout.dFImageX -= 3; // 스킬이미지가 날아옴
+						Thread.sleep(1);
+						bingoTurnIcon1.setVisible(false); //턴 표시가 바뀌어도
+						bingoTurnIcon2.setVisible(false); //스킬 이미지가 돌아가는 동안은 안보임
+					} catch (Exception ex) {}
+				}
 				try {
-					GameLayout.dFImageX -= 3; // 스킬이미지가 날아옴
-					Thread.sleep(1);
-					bingoTurnIcon1.setVisible(false); //턴 표시가 바뀌어도
-					bingoTurnIcon2.setVisible(false); //스킬 이미지가 돌아가는 동안은 안보임
+					Thread.sleep(1000); // 1초간 게임이미지 멈춰있기
 				} catch (Exception ex) {}
+				GameLayout.dFImageX = 1200; // 게임이미지 없애기
+				imageVisibleTrue();
+				sd.Sound(sd.defCore, false); 
 			}
-			try {
-				Thread.sleep(1000); // 1초간 게임이미지 멈춰있기
-			} catch (Exception ex) {}
-			GameLayout.dFImageX = 1200; // 게임이미지 없애기
-			imageVisibleTrue();
 		}
-	}
 
-	class SFImageThread extends Thread // 전략필살기 이미지 쓰레드
-	{
-		public void run() {
-			GameLayout.sFNoticeX += 1190; // 게임설명은 없어지고
-			imageVisibleFalse(); // 배경을 제외한 모든 오브젝트가 사라진 뒤
-			while (GameLayout.sFImageX >= 0) {
+		class SFImageThread extends Thread // 전략필살기 이미지 쓰레드
+		{
+			public void run() {
+				 sd.Sound(sd.trikImg, false);
+				GameLayout.sFNoticeX += 1190; // 게임설명은 없어지고
+				imageVisibleFalse(); // 배경을 제외한 모든 오브젝트가 사라진 뒤
+				while (GameLayout.sFImageX >= 0) {
+					try {
+						GameLayout.sFImageX -= 3; // 스킬이미지가 날아옴
+						Thread.sleep(1);
+						bingoTurnIcon1.setVisible(false); //턴 표시가 바뀌어도
+						bingoTurnIcon2.setVisible(false); //스킬 이미지가 돌아가는 동안은 안보임
+					} catch (Exception ex) {
+					}
+				}
 				try {
-					GameLayout.sFImageX -= 3; // 스킬이미지가 날아옴
-					Thread.sleep(1);
-					bingoTurnIcon1.setVisible(false); //턴 표시가 바뀌어도
-					bingoTurnIcon2.setVisible(false); //스킬 이미지가 돌아가는 동안은 안보임
+					Thread.sleep(1000); // 1초간 게임이미지 멈춰있기
 				} catch (Exception ex) {
 				}
+				GameLayout.sFImageX = 1200; // 게임이미지 없애기
+				imageVisibleTrue();
+				sd.Sound(sd.trikCore, false); 
 			}
-			try {
-				Thread.sleep(1000); // 1초간 게임이미지 멈춰있기
-			} catch (Exception ex) {
-			}
-			GameLayout.sFImageX = 1200; // 게임이미지 없애기
-			imageVisibleTrue();
 		}
-	}
 
 	class paintThread extends Thread // 시간제한이 지나면 스킬설명을 없애기 위해 repaint()해주는 쓰레드
 	{

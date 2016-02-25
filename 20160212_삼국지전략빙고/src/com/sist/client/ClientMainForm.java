@@ -5,6 +5,13 @@ import java.awt.event.*;
 import java.util.*;
 import java.net.*;
 import java.io.*;
+
+import com.sist.client.GameLayout.AFImageThread;
+import com.sist.client.GameLayout.AImageThread;
+import com.sist.client.GameLayout.DFImageThread;
+import com.sist.client.GameLayout.DImageThread;
+import com.sist.client.GameLayout.SImageThread;
+import com.sist.client.GameLayout.endThread;
 //import com.sist.client.GameLayout.TimeLimit;
 import com.sist.common.*;
 import com.sist.server.*;
@@ -21,6 +28,7 @@ implements ActionListener, Runnable, MouseListener
 	MakeRoom mr=new MakeRoom();
 	ChatRoom cr=new ChatRoom();
 	UserInfo uif=new UserInfo();
+	Sound sd=new Sound();
 	
 	ImageIcon mainIcon;//타이틀창 아이콘
 	static Thread t1=new TimeLimit();//시간제한바 스레드 
@@ -39,6 +47,7 @@ implements ActionListener, Runnable, MouseListener
 	ClientMainForm()
 	{
 		super("삼국지 전략빙고");//타이틀 제목
+		sd.Sound(sd.lgSound,true);
 		mainIcon=new ImageIcon("img\\타이틀아이콘.png");
 		this.setIconImage(mainIcon.getImage());
 		
@@ -101,14 +110,7 @@ implements ActionListener, Runnable, MouseListener
 		for(int i=0;i<6;i++){  
 			GameLayout.jypgChoice[i].addActionListener(this); // 이벤트 대기  
 		}  
-	  
-		// 나와 너의 빙고판 안의 모든 버튼 actionListener 추가 메소드  
-/*		for (int i = 0; i < 3; i++) {  
-			for (int j = 0; j < 25; j++) {  
-				GameLayout.a1[i][j].addActionListener(this);  
-				GameLayout.a2[i][j].addActionListener(this);  
-			}  
-		} */ 
+
 		GameLayout.defPGchoice2.addActionListener(this);  
 		GameLayout.defPGchoice1.addActionListener(this);
 		for(int i=0;i<2;i++){  
@@ -125,7 +127,6 @@ implements ActionListener, Runnable, MouseListener
 		GameLayout.btnDef.addActionListener(this);  
 		GameLayout.btnTrick.addActionListener(this);  
 		GameLayout.timeOut.addActionListener(this); // 턴종료 버튼  
-
 	}
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -140,7 +141,7 @@ implements ActionListener, Runnable, MouseListener
 	{
 		try
 		{
-			s=new Socket("211.238.142.40", 33333); //211.238.142.39 localhost
+			s=new Socket("localhost", 33333); //211.238.142.39 localhost
 			// s => server
 			in=new BufferedReader(
 					new InputStreamReader(
@@ -214,8 +215,9 @@ implements ActionListener, Runnable, MouseListener
 		            String date = userInfo.getUser_date().toString();
 		            connection(myId,myName,mySex,myAvatar,myWin,myLose,nick,date);
 		            pos="대기실";
+		            sd.clip.close();
+		            sd.Sound(sd.wrSound,true);
 		            System.out.println(myAvatar);
-//					card.show(getContentPane(), "WR"); 
 				} 
 		}
 		else if(e.getSource()==login.b2) //취소를 누르면 프로그램 종료
@@ -229,6 +231,7 @@ implements ActionListener, Runnable, MouseListener
 		}
 		else if(e.getSource()==wr.b1)
 		{
+			sd.Sound(sd.wrclick,false);
 			System.out.println("test_wr.b1");
 			mr.tf.setText("");
 			mr.open.setSelected(true);
@@ -238,11 +241,13 @@ implements ActionListener, Runnable, MouseListener
 		}
 		else if(e.getSource()==wr.b2) //1:1게임을 누르면 진영선택창
 		{
+			sd.Sound(sd.wrclick,false);
 			card.show(getContentPane(), "ChoiceNation");
 			
 		}
 		else if(e.getSource()==wr.b3) // 게임정보 버튼
 		{
+			sd.Sound(sd.wrclick,false);
 			gi.setVisible(true); 
 		}
 		else if(e.getSource()==wr.b4) //나가기를 누르면 프로그램 종료
@@ -259,10 +264,12 @@ implements ActionListener, Runnable, MouseListener
 		}
 		else if(e.getSource()==mr.b2)
 		{
+			sd.Sound(sd.wrclick,false);
 			mr.setVisible(false);
 		}
 		else if(e.getSource()==mr.b1)
 		{
+			sd.Sound(sd.wrclick,false);
 			String rn=mr.tf.getText().trim();
 			if(rn.length()<1)
 			{
@@ -272,18 +279,6 @@ implements ActionListener, Runnable, MouseListener
 				return;
 			}
 			String temp="";
-/*			for(int i=0;i<wr.model1.getRowCount();i++)
-			{
-				temp=wr.model1.getValueAt(i, 0).toString();
-				if(rn.equals(temp))
-				{
-					JOptionPane.showMessageDialog(this,
-							"이미 존재하는 방입니다\n다른 이름을 입력하세요");
-					mr.tf.setText("");
-					mr.tf.requestFocus();
-					return;
-				}
-			}*/
 			String state="",pwd="";
 			if(mr.open.isSelected())
 			{
@@ -342,6 +337,7 @@ implements ActionListener, Runnable, MouseListener
 		}
 	      else if(e.getSource()==cr.b1) 
 	      {
+	    	 sd.Sound(sd.wrclick,false);
 	         if(cr.b1.getText().equals("준비취소"))
 	         {
 	            cr.b1.setText("준비");
@@ -373,6 +369,7 @@ implements ActionListener, Runnable, MouseListener
 	      }
 		else if(e.getSource()==cr.b3)
 		{
+			sd.Sound(sd.wrclick,false);
 			try 
 			{
 				out.write((Function.ROOMOUT+"|"
@@ -392,6 +389,7 @@ implements ActionListener, Runnable, MouseListener
 		}
 		else if(e.getSource()==wr.userinfoBtn)
 		{
+			sd.Sound(sd.wrclick,false);
 			uif.setVisible(true);
 		}
 		else if(e.getSource()==uif.btn_NO)
@@ -424,8 +422,7 @@ implements ActionListener, Runnable, MouseListener
 		}
 /////////////////////////////////////////////////////////////////////////////////////////  
 //////////빙고 체크(체크된 빙고가 아닐 때+스킬아이템을 클릭하지 않았을 때)
-		if (GameLayout.bAttCheck1 == false && GameLayout.bDefCheck1 == false && GameLayout.bTrickCheck1 == false 
-				&& GameLayout.bDefFCheck1 == false && GameLayout.bTrickFCheck1 == false) {  
+		if (GameLayout.bAttCheck1 == false && GameLayout.bDefCheck1 == false && GameLayout.bTrickCheck1 == false) {  
 			for (int k = 0; k < 3; k++) {  
 				for (int l = 0; l < 3; l++) {  
 					// 각자 선택한 위촉오에 따라 버튼 이미지아이콘 바꿔주기  
@@ -458,24 +455,19 @@ implements ActionListener, Runnable, MouseListener
 		}  
   
 		//////////// 스킬버튼 누르기  
-		if (GameProcess.playerTurn == true && GameLayout.bAttCheck1 == false && GameLayout.bDefCheck1 == false 
-				&& GameLayout.bTrickCheck1 == false && GameLayout.bDefFCheck1 == false  
-				&& GameLayout.bTrickFCheck1 == false && GameProcess.skillChance1>0) {  
+		if (GameProcess.playerTurn == true && GameProcess.skillChance1>0) {  
 			if (e.getSource() == GameLayout.btnAtt && GameProcess.numOfBingo1[0] + GameProcess.usingAttackSkill1 > 0)// 플레이어1  
-																											// 공격  
-																											// 스킬  
-																											// 버튼  
 			{  
 				GameLayout.bAttCheck1 = true; // 스킬사용 가능하게 true  
 				GameLayout.aNoticeX -= 1190; // 스킬설명 가져오기(1200으로 화면 밖에 있던 것이 -1190 해서 화면에  
 									// 나옴)  
 			} else if (e.getSource() == GameLayout.btnDef && GameProcess.numOfBingo1[1] + GameProcess.usingDefenseSkill1 > 0)// 방어스킬  
 			{  
-				int k = 0;  
+				int k = 0;
 				for (int i = 0; i < 3; i++) {  
 					for (int j = 0; j < 25; j++) {  
-						if (GameLayout.panCheck1[i][j])  
-							k++;  
+						if (GameLayout.panCheck2[i][j])  
+							k++;
 					}  
 				}  
 				if (k == 0) { // 만약 락 걸린 빙고판이 없으면, 아이템 버튼이 실행되지 않음  
@@ -483,30 +475,23 @@ implements ActionListener, Runnable, MouseListener
 					return;  
 				}  
 				GameLayout.bDefCheck1 = true;  
-				GameLayout.dNoticeX -= 1190;  
+				GameLayout.dNoticeX -= 1190;
 			} else if (e.getSource() == GameLayout.btnTrick && GameProcess.numOfBingo1[2] + GameProcess.usingStrategySkill1 > 0)// 책략스킬  
 			{  
 				GameLayout.bTrickCheck1 = true;  
 				GameLayout.sNoticeX -= 1190;  
 			} else if (e.getSource() == GameLayout.fury[1][0]) // 공격필살기 버튼  
-			{  
-				game.new AFNoticeThread().start();
+			{
 				try
 				{
 					out.write((Function.ATTFURY+"|"+myRoom+"|"+myId+"\n").getBytes());
 				}catch(Exception ex){}
 			} else if (e.getSource() == GameLayout.fury[1][1]) // 방어필살기 버튼  
 			{  
+				//만약 상대 아이템이 없으면 필살기 버튼이 실행되지 않음
 				if (GameProcess.numOfBingo2[0] + GameProcess.usingAttackSkill2 <= 0  
 						&& GameProcess.numOfBingo2[1] + GameProcess.usingDefenseSkill2 <= 0  
-						&& GameProcess.numOfBingo2[2] + GameProcess.usingStrategySkill2 <= 0) { // 만약  
-																								// 상대  
-																								// 아이템이  
-																								// 없으면,  
-																								// 필살기  
-																								// 버튼이  
-																								// 실행되지  
-																								// 않음  
+						&& GameProcess.numOfBingo2[2] + GameProcess.usingStrategySkill2 <= 0) {
 					JOptionPane.showMessageDialog(this, "파괴할 전술병기가 없습니다.");  
 					return;  
 				}  
@@ -536,97 +521,60 @@ implements ActionListener, Runnable, MouseListener
 	               GameLayout.aNoticeX += 1190; // 게임설명은 없애기
 	               try
 	               {
-	                  out.write((Function.ATTSKILL+"|"+myRoom+"|"+i+"|"+j+"\n").getBytes());
+	                  out.write((Function.ATTSKILL+"|"+myRoom+"|"+myId+"|"+i+"|"+j+"\n").getBytes());
 	               }catch(Exception ex){}
+	               GameLayout.bAttCheck1 = false;
 	            } else if (e.getSource() == GameLayout.a1[i][j] && GameLayout.bDefCheck1 && GameLayout.panCheck2[i][j]) {// 방어스킬  
 	               GameLayout.dNoticeX += 1190; // 게임설명은 없애기
 	               try
 	               {
-	                  out.write((Function.DEFSKILL+"|"+myRoom+"|"+i+"|"+j+"\n").getBytes());
+	                  out.write((Function.DEFSKILL+"|"+myRoom+"|"+myId+"|"+i+"|"+j+"\n").getBytes());
 	               }catch(Exception ex){}
+	               GameLayout.bDefCheck1 = false;
 	            } else if (e.getSource() == GameLayout.a2[i][j] && GameLayout.bTrickCheck1 && !GameProcess.bingo2[i][j] && !GameLayout.panCheck1[i][j]) {
 	               GameLayout.sNoticeX += 1190; // 게임설명은 없애기
 	               try
 	               {
-	                  out.write((Function.TRICKSKILL+"|"+myRoom+"|"+i+"|"+j+"\n").getBytes());
+	                  out.write((Function.TRICKSKILL+"|"+myRoom+"|"+myId+"|"+i+"|"+j+"\n").getBytes());
 	               }catch(Exception ex){}
-	            }  
+	               GameLayout.bTrickCheck1 = false;
+	            }
 	         }  
 	      }  
 		// 수비필살기 클릭 후, 상대판 버튼 클릭  
 		if (e.getSource() == GameLayout.defPGchoice2 && GameLayout.bDefFCheck1 == true) {  
-			game.new DFImageThread().start();  
-  
-			GameProcess.usingAttackSkill2 -= GameProcess.numOfBingo1[0];  
-			GameProcess.usingDefenseSkill2 -= GameProcess.numOfBingo1[1];  
-			GameProcess.usingStrategySkill2 -= GameProcess.numOfBingo1[2];  
-			GameProcess.usingAttackSkill2 -= GameLayout.useAtt;  
-			GameProcess.usingDefenseSkill2 -= GameLayout.useDef;  
-  
-			GameLayout.laAtt.setText("x" + String.valueOf(GameProcess.numOfBingo2[0] + GameProcess.usingAttackSkill2));  
-			GameLayout.laDef.setText("x" + String.valueOf(GameProcess.numOfBingo2[1] + GameProcess.usingDefenseSkill2));  
-			GameLayout.laTrick.setText("x" + String.valueOf(GameProcess.numOfBingo2[2] + GameProcess.usingStrategySkill2));  
-  
-			GameProcess.skillChance1--;  
-			GameLayout.laTactic.setText("전술명령x" + String.valueOf(GameProcess.skillChance1));  
-  
-			GameLayout.goongUsable1[1] = false;  
-			GameLayout.fury[1][1].setEnabled(false);  
-			GameLayout.fury[1][1].setVisible(false);  
-			GameLayout.gauge[1][1].setBackground(Color.DARK_GRAY);
-			GameLayout.gauge[1][1].setString("궁극기소진");
-			GameLayout.defPan2.setVisible(false);
-			GameLayout.furyEndBtn[1][1].setVisible(true);  
-			GameLayout.bDefFCheck1 = false;
+			
 			try
 			{
-//				out.write((Function.DEFFURY+"|"+myRoom+"|"+i+j+"\n").getBytes());
+				out.write((Function.DEFFURY+"|"+myRoom+"|"+myId+"\n").getBytes());
 			}catch(Exception ex){}
+			GameLayout.bDefFCheck1 = false;
 		}  
 		// 책략필살기 클릭 후, 상대 판 진영파괴 버튼 클릭  
 		for (int i = 0; i < 3; i++) {  
-			if (e.getSource() == GameLayout.jypgChoice[i] && GameLayout.goongUsable1[2] == true) {  
-				game.new SFImageThread().start();  
-				GameProcess.jypg(0, i);  
-				GameLayout.goongUsable1[2] = false;  
-				GameLayout.fury[1][2].setEnabled(false);  
-				GameLayout.fury[1][2].setVisible(false);  
-				GameLayout.gauge[1][2].setBackground(Color.DARK_GRAY);  
-				GameLayout.gauge[1][2].setString("궁극기소진");  
-				for (int j = 0; j < 3; j++) {  
-					GameLayout.jypgChoice[j].setVisible(false);//  
-				}  
-				GameLayout.furyEndBtn[1][2].setVisible(true);  
-				GameProcess.skillChance1--;  
-				GameLayout.laTactic.setText("전술명령x" + String.valueOf(GameProcess.skillChance1));  
-				for (int j = 0; j < 6; j++) {  
-					GameLayout.jypgChoice[j].setOpaque(false);  
-					GameLayout.jypgChoice[j].setVisible(false);//  
-				}  
-				GameLayout.bTrickFCheck1 = false;  
-			}  
-  
-			if (e.getSource() == GameLayout.jypgChoice[i + 3] && GameLayout.goongUsable2[2] == true) {  
-				game.new SFImageThread().start();  
-				GameProcess.jypg(1, i);  
-				GameLayout.goongUsable2[2] = false;  
-				GameLayout.fury[0][2].setEnabled(false);  
-				GameLayout.fury[0][2].setVisible(false);  
-				GameLayout.gauge[0][2].setBackground(Color.DARK_GRAY);  
-				GameLayout.gauge[0][2].setString("궁극기소진");  
-				for (int j = 0; j < 3; j++) {  
-					GameLayout.jypgChoice[j + 3].setVisible(false);//  
-				}  
-				GameLayout.furyEndBtn[0][2].setVisible(true);  
-				GameProcess.skillChance2--;  
-				GameLayout.youLaTactic.setText("전술명령x" + String.valueOf(GameProcess.skillChance2));  
-				for (int j = 0; j < 6; j++) {  
-					GameLayout.jypgChoice[j].setOpaque(false);  
-					GameLayout.jypgChoice[j].setVisible(false);//  
-				}  
-			}  
+			if (e.getSource() == GameLayout.jypgChoice[i] && GameLayout.goongUsable1[2] == true) 
+			{  System.out.println("나는 "+myId+"입니다.");
+				GameProcess.jypg(i);
+				for(int k=i*25; k<25+(i*25); k++)
+				{   //0~24, 25~49, 50~74
+					System.out.println("진영파괴 쓰는 유저의 GameProcess.numArr2["+k+"]값:"+GameProcess.numArr2[k]);
+					try 
+					{
+						System.out.println("진영파괴 쓰는 유저의 GameProcess.bingo2["+i+"]["+k+"%25]:"+GameProcess.bingo2[i][k%25]);
+						out.write((Function.JYPGRANNUM+"|"
+									+i+"|" 
+									+k+"|" 
+									+GameProcess.p2Board[i][k%25]+"|" //상대편 버튼 위치별 실제 빙고값
+									+GameProcess.bingo2[i][k%25]+"|"  //상대편 버튼 위치별 빙고체크 여부값
+									+GameProcess.numArr2[k]+"|" //상대편 배열값
+									+myRoom+"|"
+								    +myId+"\n").getBytes());
+					} catch (Exception e2) {
+						// TODO: handle exception
+					}
+				}
+			}   
 		}  
-  
 		if (e.getSource() == GameLayout.timeOut && GameProcess.playerTurn)// 턴턴턴 
 		{  
 			GameLayout.IFNoticeVisible();  
@@ -645,27 +593,29 @@ implements ActionListener, Runnable, MouseListener
 		
 		if(e.getSource()==GameLayout.exit) //항복 버튼
 		{
+			sd.Sound(sd.endBtn, false);  
+			
 			int exitValue=JOptionPane.showConfirmDialog(this, "항복하시겠습니까?", "항복", JOptionPane.YES_NO_OPTION);
 			if(exitValue==JOptionPane.YES_OPTION) //예를 누르면 게임 끝내기 쓰레드
 			{
-				GameLayout.gameEnd.addActionListener(this);//인게임 나가기 버튼
 				GameProcess.playerWon=false;
+				int wonInt=0;
 				GameLayout.imageVisibleFalse();
 				try
 	            {
-	               out.write((Function.BINGOEND+"|"+myRoom+"|"+myId+"|"+GameProcess.playerWon+"\n").getBytes());
+	               out.write((Function.BINGOEND+"|"+myRoom+"|"+myId+"|"+wonInt+"\n").getBytes());
 	            }catch(Exception ex){}
 			}
 		}
 		else if(e.getSource()==GameLayout.endBtn)//빙고 마무리
 		{
-			GameLayout.gameEnd.addActionListener(this);//인게임 나가기 버튼
-			GameLayout.endBtn.setVisible(false);
-			GameLayout.endBackX+=975;
+			sd.Sound(sd.endBtn,false); 
+
 			GameProcess.playerWon=true;
+			int wonInt=1;
 			try
             {
-               out.write((Function.BINGOEND+"|"+myRoom+"|"+myId+"|"+GameProcess.playerWon+"\n").getBytes());
+               out.write((Function.BINGOEND+"|"+myRoom+"|"+myId+"|"+wonInt+"\n").getBytes());
             }catch(Exception ex){}
 		}
 		else if(e.getSource()==GameLayout.gameEnd) //나가기
@@ -679,6 +629,8 @@ implements ActionListener, Runnable, MouseListener
 			t1.interrupt();
 			paintthread.interrupt();
 			card.show(getContentPane(), "WR");
+			sd.clip.close();
+			sd.Sound(sd.wrSound,true); 
 			game.removeAll();
 			GameProcess.gameReset();
 			game=new GameLayout();
@@ -838,13 +790,11 @@ implements ActionListener, Runnable, MouseListener
 	               {
 	                  cr.b1.setEnabled(false); //준비
 	                  cr.b2.setEnabled(false); //시작
-//	                  cr.idtf[0].setForeground(Color.red);
 	               }
 	               else//걍 입장인원
 	               {
 	                  cr.b1.setEnabled(true); //준비
 	                  cr.b2.setEnabled(false);//시작
-//	                  cr.idtf[1].setForeground(Color.red);
 	               }
 	               cr.setVisible(true);
 	            }
@@ -906,7 +856,6 @@ implements ActionListener, Runnable, MouseListener
 	                   System.out.println("id:"+myId+"\n"+"color:"+color);
 	                   wr.append(data,color);
 	                   wr.bar.setValue(wr.bar.getMaximum());
-	                   //wr.tf.setText("");
 	                }
 	                break;
 	                case Function.ROOMCHAT:
@@ -915,7 +864,6 @@ implements ActionListener, Runnable, MouseListener
 	                   String color=st.nextToken();
 	                    cr.append(data,color);
 	                    cr.bar.setValue(cr.bar.getMaximum());
-	                    //cr.tf.setText("");
 	                }
 	                break;
 	            case Function.WAITUPDATE:
@@ -999,7 +947,7 @@ implements ActionListener, Runnable, MouseListener
 	               cr.b1.setText("준   비");
 	            }
 	            break;
-	            case Function.MYROOMOUT://?!?!?!?
+	            case Function.MYROOMOUT:
 	            {
 	               int size=Integer.parseInt(st.nextToken());
 	               //아바타 창 초기화
@@ -1122,15 +1070,19 @@ implements ActionListener, Runnable, MouseListener
 	                     {
 	                        GameProcess.numArr1[seq]=Integer.parseInt(st.nextToken());
 	                        GameProcess.numArr2[seq]=Integer.parseInt(st.nextToken());
+	                        System.out.println(myId+"의 "+(seq+1)+"번째 나의 빙고값: "+GameProcess.numArr1[seq]);
+	                        System.out.println(myId+"의 "+(seq+1)+"번째 상대방 빙고값: "+GameProcess.numArr2[seq]);
 	                     }
 	                     else//내가 게스트면
 	                     {
 	                        GameProcess.numArr2[seq]=Integer.parseInt(st.nextToken());
 	                        GameProcess.numArr1[seq]=Integer.parseInt(st.nextToken());
+	                        System.out.println(myId+"의 "+(seq+1)+"번째 나의 빙고값: "+GameProcess.numArr1[seq]);
+	                        System.out.println(myId+"의 "+(seq+1)+"번째 상대방 빙고값: "+GameProcess.numArr2[seq]);
 	                     }  
 	                  }
 	                  break;
-	                  case Function.GAMELAYOUT://!!!!lay
+	                  case Function.GAMELAYOUT:
 	                  {
 	                	  GameLayout.Rand();
 	              		for (int i = 0; i < 3; i++) 
@@ -1172,7 +1124,7 @@ implements ActionListener, Runnable, MouseListener
 	                        }
 	                     }
 	                     break;
-	               case Function.CHOICENATION:
+	                  case Function.CHOICENATION:
 	                  {
 	                     String id=st.nextToken();
 	                     String name=st.nextToken();
@@ -1236,8 +1188,9 @@ implements ActionListener, Runnable, MouseListener
 	            				   				  GameLayout.a1, GameLayout.a2, 
 	            				   				  nationIcon1, nationIcon2);  
 							GameLayout.laCommand.setText("지휘권x" + String.valueOf(GameProcess.bingoCheckChance1));
-//							if(GameLayout.panCheck2[panNumber][bingoCheckNumber]==true)//락걸린건 안바뀜
-//								GameLayout.a1[panNumber][bingoCheckNumber].setIcon(new ImageIcon("img\\빙고체크-락.png"));  
+		            		game.laSetting1();
+		            		if (GameLayout.bingoEnd)
+		            			game.bingoEndProcess();
 	            	   }
 	            	   else
 	            	   {
@@ -1247,36 +1200,34 @@ implements ActionListener, Runnable, MouseListener
  				   				  GameLayout.a2, GameLayout.a1, 
  				   				  nationIcon2, nationIcon1); 
 	            		   GameProcess.bingoCheckChance2=0;
-	            		   GameLayout.youLaCommand.setText("지휘권x" + String.valueOf(GameProcess.bingoCheckChance2));
+	            		   //GameLayout.youLaCommand.setText("지휘권x" + String.valueOf(GameProcess.bingoCheckChance2));
 							if(GameLayout.panCheck2[panNumber][bingoCheckNumber]==true)//락걸린건 안바뀜
 								GameLayout.a1[panNumber][bingoCheckNumber].setIcon(new ImageIcon("img\\빙고체크-락.png"));
+							game.laSetting2();
 	            	   }
-						
-						game.laSetting(GameLayout.laCommand, GameLayout.laAtt, GameLayout.laDef, GameLayout.laTrick);  
-						if (GameLayout.bingoEnd)
-							game.bingoEndProcess();
+
 	               }
 	               break;
 	               case Function.ATTSKILL:
 	                  {
+	                	  game.new AImageThread().start();
+	                	  String sId=st.nextToken();
 	                     int panNumber=Integer.parseInt(st.nextToken());
 	                     int bingoCheckNumber=Integer.parseInt(st.nextToken());
-	                     if(GameLayout.bAttCheck1)
+	                     if(sId.equals(myId))
 	                     {
-	                        game.new AImageThread().start();
 	                        GameLayout.a2[panNumber][bingoCheckNumber].setIcon(new ImageIcon("img\\빙고체크-락.png"));  
 	                        GameProcess.usingAttackSkill1--;
 	                        GameLayout.useAtt--;
 	                        GameLayout.laAtt.setText("x" + String.valueOf(GameProcess.numOfBingo1[0] + GameProcess.usingAttackSkill1));  
-	                        GameLayout.bAttCheck1 = false;  
+	                        //GameLayout.bAttCheck1 = false;  
 	                        GameProcess.skillChance1--;  
 	                        GameLayout.laTactic.setText("전술명령x" + String.valueOf(GameProcess.skillChance1));  
 	                        GameLayout.panCheck1[panNumber][bingoCheckNumber] = true; // 공격한 곳 확인.
 	                     }
 	                     else
 	                     {
-	                        game.new AImageThread().start();
-	                      GameLayout.a1[panNumber][bingoCheckNumber].setIcon(new ImageIcon("img\\빙고체크-락.png"));
+	                        GameLayout.a1[panNumber][bingoCheckNumber].setIcon(new ImageIcon("img\\빙고체크-락.png"));
 	                        GameProcess.usingAttackSkill2--;
 	                        GameLayout.youUseAtt--;
 	                        GameLayout.youLaAtt.setText("x" + String.valueOf(GameProcess.numOfBingo2[0] + GameProcess.usingAttackSkill2));  
@@ -1288,46 +1239,34 @@ implements ActionListener, Runnable, MouseListener
 	                  break;
 	                  case Function.DEFSKILL:
 	                  {
+	                	  game.new DImageThread().start(); 
+	                	  String sId=st.nextToken();
 	                     int panNumber=Integer.parseInt(st.nextToken());
 	                     int bingoCheckNumber=Integer.parseInt(st.nextToken());
-	                     if(GameLayout.bDefCheck1)
+	                     if(sId.equals(myId))
 	                     {
 	                        game.new DImageThread().start();  
 	                        GameProcess.usingDefenseSkill1--;  
 	                        GameLayout.useDef--;  
 	                        GameLayout.laDef.setText("x" + String.valueOf(GameProcess.numOfBingo1[1] + GameProcess.usingDefenseSkill1));  
-	                     if (GameProcess.bingo1[panNumber][bingoCheckNumber] == false) {  
-	                        GameLayout.a1[panNumber][bingoCheckNumber].setIcon(new ImageIcon("img\\" + (GameProcess.p1Board[panNumber][bingoCheckNumber]) + ".png"));  
-	                     } else if (GameProcess.bingo1[panNumber][bingoCheckNumber]) {
-	                        if (ChoiceNation.chosenNation1 == 0)
-	                           GameLayout.a1[panNumber][bingoCheckNumber].setIcon(new ImageIcon("img\\빙고체크-위.png"));  
-	                        else if (ChoiceNation.chosenNation1 == 1)  
-	                           GameLayout.a1[panNumber][bingoCheckNumber].setIcon(new ImageIcon("img\\빙고체크-촉.png"));  
-	                        else if (ChoiceNation.chosenNation1 == 2)  
-	                           GameLayout.a1[panNumber][bingoCheckNumber].setIcon(new ImageIcon("img\\빙고체크-오.png"));  
-	                     }  
+	                        if (GameProcess.bingo1[panNumber][bingoCheckNumber] == false) {  
+	                        	GameLayout.a1[panNumber][bingoCheckNumber].setIcon(new ImageIcon("img\\" + (GameProcess.p1Board[panNumber][bingoCheckNumber]) + ".png"));  
+	                     }
 	        
-	                     GameLayout.bDefCheck1 = false;  
+//	                     GameLayout.bDefCheck1 = false;  
 	                     GameProcess.skillChance1--;  
 	                     GameLayout.laTactic.setText("전술명령x" + String.valueOf(GameProcess.skillChance1));  
 	                     GameLayout.panCheck2[panNumber][bingoCheckNumber] = false;
 	                     }
 	                     else
 	                     {
-	                        game.new DImageThread().start();  
 	                        GameProcess.usingDefenseSkill2--;  
 	                        GameLayout.youUseDef--;  
 	                        GameLayout.youLaDef.setText("x" + String.valueOf(GameProcess.numOfBingo2[1] + GameProcess.usingDefenseSkill2));  
-	                     if (GameProcess.bingo2[panNumber][bingoCheckNumber] == false) {  
-	                        GameLayout.a2[panNumber][bingoCheckNumber].setIcon(new ImageIcon("img\\" + (GameProcess.p2Board[panNumber][bingoCheckNumber]) + ".png"));  
-	                     } else if (GameProcess.bingo2[panNumber][bingoCheckNumber]) {
-	                        if (ChoiceNation.chosenNation2 == 0)
-	                           GameLayout.a2[panNumber][bingoCheckNumber].setIcon(new ImageIcon("img\\빙고체크-위.png"));  
-	                        else if (ChoiceNation.chosenNation2 == 1)  
-	                           GameLayout.a2[panNumber][bingoCheckNumber].setIcon(new ImageIcon("img\\빙고체크-촉.png"));  
-	                        else if (ChoiceNation.chosenNation2 == 2)  
-	                           GameLayout.a2[panNumber][bingoCheckNumber].setIcon(new ImageIcon("img\\빙고체크-오.png"));  
+	                        if (GameProcess.bingo2[panNumber][bingoCheckNumber] == false) {  
+	                        	GameLayout.a2[panNumber][bingoCheckNumber].setIcon(new ImageIcon("img\\빙고판-상대.png"));  
 	                     }  
+	                     
 	                     GameProcess.skillChance2--;
 	                     GameLayout.youLaTactic.setText("전술명령x" + String.valueOf(GameProcess.skillChance2));  
 	                     GameLayout.panCheck1[panNumber][bingoCheckNumber] = false;
@@ -1336,76 +1275,215 @@ implements ActionListener, Runnable, MouseListener
 	                  break;
 	                  case Function.TRICKSKILL:
 	                  {
+	                	  game.new SImageThread().start(); 
+	                	  String sId=st.nextToken();
 	                     int panNumber=Integer.parseInt(st.nextToken());
 	                     int bingoCheckNumber=Integer.parseInt(st.nextToken());
-	                     if(GameLayout.bTrickCheck1)
+	                     if(sId.equals(myId))
 	                     {
-	                        game.new SImageThread().start();  
 	                        GameLayout.a2[panNumber][bingoCheckNumber].setIcon(new ImageIcon("img\\" + GameProcess.numArr2[25 * panNumber + bingoCheckNumber] + ".png"));  
-	                     GameProcess.usingStrategySkill1--;  
-	                     GameLayout.useTrick--;  
-	                     GameLayout.laTrick.setText("x" + String.valueOf(GameProcess.numOfBingo1[2] + GameProcess.usingStrategySkill1));  
-	                     GameProcess.skillChance1--;  
-	                     GameLayout.laTactic.setText("전술명령x" + String.valueOf(GameProcess.skillChance1));  
-	                     GameLayout.bTrickCheck1 = false;
+	                        GameProcess.usingStrategySkill1--;  
+	                        GameLayout.useTrick--;  
+	                        GameProcess.skillChance1--;
+	                        game.laSetting1();
+//	            	        GameLayout.bTrickCheck1 = false;
 	                     }
 	                     else
 	                     {
-	                        game.new SImageThread().start();
-	                        GameProcess.skillChance2--;
-	                        GameLayout.youLaTactic.setText("전술명령x" + String.valueOf(GameProcess.skillChance2));
+	                    	 GameLayout.youUseTrick--;
+	                    	 GameProcess.usingStrategySkill2--; 
+	                    	 GameProcess.skillChance2--;
+	                    	 game.laSetting2();
 	                     }
 	                  }
 	                  break;
-	                  case Function.ATTFURY:
+	                  case Function.ATTFURY://수정필요
 	                  {
+	                	  game.new AFImageThread().start(); 
 	                	  String furyId=st.nextToken();
 	                	  if(furyId.equals(myId))
 	                	  {
-		                	  game.new AFImageThread().start();  
-		                	  GameProcess.bingoCheckChance1++;// 공격기회+1,아이템사용기회+1  
-		                	  GameProcess.skillChance1++;  
-		                	  GameLayout.goongUsable1[0] = false;  
-		                	  GameLayout.fury[1][0].setEnabled(false);  
-		                	  GameLayout.gauge[1][0].setBackground(Color.DARK_GRAY);  
-		                	  GameLayout.gauge[1][0].setString("궁극기소진");
+	                		  GameProcess.bingoCheckChance1++;// 공격기회+1,아이템사용기회+1  
+	                		  GameProcess.skillChance1++;  
+	                		  GameLayout.goongUsable1[0] = false;
+	                		  GameLayout.fury[1][0].setEnabled(false);  
+	                		  GameLayout.gauge[1][0].setBackground(Color.DARK_GRAY);  
+	                		  GameLayout.gauge[1][0].setString("궁극기소진");
+	                		  game.laSetting1();
 	                	  }
 	                	  else
 	                	  {
-	                		  game.new AFImageThread().start();
-	                		  GameProcess.bingoCheckChance2++;// 공격기회+1,아이템사용기회+1  
-		                	  GameProcess.skillChance2++;  
-		                	  GameLayout.goongUsable2[0] = false;  
-		                	  GameLayout.fury[2][0].setEnabled(false);  
-		                	  GameLayout.gauge[2][0].setBackground(Color.DARK_GRAY);  
-		                	  GameLayout.gauge[2][0].setString("궁극기소진");
+	                		  GameProcess.bingoCheckChance2++;// 공격기회+1,아이템사용기회+1
+	                		  GameProcess.skillChance2++;
+	                		  GameLayout.goongUsable2[0] = false;
+	                		  GameLayout.fury[0][0].setEnabled(false);  
+	                		  GameLayout.gauge[0][0].setBackground(Color.DARK_GRAY);  
+	                		  GameLayout.gauge[0][0].setString("궁극기소진");
+	                		  game.laSetting2();
 	                	  }
 	                  }
 	                  break;
 	                  case Function.DEFFURY:
 	                  {
-	                     
+	                	  game.new DFImageThread().start();  
+	                	  String furyId=st.nextToken();
+	                	  if(furyId.equals(myId))
+	                	  {
+	                		  GameProcess.usingAttackSkill2 -= GameProcess.numOfBingo2[0];  
+		                	  GameProcess.usingDefenseSkill2 -= GameProcess.numOfBingo2[1];  
+		                	  GameProcess.usingStrategySkill2 -= GameProcess.numOfBingo2[2];  
+		                	  GameProcess.usingAttackSkill2 -= GameLayout.youUseAtt;  
+		                	  GameProcess.usingDefenseSkill2 -= GameLayout.youUseDef;
+		                	  GameProcess.usingStrategySkill2 -= GameLayout.youUseTrick;
+		            
+		                	  GameProcess.skillChance1--;  
+		            
+		                	  game.laSetting1();
+		                	  game.laSetting2();
+		                	  
+		                	  GameLayout.goongUsable1[1] = false;  
+		                	  GameLayout.fury[1][1].setEnabled(false);  
+		                	  GameLayout.fury[1][1].setVisible(false);  
+		                	  GameLayout.gauge[1][1].setBackground(Color.DARK_GRAY);
+		                	  GameLayout.gauge[1][1].setString("궁극기소진");
+		                	  GameLayout.defPan2.setVisible(false);
+		                	  GameLayout.furyEndBtn[1][1].setVisible(true);
+	                	  }
+	                	  else
+	                	  {
+	                		  GameProcess.usingAttackSkill1 -= GameProcess.numOfBingo1[0];  
+		                	  GameProcess.usingDefenseSkill1 -= GameProcess.numOfBingo1[1];  
+		                	  GameProcess.usingStrategySkill1 -= GameProcess.numOfBingo1[2];  
+		                	  GameProcess.usingAttackSkill1 -= GameLayout.useAtt;  
+		                	  GameProcess.usingDefenseSkill1 -= GameLayout.useDef;
+		                	  GameProcess.usingStrategySkill1 -= GameLayout.useTrick;  
+		            
+		                	  game.laSetting1();
+		                	  game.laSetting2();  
+		            
+		                	  GameLayout.goongUsable2[1] = false;  
+		                	  GameLayout.fury[0][1].setEnabled(false);  
+		                	  GameLayout.fury[0][1].setVisible(false);  
+		                	  GameLayout.gauge[0][1].setBackground(Color.DARK_GRAY);
+		                	  GameLayout.gauge[0][1].setString("궁극기소진");
+		                	  GameLayout.furyEndBtn[0][1].setVisible(true);
+	                	  }
+	                  }
+	                  break;
+	                  case Function.JYPGRANNUM:
+	                  {
+	                	   int panCol=Integer.parseInt(st.nextToken());
+	                	   int seq=Integer.parseInt(st.nextToken());
+	                	   int p2Board=Integer.parseInt(st.nextToken());
+	                	   String bingo2=st.nextToken();
+	                	   System.out.println("Client의 case Function.JYPGRANNUM-bingo2:"+bingo2);
+	                	   boolean bingo2Val=false;
+	                	   if(bingo2.equals("false"))
+	                		   bingo2Val=false;
+	                	   else
+	                		   bingo2Val=true;
+	                	   int numArr2=Integer.parseInt(st.nextToken());
+		                   String furyId=st.nextToken();	
+		                   System.out.println("제대로 도는거니? 진영파괴 쓴놈 아이디는:"+furyId);
+		                   System.out.println("제대로 도는거니? 내아이디는:"+myId);
+		                   if(!myId.equals(furyId))
+		               	   {
+		                	   System.out.println("제대로 도는거니? 내아이디는:"+myId);
+		                	
+			               	   ImageIcon[] dft= {GameLayout.bcIcon0,GameLayout.bcIcon1,GameLayout.bcIcon2}; //위촉오 빙고이미지
+			            	   ImageIcon myBingo=dft[ChoiceNation.chosenNation1]; //자신이 선택한 빙고아이콘
+			               	   
+			            	   GameProcess.p1Board[panCol][seq%25]=p2Board;
+			            	   GameProcess.bingo1[panCol][seq%25]=bingo2Val;
+			            	   GameProcess.numArr1[seq]=numArr2;
+			            	   if(GameProcess.bingo1[panCol][seq%25])
+			            	   {
+			            		   GameLayout.a1[panCol][seq%25].setIcon(myBingo); 
+			            	   }
+			            	   else
+			            	   {
+			            		   GameLayout.a1[panCol][seq%25].setIcon
+				          			  (new ImageIcon("img\\"+GameProcess.numArr1[seq]+".png")); 
+			            	   }
+			            	   
+					          	   	out.write((Function.TRICKFURY+"|"
+			               				   		+myRoom+"|"
+			               				   		+furyId+"|"+"\n").getBytes());
+		               		}
+	 
 	                  }
 	                  break;
 	                  case Function.TRICKFURY:
 	                  {
-	                     
+	                	  String furyId=st.nextToken();
+	                	  if(furyId.equals(myId))//내가 진영파괴를 썼을때
+	                	  {
+	          				game.new SFImageThread().start();
+	        				GameLayout.goongUsable1[2] = false;  
+	        				GameLayout.fury[1][2].setEnabled(false);  
+	        				GameLayout.fury[1][2].setVisible(false);  
+	        				GameLayout.gauge[1][2].setBackground(Color.DARK_GRAY);  
+	        				GameLayout.gauge[1][2].setString("궁극기소진");  
+	        				for (int j = 0; j < 3; j++) {  
+	        					GameLayout.jypgChoice[j].setVisible(false);//  
+	        				}  
+	        				GameLayout.furyEndBtn[1][2].setVisible(true);  
+	        				GameProcess.skillChance1--;  
+	        				GameLayout.laTactic.setText("전술명령x" + String.valueOf(GameProcess.skillChance1));  
+	        				for (int j = 0; j < 6; j++) {  
+	        					GameLayout.jypgChoice[j].setOpaque(false);  
+	        					GameLayout.jypgChoice[j].setVisible(false);//  
+	        				}  
+	        				GameLayout.bTrickFCheck1 = false;
+	                	  }
+	                	  else//상대편이 진영파괴를 썼을때
+	                	  {
+		                		GameProcess.lineCount();
+		          				game.new SFImageThread().start();  
+		        				GameLayout.goongUsable2[2] = false;  
+		        				GameLayout.fury[0][2].setEnabled(false);  
+		        				GameLayout.fury[0][2].setVisible(false);  
+		        				GameLayout.gauge[0][2].setBackground(Color.DARK_GRAY);  
+		        				GameLayout.gauge[0][2].setString("궁극기소진");  
+		        				for (int j =0; j <3 ; j++) 
+		        				{  
+		        					GameLayout.jypgChoice[j].setVisible(false);//  
+		        				}  
+		        				GameLayout.furyEndBtn[0][2].setVisible(true);  
+		        				GameProcess.skillChance2--;  
+		        				GameLayout.youLaTactic.setText("전술명령x" + String.valueOf(GameProcess.skillChance2));  
+		        				for (int j = 0; j < 6; j++) 
+		        				{  
+		        					GameLayout.jypgChoice[j].setOpaque(false);  
+		        					GameLayout.jypgChoice[j].setVisible(false);//  
+		        				}
+	                	  	}
 	                  }
 	                  break;
 	                  case Function.BINGOEND:
 	                  {
+	                	  GameLayout.gameEnd.addActionListener(this);//인게임 나가기 버튼
+	                	  GameLayout.endBtn.setVisible(false);
+	                	  GameLayout.endBackX+=975;
 	                	  String endId=st.nextToken();
 	                	  int won=Integer.parseInt(st.nextToken());
-	                	  if(endId.equals(myId))
+	                	  if(endId.equals(myId)&&GameProcess.playerWon)
+	                	  {
 	                		  game.new endThread().start();
+	                	  }
+	                	  else if(endId.equals(myId)&&!GameProcess.playerWon)
+	                	  {
+	                		  game.new endThread().start();
+	                	  }
 	                	  else if(!endId.equals(myId)&&won==0)
 	                	  {
+	                		  GameLayout.imageVisibleFalse();
 	                		  GameProcess.playerWon=true;
 	                		  game.new endThread().start();
-	                	  
 	                	  }
 	                	  else if(!endId.equals(myId)&&won==1)
 	                	  {
+	                		  GameLayout.imageVisibleFalse();
 	                		  GameProcess.playerWon=false;
 	                		  game.new endThread().start();
 	                	  }
@@ -1499,7 +1577,7 @@ implements ActionListener, Runnable, MouseListener
         			cf.setVisible(true);
         			if(CoinFlip.coinEnd==false)
         			{ 
-
+        				sd.Sound(sd.bell, false);
         				card.show(getContentPane(), "GAME");
         				t1=new TimeLimit();
         				t1.start();

@@ -4,7 +4,6 @@ import javax.swing.*;
 
 public class GameInfo extends JDialog{
 	public GameInfo(){
-		setModal(true);
 		GameView gv=new GameView();
 		add("Center", gv);
 		this.setModal(true);
