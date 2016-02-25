@@ -33,9 +33,8 @@ public class WaitRoom extends JPanel implements ActionListener,MouseListener {
    
    //// ¥Î±‚Ω« ¿⁄±‚¡§∫∏ /////
    JProgressBar pb;
-   JButton avaBtn;
-   JLabel laId,laScore,laChode,laRate;
-   Checkbox cb;
+   JButton avaBtn,userinfoBtn;
+   JLabel laId,laScore,laRate;
    ImageIcon stateicon;
    //////////////////////
    
@@ -138,16 +137,17 @@ public class WaitRoom extends JPanel implements ActionListener,MouseListener {
       pb.setBorderPainted(false);
       pb.setBackground(Color.white);
       pb.setStringPainted(true);
+      pb.setBorderPainted(true);
       laId = new JLabel("FreshQ ¥‘");
       laScore = new JLabel("¿¸¿˚ 27Ω¬ 15∆–");
-      laChode = new JLabel("√ ¥Î ∞≈∫Œ");
+      userinfoBtn = new JButton("ªÛºº∫∏±‚");
       laRate = new JLabel("Ω¬∑¸");
-      cb = new Checkbox();
+      
       
       laId.setFont(new Font("πŸ≈¡",Font.BOLD,25));
       laScore.setFont(new Font("πŸ≈¡",Font.BOLD,18));
       laRate.setFont(new Font("πŸ≈¡",Font.BOLD,18));
-      laChode.setFont(new Font("πŸ≈¡",Font.BOLD,18));
+      userinfoBtn.setFont(new Font("∏º¿∫ ∞ÌµÒ",Font.BOLD,15));
       ////////////////////
       
       setLayout(null);
@@ -163,11 +163,10 @@ public class WaitRoom extends JPanel implements ActionListener,MouseListener {
        p2.setBounds(10, 700, 400, 220);
        avaBtn.setBounds(25, 710, 157 ,200);
        laId.setBounds(220, 725, 170, 30);
-       laScore.setBounds(220, 770, 170, 30);
-       laRate.setBounds(220, 810, 60, 30);
-       pb.setBounds(270, 815, 105, 23);
-       cb.setBounds(220, 852, 30, 30);
-       laChode.setBounds(245, 857, 120, 20);
+       laScore.setBounds(220, 775, 170, 30);
+       laRate.setBounds(220, 820, 60, 30);
+       pb.setBounds(270, 825, 105, 23);
+       userinfoBtn.setBounds(235, 873, 100, 30);
        
        p2.add(avaBtn);
        p2.add(laId);
@@ -180,8 +179,7 @@ public class WaitRoom extends JPanel implements ActionListener,MouseListener {
       add(la1);add(la2);add(la3);
       add(avaBtn);add(laId);
       add(laScore);add(pb);
-      add(laChode);add(laRate);
-      add(cb);
+      add(userinfoBtn);add(laRate);
       add(p2);
 
 //      mr.b1.addActionListener(this);

@@ -1,5 +1,6 @@
 package com.sist.client;
 
+import java.util.*;
 public class UserDTO {
    private String user_id;
    private String user_pw;
@@ -9,7 +10,14 @@ public class UserDTO {
    private int user_win;
    private int user_lose;
    private String user_avatar;
+   private Date user_date;
    
+   public Date getUser_date() {
+   return user_date;
+   }
+   public void setUser_date(Date user_date) {
+      this.user_date = user_date;
+   }
    public String getUser_id() {
       return user_id;
    }

@@ -70,6 +70,7 @@ public class UserDAO {
             dto.setUser_win(rs.getInt("user_win"));
             dto.setUser_lose(rs.getInt("user_lose"));
             dto.setUser_avatar(rs.getString("user_avatar"));
+            dto.setUser_date(rs.getDate("user_date"));
             list.add(dto);
          }
       }catch(Exception e){
@@ -106,6 +107,7 @@ public class UserDAO {
             dto.setUser_win(rs.getInt("user_win"));
             dto.setUser_lose(rs.getInt("user_lose"));
             dto.setUser_avatar(rs.getString("user_avatar"));
+            dto.setUser_date(rs.getDate("user_date"));
          }
       }catch(Exception e){
          System.out.println(e+"getUserDTO에서 에러");
@@ -129,7 +131,7 @@ public class UserDAO {
       try{
          getConnection();
          String sql = "insert into user_info(user_id,user_pw,user_name,user_nickname,user_sex,"
-                     + "user_win,user_lose,user_avatar) values(?,?,?,?,?,?,?,?)";
+                     + "user_win,user_lose,user_avatar,user_date) values(?,?,?,?,?,?,?,?,sysdate)";
          ps = conn.prepareStatement(sql);
          ps.setString(1, dto.getUser_id());
          ps.setString(2, dto.getUser_pw());

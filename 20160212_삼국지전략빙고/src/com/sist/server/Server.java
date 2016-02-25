@@ -607,7 +607,7 @@ public class Server implements Runnable{
    // 통신 => Server의 모든내용을 공유 : 내부클래스 
     class Client extends Thread
     {
-       String id,name,sex,avata,pos;
+       String id,name,sex,avata,pos,nick,date;
        // 통신 
        int win,lose;
        Socket s;
@@ -654,6 +654,8 @@ public class Server implements Runnable{
                    avata=st.nextToken();
                    win=Integer.parseInt(st.nextToken());
                    lose=Integer.parseInt(st.nextToken());
+                   nick=st.nextToken();
+                   date=st.nextToken();
                    pos="대기실";
                    for(Client client:waitVc)
                    {
@@ -677,7 +679,10 @@ public class Server implements Runnable{
                               +id+"|"
                               +win+"|"
                               +lose+"|"
-                              +avata); //메세지를 다시 본인에게 날려준다.
+                              +avata+"|"
+                              +name+"|"
+                              +nick+"|"
+                              +date+"|"); //메세지를 다시 본인에게 날려준다.
                       for(Client client:waitVc) 
                       {
                          messageTo(Function.LOGIN+"|"
@@ -1081,7 +1086,7 @@ public class Server implements Runnable{
                            {   
                               for(Client client:room.userVc)
                               {
-                                 client.messageTo((Function.GAMETURN+"|"+id));
+                                 client.messageTo((Function.GAMETURN+"|"));
                               }
                            }
                        }
