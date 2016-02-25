@@ -40,7 +40,6 @@ public class Function {
    public static final int GAMETURN=690;
    
    public static final int GAMEEND=660;
-   public static final int MYGAMEEND=670;
    
    //인게임
    public static final int BINGOSTART=890;
@@ -58,8 +57,7 @@ public class Function {
    public static final int DEFFURY=790;
    public static final int TRICKFURY=800;
    
-   public static final int MYBINGOEND=870;
-   public static final int YOURBINGOEND=880;
+   public static final int BINGOEND=870;
    
    //종료
    public static final int CHATEND=900;

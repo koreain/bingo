@@ -10,9 +10,6 @@ public class GameLayout extends JPanel implements KeyListener {
 	/* >>>>>>>>>>>>>>>>>>>>>>>>>>변수선언<<<<<<<<<<<<<<<<<<<<<<<<<<< */
 	// 시간제한 타이머
 	static JProgressBar timer = new JProgressBar(); // 시간제한바
-	// static boolean timeRun=true;
-	static int colorInt = 0;
-
 	// 턴종료 버튼
 	static JButton timeOut = new JButton();
 	static ImageIcon timeImg = new ImageIcon("img\\턴종료_기본.png");
@@ -65,7 +62,8 @@ public class GameLayout extends JPanel implements KeyListener {
 	static JButton youBtnTrick;
 	static JButton youBtnAvatar;
 
-	static int useAtt, useDef, useTrick;
+	static int useAtt, useDef, useTrick; //나
+	static int youUseAtt, youUseDef, youUseTrick;//상대방
 
 	// 아이템 갯수 확인 및 아이디
 	static JLabel laAtt; // 공격스킬 개수 확인
@@ -149,12 +147,6 @@ public class GameLayout extends JPanel implements KeyListener {
 	static boolean bTrickCheck1 = false; // 나의 전략스킬
 	static boolean bDefFCheck1 = false; // 나의 방어필살기
 	static boolean bTrickFCheck1 = false; // 나의 전략필살기
-
-	static boolean bAttCheck2 = false; // 너의 공격스킬
-	static boolean bDefCheck2 = false; // 너의 방어스킬
-	static boolean bTrickCheck2 = false; // 너의 전략스킬
-	static boolean bDefFCheck2 = false; // 너의 방어필살기
-	static boolean bTrickFCheck2 = false; // 너의 전략필살기
 
 	// 궁극기(필살기) 사용가능여부 (0번배열:공격필살기, 1번배열:방어필살기, 2번배열:전략필살기)
 	static boolean goongUsable1[] = new boolean[3]; // 나의 궁극기(필살기)
@@ -953,27 +945,22 @@ public class GameLayout extends JPanel implements KeyListener {
 	}
 
 	public static void IFNoticeVisible() {
-		if (bAttCheck1 || bAttCheck2) {
+		if (bAttCheck1) {
 			aNoticeX += 1190;
 			bAttCheck1 = false;
-			bAttCheck2 = false;
-		} else if (bDefCheck1 || bDefCheck2) {
+		} else if (bDefCheck1) {
 			dNoticeX += 1190;
 			bDefCheck1 = false;
-			bDefCheck2 = false;
-		} else if (bTrickCheck1 || bTrickCheck2) {
+		} else if (bTrickCheck1) {
 			sNoticeX += 1190;
 			bTrickCheck1 = false;
-			bTrickCheck2 = false;
-		} else if (bDefFCheck1 || bDefFCheck2) {
+		} else if (bDefFCheck1) {
 			dFNoticeX += 1190;
 			bDefFCheck1 = false;
-			bDefFCheck2 = false;
 			defPGchoice2.setVisible(false);
-		} else if (bTrickFCheck1 || bTrickFCheck2) {
+		} else if (bTrickFCheck1) {
 			sFNoticeX += 1190;
 			bTrickFCheck1 = false;
-			bTrickFCheck2 = false;
 			for (int i = 0; i < 6; i++) {
 				jypgChoice[i].setVisible(false);
 			}
@@ -1074,15 +1061,15 @@ public class GameLayout extends JPanel implements KeyListener {
 	         try {
 	            Thread.sleep(1500); // 1.5초 후
 	         } catch (Exception ex) {}
+	         GameLayout.aFNoticeX += 1190; // 게임설명은 없애기
 	      }
 	   }
 	   class AFImageThread extends Thread // 공격필살기 이미지 쓰레드
 	   {
 	      public void run() {
 	         try {
-	            Thread.sleep(1500); // 1.5초 후
+	            Thread.sleep(1500); // 게임설명이 있는 1.5초 후
 	         } catch (Exception ex) {}
-	         GameLayout.aFNoticeX += 1190; // 게임설명은 없어지고
 	         imageVisibleFalse(); // 배경을 제외한 모든 오브젝트가 사라진 뒤
 	         while (GameLayout.aFImageX >= 0) {
 	            try {
@@ -1156,83 +1143,6 @@ public class GameLayout extends JPanel implements KeyListener {
 		}
 	}
 
-	public static class TimeLimit extends Thread {
-		int cnt = 0;
-		int[] rgb = new int[3];
-		static int percent = 0; // 시간제한바를 채우는 퍼센트 (20초:100퍼센트 즉, 0.2초: 1퍼센트)
-		double residueTime = 20; // 남은시간표시 (초기값:20초)
-
-		public void run() {
-			// timeRun=true;
-			try {
-				if (GameProcess.playerTurn) {
-					bingoTurnIcon1.setVisible(true);
-					bingoTurnIcon2.setVisible(false);
-				} else if (!GameProcess.playerTurn) {
-					bingoTurnIcon1.setVisible(false);
-					bingoTurnIcon2.setVisible(true);
-				}
-				while (true)// timeRun)//timeRun이 false일때 멈춤 (나가기,항복,턴종료)
-				{
-					cnt++;
-					percent++;
-					if (percent > 100)// 100퍼센트가 되면 다시 0으로 초기화
-					{
-						if (GameProcess.playerTurn)// 턴이 바뀜
-						{
-							GameProcess.playerTurn = false;
-							GameProcess.skillChance2=1;
-							GameProcess.bingoCheckChance2=1;
-							youLaTactic.setText("전술명령x" + String.valueOf(GameProcess.skillChance2));
-							youLaCommand.setText("지휘권x" + String.valueOf(GameProcess.bingoCheckChance2));
-						}
-						else if (!GameProcess.playerTurn)// 턴이 바뀜
-						{
-							GameProcess.playerTurn = true;
-							GameProcess.skillChance1=1;
-							GameProcess.bingoCheckChance1=1;
-							laTactic.setText("전술명령x" + String.valueOf(GameProcess.skillChance1));
-							laCommand.setText("지휘권x" + String.valueOf(GameProcess.bingoCheckChance1));
-						}
-						percent = 0;
-						residueTime = 20;
-						colorInt = 0;
-						rgb[0] = colorInt;
-						rgb[1] = 255;
-						IFNoticeVisible(); // 시간이 끝나면 게임설명은 들어가고 스킬사용이false가 됨
-						if (GameProcess.playerTurn) {
-							bingoTurnIcon1.setVisible(true);
-							bingoTurnIcon2.setVisible(false);
-						} else if (!GameProcess.playerTurn) {
-							bingoTurnIcon1.setVisible(false);
-							bingoTurnIcon2.setVisible(true);
-						}
-					}
-					Thread.sleep(200);
-					colorInt = (int) (Math.ceil(2.55 * (percent)));
-					residueTime -= 0.2;
-					if (residueTime < 0.2)
-						residueTime = 0;
-					String rt = String.valueOf(residueTime);
-					if (rt.length() >= 4) {
-						String rr = rt.substring(0, 4);
-						timer.setString("制限時間:" + rr);
-					} else {
-						String rr = rt;
-						timer.setString("制限時間:" + rr);
-					}
-					rgb[0] = colorInt;
-					rgb[1] = 255 - colorInt;
-					timer.setValue(percent);
-					timer.setForeground(new Color(rgb[0], rgb[1], rgb[2]));
-				}
-			} catch (Exception e) {
-				// TODO: handle exception
-				e.getMessage();
-			}
-		}
-	}
-
 	class paintThread extends Thread // 시간제한이 지나면 스킬설명을 없애기 위해 repaint()해주는 쓰레드
 	{
 		public void run() {
@@ -1248,6 +1158,7 @@ public class GameLayout extends JPanel implements KeyListener {
 	class endThread extends Thread // 전략필살기 이미지 쓰레드
 	{
 		public void run() {
+			GameLayout.IFNoticeVisible();
 			GameLayout.boomX -= 1000;
 			int i = 0;
 			while (i < 18) {
