@@ -20,6 +20,7 @@ implements ActionListener, Runnable, MouseListener
 	GameInfo gi=new GameInfo();
 	MakeRoom mr=new MakeRoom();
 	ChatRoom cr=new ChatRoom();
+	Sound sd=new Sound();
 	
 	ImageIcon mainIcon;//타이틀창 아이콘
 	static Thread t1=new TimeLimit();//시간제한바 스레드 
@@ -34,6 +35,7 @@ implements ActionListener, Runnable, MouseListener
 	ClientMainForm()
 	{
 		super("삼국지 전략빙고");//타이틀 제목
+		sd.Sound(sd.lgSound,true);
 		mainIcon=new ImageIcon("img\\타이틀아이콘.png");
 		this.setIconImage(mainIcon.getImage());
 		
@@ -197,6 +199,8 @@ implements ActionListener, Runnable, MouseListener
 		            int myLose=userInfo.getUser_lose();
 		            connection(myId,myName,mySex,myAvatar,myWin,myLose);
 		            pos="대기실";
+		            sd.clip.close();
+					sd.Sound(sd.wrSound,true);
 		            System.out.println(myAvatar);
 //					card.show(getContentPane(), "WR"); 
 				} 
@@ -372,11 +376,13 @@ implements ActionListener, Runnable, MouseListener
 			{
 				out.write((Function.GAMESTART+"|"+myRoom+"\n").getBytes());
 			}catch(Exception ex){}
+			sd.clip.close();
+			sd.Sound(sd.gmSound,true);
 		}
 ///////////////////인게임
 		else if(e.getSource()==cn.nation0||e.getSource()==cn.nation1
 				||e.getSource()==cn.nation2)
-		{
+		{	
 			//버튼을 누르면 위 촉 오 (0 1 2) 값이 들어감 => 인게임에서 빙고체크 시 각 나라아이콘 사용
 			if(e.getSource()==cn.nation0){
 				cn.chosenNation1=0;
@@ -704,6 +710,8 @@ implements ActionListener, Runnable, MouseListener
 			t1.interrupt();
 			paintthread.interrupt();
 			card.show(getContentPane(), "WR");
+			sd.clip.close();
+			sd.Sound(sd.wrSound,true);
 			game.removeAll();
 			GameProcess.gameReset();
 			game=new GameLayout();
