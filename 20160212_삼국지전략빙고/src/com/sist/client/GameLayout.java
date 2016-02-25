@@ -13,6 +13,8 @@ import com.sist.client.GameLayout.TimeLimit;
 
 public class GameLayout extends JPanel implements KeyListener {
 	/* >>>>>>>>>>>>>>>>>>>>>>>>>>변수선언<<<<<<<<<<<<<<<<<<<<<<<<<<< */
+	//사운드 클래스 선언
+	Sound sd=new Sound();
 	// 시간제한 타이머
 	static JProgressBar timer = new JProgressBar(); // 시간제한바
 	// static boolean timeRun=true;
@@ -953,6 +955,7 @@ public class GameLayout extends JPanel implements KeyListener {
 	class AImageThread extends Thread // 공격스킬 이미지 쓰레드
 	{
 		public void run() {
+			sd.Sound(sd.attImg, false);
 			GameLayout.aNoticeX += 1190; // 게임설명은 없어지고
 			imageVisibleFalse(); // 배경을 제외한 모든 오브젝트가 사라진 뒤
 			while (GameLayout.aImageX >= 0) {
@@ -968,12 +971,14 @@ public class GameLayout extends JPanel implements KeyListener {
 			} catch (Exception ex) {}
 			GameLayout.aImageX = 1200; // 게임이미지 없애기
 			imageVisibleTrue();
+			sd.Sound(sd.btnAtt, false);
 		}
 	}
 
 	class DImageThread extends Thread // 방어스킬 이미지 쓰레드
 	{
 		public void run() {
+			sd.Sound(sd.defImg, false);
 			GameLayout.dNoticeX += 1190; // 게임설명은 없어지고
 			imageVisibleFalse(); // 배경을 제외한 모든 오브젝트가 사라진 뒤
 			while (GameLayout.dImageX >= 0) {
@@ -989,12 +994,14 @@ public class GameLayout extends JPanel implements KeyListener {
 			} catch (Exception ex) {}
 			GameLayout.dImageX = 1200; // 게임이미지 없애기
 			imageVisibleTrue();
+			sd.Sound(sd.btnDef, false);
 		}
 	}
 
 	class SImageThread extends Thread // 전략스킬 이미지 쓰레드
 	{
 		public void run() {
+			sd.Sound(sd.trikImg, false);
 			GameLayout.sNoticeX += 1190; // 게임설명은 없어지고
 			imageVisibleFalse(); // 배경을 제외한 모든 오브젝트가 사라진 뒤
 			while (GameLayout.sImageX >= 0) {
@@ -1010,6 +1017,7 @@ public class GameLayout extends JPanel implements KeyListener {
 			} catch (Exception ex) {}
 			GameLayout.sImageX = 1200; // 게임이미지 없애기
 			imageVisibleTrue();
+			sd.Sound(sd.btnTrik, false);
 		}
 	}
 
@@ -1028,6 +1036,7 @@ public class GameLayout extends JPanel implements KeyListener {
 			try {
 				Thread.sleep(1500); // 1.5초 후
 			} catch (Exception ex) {}
+			sd.Sound(sd.attCore, false);
 			GameLayout.aFNoticeX += 1190; // 게임설명은 없어지고
 			imageVisibleFalse(); // 배경을 제외한 모든 오브젝트가 사라진 뒤
 			while (GameLayout.aFImageX >= 0) {
@@ -1061,6 +1070,7 @@ public class GameLayout extends JPanel implements KeyListener {
 	class DFImageThread extends Thread // 방어필살기 이미지 쓰레드
 	{
 		public void run() {
+			sd.Sound(sd.defCore, false);
 			GameLayout.dFNoticeX += 1190; // 게임설명은 없어지고
 			imageVisibleFalse(); // 배경을 제외한 모든 오브젝트가 사라진 뒤
 			while (GameLayout.dFImageX >= 0) {
@@ -1082,6 +1092,7 @@ public class GameLayout extends JPanel implements KeyListener {
 	class SFImageThread extends Thread // 전략필살기 이미지 쓰레드
 	{
 		public void run() {
+			sd.Sound(sd.trikCore, false);
 			GameLayout.sFNoticeX += 1190; // 게임설명은 없어지고
 			imageVisibleFalse(); // 배경을 제외한 모든 오브젝트가 사라진 뒤
 			while (GameLayout.sFImageX >= 0) {

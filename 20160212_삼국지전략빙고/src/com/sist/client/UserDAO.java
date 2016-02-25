@@ -11,7 +11,7 @@ public class UserDAO {
    private Connection conn;
    private PreparedStatement ps;
    private static UserDAO dao;
-   private static final String URL = "jdbc:oracle:thin:@211.238.142.40:1521:ORCL";
+   private static final String URL = "jdbc:oracle:thin:@211.238.142.32:1521:ORCL";
    
    ArrayList<UserDTO> arDTO = new ArrayList<>();
    // UserDTO를 여러개 담을 객체 : 테이블 내용 / select 전체 내용

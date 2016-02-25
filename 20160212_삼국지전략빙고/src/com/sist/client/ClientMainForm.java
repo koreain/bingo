@@ -129,7 +129,7 @@ implements ActionListener, Runnable, MouseListener
 	{
 		try
 		{
-			s=new Socket("211.238.142.40", 33333); //211.238.142.39 localhost
+			s=new Socket("211.238.142.32", 33333); //211.238.142.39 localhost
 			// s => server
 			in=new BufferedReader(
 					new InputStreamReader(
@@ -214,8 +214,9 @@ implements ActionListener, Runnable, MouseListener
 			SignUp su = new SignUp();
 			su.setVisible(true);
 		}
-		else if(e.getSource()==wr.b1)
+		else if(e.getSource()==wr.b1) //방만들기
 		{
+			sd.Sound(sd.wrclick,false);
 			System.out.println("test_wr.b1");
 			mr.tf.setText("");
 			mr.open.setSelected(true);
@@ -223,13 +224,15 @@ implements ActionListener, Runnable, MouseListener
 			mr.pf.setVisible(false);
 			mr.setVisible(true);
 		}
-		else if(e.getSource()==wr.b2) //1:1게임을 누르면 진영선택창
+		else if(e.getSource()==wr.b2) //게임방법
 		{
+			sd.Sound(sd.wrclick,false);
 			card.show(getContentPane(), "ChoiceNation");
 			
 		}
 		else if(e.getSource()==wr.b3) // 게임정보 버튼
 		{
+			sd.Sound(sd.wrclick,false);
 			gi.setVisible(true); 
 		}
 		else if(e.getSource()==wr.b4) //나가기를 누르면 프로그램 종료
@@ -241,10 +244,11 @@ implements ActionListener, Runnable, MouseListener
 	            // TODO Auto-generated catch block
 	            e1.printStackTrace();
 	         }
+			sd.Sound(sd.wrclick,false);
 			dispose();
 			System.exit(0);
 		}
-		else if(e.getSource()==mr.b2)
+		else if(e.getSource()==mr.b2) //챗룸 나가기
 		{
 			mr.setVisible(false);
 		}
@@ -376,8 +380,7 @@ implements ActionListener, Runnable, MouseListener
 			{
 				out.write((Function.GAMESTART+"|"+myRoom+"\n").getBytes());
 			}catch(Exception ex){}
-			sd.clip.close();
-			sd.Sound(sd.gmSound,true);
+			
 		}
 ///////////////////인게임
 		else if(e.getSource()==cn.nation0||e.getSource()==cn.nation1
@@ -451,7 +454,7 @@ implements ActionListener, Runnable, MouseListener
 																											// 스킬  
 																											// 버튼  
 			{  
-				GameLayout.bAttCheck1 = true; // 스킬사용 가능하게 true  
+				GameLayout.bAttCheck1 = true; // 스킬사용 가능하게 true
 				GameLayout.aNoticeX -= 1190; // 스킬설명 가져오기(1200으로 화면 밖에 있던 것이 -1190 해서 화면에  
 									// 나옴)  
 			} else if (e.getSource() == GameLayout.btnDef && GameProcess.numOfBingo1[1] + GameProcess.usingDefenseSkill1 > 0)// 방어스킬  
@@ -604,6 +607,7 @@ implements ActionListener, Runnable, MouseListener
 //				out.write((Function.DEFFURY+"|"+myRoom+"|"+i+j+"\n").getBytes());
 			}catch(Exception ex){}
 		}  
+		
 		// 책략필살기 클릭 후, 상대 판 진영파괴 버튼 클릭  
 		for (int i = 0; i < 3; i++) {  
 			if (e.getSource() == GameLayout.jypgChoice[i] && GameLayout.goongUsable1[2] == true) {  
@@ -682,6 +686,9 @@ implements ActionListener, Runnable, MouseListener
 			int exitValue=JOptionPane.showConfirmDialog(this, "항복하시겠습니까?", "항복", JOptionPane.YES_NO_OPTION);
 			if(exitValue==JOptionPane.YES_OPTION) //예를 누르면 게임 끝내기 쓰레드
 			{
+				sd.clip.close();
+				sd.Sound(sd.endBtn, false);
+				sd.Sound(sd.loseSd, true);
 				GameLayout.gameEnd.addActionListener(this);//인게임 나가기 버튼
 				t1.interrupt();
 				GameLayout.IFNoticeVisible();
@@ -692,6 +699,9 @@ implements ActionListener, Runnable, MouseListener
 		}
 		else if(e.getSource()==GameLayout.endBtn)//빙고 마무리
 		{
+			sd.clip.close();
+			sd.Sound(sd.endBtn,false);
+			sd.Sound(sd.winSd, true);
 			GameLayout.gameEnd.addActionListener(this);//인게임 나가기 버튼
 			GameLayout.endBtn.setVisible(false);
 			GameLayout.endBackX+=975;
@@ -1148,6 +1158,8 @@ implements ActionListener, Runnable, MouseListener
 	                     }
 	                     cr.setVisible(false);
 	                     card.show(getContentPane(), "ChoiceNation");
+	                     sd.clip.close();
+	                     sd.Sound(sd.choiceNa, true);
 	                     new ChoiceNationTimeLimit().start();
 	                  }
 	                  break;
@@ -1345,8 +1357,11 @@ implements ActionListener, Runnable, MouseListener
         			CoinFlip.coinEnd=true;
         			cf.setVisible(true);
         			if(CoinFlip.coinEnd==false)
-        			{ 
+        			{
+        				sd.clip.close();
+        				sd.Sound(sd.bell, false);
         				card.show(getContentPane(), "GAME");
+        				sd.Sound(sd.gmSound, true);
         				t1=new TimeLimit();
         				t1.start();
         				paintthread=game.new paintThread();
