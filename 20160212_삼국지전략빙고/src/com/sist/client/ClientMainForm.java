@@ -29,6 +29,7 @@ implements ActionListener, Runnable, MouseListener
 	ChatRoom cr=new ChatRoom();
 	UserInfo uif=new UserInfo();
 	Sound sd=new Sound();
+	GameWay gw = new GameWay();
 	
 	ImageIcon mainIcon;//타이틀창 아이콘
 	static Thread t1=new TimeLimit();//시간제한바 스레드 
@@ -141,7 +142,7 @@ implements ActionListener, Runnable, MouseListener
 	{
 		try
 		{
-			s=new Socket("localhost", 33333); //211.238.142.39 localhost
+			s=new Socket("211.238.142.39", 33333); //211.238.142.39 localhost
 			// s => server
 			in=new BufferedReader(
 					new InputStreamReader(
@@ -240,11 +241,12 @@ implements ActionListener, Runnable, MouseListener
 			mr.setVisible(true);
 		}
 		else if(e.getSource()==wr.b2) //1:1게임을 누르면 진영선택창
-		{
-			sd.Sound(sd.wrclick,false);
-			card.show(getContentPane(), "ChoiceNation");
-			
-		}
+	      {
+	         sd.Sound(sd.wrclick,false);
+	         gw.setVisible(true);
+	         gw.next = 1;
+	         gw.la.setIcon(new ImageIcon("img\\gameway"+gw.next+".jpg"));
+	      }
 		else if(e.getSource()==wr.b3) // 게임정보 버튼
 		{
 			sd.Sound(sd.wrclick,false);
